@@ -4,12 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Config;
 use App\Console\Utils;
-use App\Models\Pg\Address;
-use App\Models\Pg\Category;
-use App\Models\Pg\Identity;
-use App\Models\Pg\Owner;
 
-use App\Models\Pg\WalletExplorer;
 use DOMXPath;
 
 class BitinfochartsParsePage extends GlobalCommand
@@ -51,7 +46,7 @@ class BitinfochartsParsePage extends GlobalCommand
         $cryptoSettings = $this->getCryptoSettings($url);
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
-        $allWallets = []; // all wallets for one crypto currency
+//        $allWallets = []; // all wallets for one crypto currency
                 
         $this->line("<fg=cyan>Parsing page: " . $url ."</>");
         
@@ -69,22 +64,33 @@ class BitinfochartsParsePage extends GlobalCommand
 
         $bodyXpath = Utils::getDOMXPath($body);
 
-        if (!empty($allAddresses)) {
-            $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
-            $newWallets = $this->getNewWallets($allWallets, $bodyXpath, $allAddresses, $cryptoRegex);
-            // insert new wallets into DB
-            $this->printHeader("<fg=yellow>Inserting owner:</>");
-            if (!empty($newWallets)) {
-                $this->insertDataFromWallets($newWallets, $cryptoType);
-                // merge new wallets and all wallets with the same crypto
-                $allWallets = array_merge($allWallets, $newWallets);
-            } else {
-                $this->printDetail("- no data to insert.\n");
+        $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
+        $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex);
+        // insert new wallets into DB
+        $this->printHeader("<fg=yellow>Inserting owner:</>");
+        if (!empty($wallets)) {
+            $countInserts = 0;
+            foreach ($wallets as $owner => $data) {
+                $this->printDetail("- " . $owner . "");
+                foreach ($data['addresses'] as $address) {
+                    $inserted = $this->call('insert:db', [
+                        'owner name' => $owner,
+                        'url' => $url,
+                        'label' => $data['label'],
+                        'source' => Config::getSource(),
+                        'address' => $address,
+                        'crypto type' => $cryptoType
+                    ]);
+                    $countInserts = $inserted ? $countInserts + 1 : $countInserts;
+                }
             }
+            $this->printDetail("\t-> inserted: " . $countInserts . " rows\n");
         } else {
-            $this->printHeader("<fg=magenta>No addresses found.</>");
+            $this->printDetail("- no data to insert.\n");
         }
+            
         $this->printHeader("");
+        return true;
     }
 
     private function getCryptoSettings(string $url) {
@@ -115,14 +121,13 @@ class BitinfochartsParsePage extends GlobalCommand
     /**
      * Core function. Parses configs, pages and inserts data into a database.
      *
-     * @param array $allWallets All found interim wallets for a single cryptocurrency
      * @param DOMXPath $bodyXpath Input for xpath
      * @param array $allAddresses All addresses extracted from single page
      * @param string $cryptoRegex Regex for additional address extraction
      * @return array New wallets with assigned addresses
      */
-    private function getNewWallets($allWallets, $bodyXpath, $allAddresses, $cryptoRegex) {
-        $newWallets = [];
+    private function getWallets($bodyXpath, $allAddresses, $cryptoRegex) {
+        $resultWallets = [];
         foreach ($allAddresses as $address) {
             $walletInfo = $this->getWalletInfo($bodyXpath, $address);
             // parse only usefull wallets => no anonymous 
@@ -132,125 +137,38 @@ class BitinfochartsParsePage extends GlobalCommand
                 $label = $walletInfo["label"];
                 $url = Config::getUrl($link);
                 $this->printDetail("- " . $owner . " ");
-                // check if a wallet has been already parsed in this or previous page
-                if (!array_key_exists($owner, $newWallets) && !array_key_exists($owner, $allWallets)) {
+                // check if a wallet has been already parsed in this page
+                if (!array_key_exists($owner, $resultWallets)) {
                     $body = Utils::getContentFromURL($url);
                     if ($body != "") {
                         // get addresses from a wallet
                         $walletAddresses = $this->getAddresses($body, $cryptoRegex);
                         // always insert also the original address
                         array_push($walletAddresses, $address);
+                        
                         $addressCount = sizeof($walletAddresses);
                         $this->printDetail("\t-> success: " . $addressCount . " addresses found. \n");
+                        
                         // if no address found, add at least the one from the previous page
-                        $newWallets[$owner] = Utils::newWallet(
+                        $resultWallets[$owner] = Utils::newWallet(
                             $url, $label, $addressCount ? $walletAddresses : [$address]
                         );
                     } else {
-                        $newWallets[$owner] = Utils::newWallet($url, $label, [$address]);
+                        $resultWallets[$owner] = Utils::newWallet($url, $label, [$address]);
                         $this->printDetail("\t-> failed to obtain HTML body. Adding one address at least. \n");
                     }
-                } else if (array_key_exists($owner, $newWallets)) { // add one address into existing array
-                    $prevWallet = $newWallets[$owner];
+                } else {
+                    $prevWallet = $resultWallets[$owner];
                     $prevUrl = $prevWallet["url"];
                     $prevLabel = $prevWallet["label"];
                     $prevAddresses = $prevWallet["addresses"];
                     array_push($prevAddresses, $address);
-                    $newWallets[$owner] = Utils::newWallet($prevUrl, $prevLabel, $prevAddresses);
+                    $resultWallets[$owner] = Utils::newWallet($prevUrl, $prevLabel, $prevAddresses);
                     $this->printDetail("\t-> adding one address into existing array. \n");
-                } else { // create entry in new wallets array
-                    $newWallets[$owner] = Utils::newWallet($url, $label, [$address]);
-                    $this->printDetail("\t-> adding one address into new array. \n");
                 }
             }
         }
-        return $newWallets;
-    }
-
-
-
-    /**
-     * Insert owners, addresses and identities if there's no such a entry in the database.
-     *
-     * @param array $wallets Wallets to be inserted
-     * @param int $cryptoType Type of cryptocurrency from config
-     * @return void
-     */
-    private function insertDataFromWallets($wallets, $cryptoType) {
-        foreach ($wallets as $ownerName => $data) {
-            $this->printDetail("- " . $ownerName . "");
-            $owner = Owner::getByName($ownerName);
-            $url = $data["url"];
-            $label = $data["label"];
-            $source = Config::getSource();
-
-            $countInserts = 0;
-            foreach ($data["addresses"] as $address) {
-
-                $category = $this->getCategory($ownerName);
-                $existingAddress = Address::getByAddress($address);
-                if ($existingAddress == null) { // no address in the database
-                    $identity = $this->getNewIdentity($source, $url, $label);
-
-                    $ownerAddr = new Address();
-                    $ownerAddr->address = $address;
-                    $ownerAddr->crypto = $cryptoType;
-                    $ownerAddr->color = $category->color;
-                    $ownerAddr->save();
-                    $ownerAddr->identities()->save($identity);
-                    $ownerAddr->categories()->attach($category->id);
-
-                    $owner->addresses()->save($ownerAddr);
-                    $countInserts++;
-                } else if ($this->newIdentity($existingAddress->id, $source)) {
-                    // no identity for the address in the database
-                    $identity = $this->getNewIdentity($source, $url, $label);
-                    $existingAddress->identities()->save($identity);
-                }
-            }
-            $this->printDetail("\t-> inserted: " . $countInserts . " rows\n");
-        }
-    }
-
-
-    /**
-     * Get specific category from `Category` class based on owner name.
-     *
-     * @param string $ownerName
-     * @return Category
-     */
-    private function getCategory(string $ownerName) {
-        $owner = WalletExplorer::getByOwnerLike($ownerName);
-        if ($owner) {
-            return Category::getByName($owner->category);
-        }
-        return Category::getByName(Category::CAT_1);
-    }
-
-    /**
-     * Checks if there is already an identity for specific combiantion of cryptoaddress and source url.
-     * Enables adding new identities for existing cryptoaddress.
-     *
-     * @param string $addr_id Address id
-     * @param string $newSource Source url of potential new identity
-     * @return bool
-     */
-    private function newIdentity($addr_id, $newSource) {
-        $identities = Identity::getIdentitiesByAddress($addr_id);
-        $existingIdentities = $identities->reduce(function ($acc, $identity) {
-            array_push($acc, $identity->source);
-            return $acc;
-        }, []);
-        return in_array($newSource, $existingIdentities) == false;
-    }
-
-    private function getNewIdentity($source, $url, $label) {
-        $identity = new Identity();
-        $identity->source = $source;
-        $identity->url = $url;
-        $identity->label = $label;
-        $identity->save();
-        return $identity;
+        return $resultWallets;
     }
 
     /**

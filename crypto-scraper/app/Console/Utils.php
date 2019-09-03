@@ -79,8 +79,8 @@ class Utils {
      *
      * @param string $url
      * @param string $label
-     * @param string $addresses
-     * @return string Owner name
+     * @param array $addresses
+     * @return array
      */
     public static function newWallet($url, $label, $addresses) {
         return [
