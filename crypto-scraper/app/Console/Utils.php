@@ -89,5 +89,17 @@ class Utils {
             "addresses" => $addresses
         ];
     }
+    
+    public static function getCryptoSettings(string $url) {
+        switch (true) {
+            case preg_match('/' . Config::BTC['name'] . '/' , $url): return Config::BTC;
+            case preg_match('/' . Config::LTC['name']. '/', $url): return Config::LTC;
+            case preg_match('/' . Config::BCH['name']. '/', $url): return Config::BCH;
+            case preg_match('/' . Config::DASH['name']. '/', $url): return Config::DASH;
+            case preg_match('/' . Config::BTG['name']. '/', $url): return Config::BTG;
+        }
+        return Config::EMPTY;
+    }
+
 }
    

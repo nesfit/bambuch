@@ -43,10 +43,9 @@ class BitinfochartsParsePage extends GlobalCommand
         $this->verbose = $this->argument("verbose");
         $url = $this->argument("url");
 
-        $cryptoSettings = $this->getCryptoSettings($url);
+        $cryptoSettings = Utils::getCryptoSettings($url);
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
-//        $allWallets = []; // all wallets for one crypto currency
                 
         $this->line("<fg=cyan>Parsing page: " . $url ."</>");
         
@@ -93,17 +92,6 @@ class BitinfochartsParsePage extends GlobalCommand
         return true;
     }
 
-    private function getCryptoSettings(string $url) {
-        switch (true) {
-            case preg_match('/' . Config::BTC['name'] . '/' , $url): return Config::BTC;
-            case preg_match('/' . Config::LTC['name']. '/', $url): return Config::LTC;
-            case preg_match('/' . Config::BCH['name']. '/', $url): return Config::BCH;
-            case preg_match('/' . Config::DASH['name']. '/', $url): return Config::DASH;
-            case preg_match('/' . Config::BTG['name']. '/', $url): return Config::BTG;
-        }
-        return Config::EMPTY;
-    }
-    
     /**
      * Gets addresses from a body according to crypto regex.
      *
