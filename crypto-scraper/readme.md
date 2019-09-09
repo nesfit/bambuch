@@ -20,7 +20,8 @@ Run the project script:
 
 
 ## Architecture
-[[https://github.com/nesfit/bambuch/tree/master/crypto-scraper/assets/architecture.png|alt=architecture]]
+![Architecture](assets/architecture.png)
+
 
 ## TODO
 * Retry failed requests.
