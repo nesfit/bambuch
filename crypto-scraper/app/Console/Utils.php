@@ -101,5 +101,8 @@ class Utils {
         return Config::EMPTY;
     }
 
+    public static function createCSVData($owner, $url, $label, $source, $address, $cryptoType) {
+        return implode(",", [$owner, $url, $label, $source, $address, $cryptoType]);
+    }
 }
    

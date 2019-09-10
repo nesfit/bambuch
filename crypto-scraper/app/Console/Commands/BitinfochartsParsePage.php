@@ -65,29 +65,21 @@ class BitinfochartsParsePage extends GlobalCommand
 
         $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
         $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex);
-        // insert new wallets into DB
+        // store wallets data into CSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
         if (!empty($wallets)) {
-            $countInserts = 0;
             foreach ($wallets as $owner => $data) {
                 $this->printDetail("- " . $owner . "");
                 foreach ($data['addresses'] as $address) {
-                    $inserted = $this->call('insert:db', [
-                        'owner name' => $owner,
-                        'url' => $url,
-                        'label' => $data['label'],
-                        'source' => Config::getSource(),
-                        'address' => $address,
-                        'crypto type' => $cryptoType
-                    ]);
-                    $countInserts = $inserted ? $countInserts + 1 : $countInserts;
+                    $csvData = Utils::createCSVData(
+                        $owner, $url, $data['label'], Config::getSource(), $address, $cryptoType);
+                    $this->call("storage:write", ["data" => $csvData]);
+                    $this->line("Stored into file");
                 }
             }
-            $this->printDetail("\t-> inserted: " . $countInserts . " rows\n");
         } else {
             $this->printDetail("- no data to insert.\n");
         }
-            
         $this->printHeader("");
         return true;
     }
@@ -107,7 +99,7 @@ class BitinfochartsParsePage extends GlobalCommand
 
 
     /**
-     * Core function. Parses configs, pages and inserts data into a database.
+     * Core function. Extracts info about wallets and returns it in an array for each address owner.
      *
      * @param DOMXPath $bodyXpath Input for xpath
      * @param array $allAddresses All addresses extracted from single page
