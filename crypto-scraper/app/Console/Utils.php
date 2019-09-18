@@ -92,17 +92,22 @@ class Utils {
     
     public static function getCryptoSettings(string $url) {
         switch (true) {
-            case preg_match('/' . Config::BTC['name'] . '/' , $url): return Config::BTC;
-            case preg_match('/' . Config::LTC['name']. '/', $url): return Config::LTC;
-            case preg_match('/' . Config::BCH['name']. '/', $url): return Config::BCH;
-            case preg_match('/' . Config::DASH['name']. '/', $url): return Config::DASH;
-            case preg_match('/' . Config::BTG['name']. '/', $url): return Config::BTG;
+            case preg_match('/' . CryptoCurrency::BTC['name'] . '/' , $url): return CryptoCurrency::BTC;
+            case preg_match('/' . CryptoCurrency::LTC['name']. '/', $url): return CryptoCurrency::LTC;
+            case preg_match('/' . CryptoCurrency::BCH['name']. '/', $url): return CryptoCurrency::BCH;
+            case preg_match('/' . CryptoCurrency::DASH['name']. '/', $url): return CryptoCurrency::DASH;
+            case preg_match('/' . CryptoCurrency::BTG['name']. '/', $url): return CryptoCurrency::BTG;
         }
-        return Config::EMPTY;
+        return CryptoCurrency::EMPTY;
     }
 
     public static function createCSVData($owner, $url, $label, $source, $address, $cryptoType) {
         return implode(",", [$owner, $url, $label, $source, $address, $cryptoType]);
+    }
+    
+    public static function getFullHost(string $url): string {
+        $parsedUrl = parse_url($url);
+        return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
 }
    
