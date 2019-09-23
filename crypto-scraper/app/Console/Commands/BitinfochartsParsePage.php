@@ -72,8 +72,11 @@ class BitinfochartsParsePage extends GlobalCommand
                 $this->printDetail("- " . $owner . "");
                 foreach ($data['addresses'] as $address) {
                     $tsvData = Utils::createTSVData(
-                        $owner, $url, $data['label'], $source, $address, $cryptoType);
-                    $this->call("storage:write", ["data" => $tsvData]);
+                        $owner, $url, $data['label'], $source, $address, $cryptoType, '');
+                    $this->call("storage:write", [
+                        "data" => $tsvData,
+                        "verbose" => $this->verbose
+                    ]);
                     $this->line("Stored into file");
                 }
             }

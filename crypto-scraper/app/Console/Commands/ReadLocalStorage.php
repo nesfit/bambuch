@@ -44,14 +44,15 @@ class ReadLocalStorage extends Command {
                 $tsvRows =  explode("\n", $tsvData);
                 $progressBar = $this->output->createProgressBar(count($tsvRows));
                 foreach ($tsvRows as $row) {
-                    list($owner, $url, $label, $source, $address, $cryptoType) = explode("\t", $row);
+                    list($owner, $url, $label, $source, $address, $cryptoType, $category) = explode("\t", $row);
                     $this->call('insert:db', [
                         'owner name' => $owner,
                         'url' => $url,
                         'label' => $label,
                         'source' => $source,
                         'address' => $address,
-                        'crypto type' => $cryptoType
+                        'crypto type' => $cryptoType,
+                        'category' => $category
                     ]);
                     $progressBar->advance();
                 }

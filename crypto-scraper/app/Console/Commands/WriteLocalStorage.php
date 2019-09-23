@@ -2,17 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class WriteLocalStorage extends Command
+class WriteLocalStorage extends GlobalCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'storage:write {data}';
+    protected $signature = 'storage:write {data} {dateTime?} {verbose=1}';
 
     /**
      * The console command description.
@@ -38,9 +37,11 @@ class WriteLocalStorage extends Command
      */
     public function handle()
     {
+        $this->verbose = $this->argument("verbose");
         $data = $this->argument("data");
-        $fileName = "scrapper_data_" . date("Y_m_d_H_i");
-        $this->info("Writing into file: " . $fileName);
+        $dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
+        $fileName = "scrapper_data_" . date("Y_m_d_H_i", strtotime($dateTime));
+        $this->printHeader("<fg=yellow>Writing into file: </>" . $fileName);
         Storage::disk("local")->append($fileName, $data);
         return 1;
     }

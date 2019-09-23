@@ -8,7 +8,6 @@ namespace App\Console;
 
 use DOMDocument;
 use DOMXPath;
-use ForceUTF8\Encoding;
 
 class Utils {
     private const replaceRegexes = [
@@ -102,11 +101,10 @@ class Utils {
         return CryptoCurrency::EMPTY;
     }
 
-    public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType) {
-        $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType],
+    public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType, $category) {
+        $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType, $category],
             function ($acc, $value)  {
-                $correctUtf = Encoding::toUTF8($value);
-                array_push($acc, str_replace("\t", " ", $correctUtf));
+                array_push($acc, str_replace("\t", " ", $value));
                 return $acc;
             }, []
         );
@@ -116,6 +114,23 @@ class Utils {
     public static function getFullHost(string $url): string {
         $parsedUrl = parse_url($url);
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
+    }
+
+    public static function extractXorCode($address, $position) {
+        $value = substr($address, $position, 2);
+        return hexdec($value);
+    }
+
+    public static function decrypt($address) {
+        $output = "";
+        $xor_base = self::extractXorCode($address, 0);
+
+        for ($i = 2; $i < strlen($address); $i += 2) {
+            $char_code = self::extractXorCode($address, $i) ^ $xor_base;
+            $output .= chr($char_code);
+        }
+
+        return $output;
     }
 }
    
