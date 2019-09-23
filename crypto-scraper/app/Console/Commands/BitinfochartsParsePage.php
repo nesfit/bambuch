@@ -65,15 +65,15 @@ class BitinfochartsParsePage extends GlobalCommand
 
         $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
         $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex, $source);
-        // store wallets data into CSV file 
+        // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
         if (!empty($wallets)) {
             foreach ($wallets as $owner => $data) {
                 $this->printDetail("- " . $owner . "");
                 foreach ($data['addresses'] as $address) {
-                    $csvData = Utils::createCSVData(
+                    $tsvData = Utils::createTSVData(
                         $owner, $url, $data['label'], $source, $address, $cryptoType);
-                    $this->call("storage:write", ["data" => $csvData]);
+                    $this->call("storage:write", ["data" => $tsvData]);
                     $this->line("Stored into file");
                 }
             }

@@ -8,6 +8,7 @@ namespace App\Console;
 
 use DOMDocument;
 use DOMXPath;
+use ForceUTF8\Encoding;
 
 class Utils {
     private const replaceRegexes = [
@@ -101,8 +102,15 @@ class Utils {
         return CryptoCurrency::EMPTY;
     }
 
-    public static function createCSVData($owner, $url, $label, $source, $address, $cryptoType) {
-        return implode(",", [$owner, $url, $label, $source, $address, $cryptoType]);
+    public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType) {
+        $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType],
+            function ($acc, $value)  {
+                $correctUtf = Encoding::toUTF8($value);
+                array_push($acc, str_replace("\t", " ", $correctUtf));
+                return $acc;
+            }, []
+        );
+        return implode("\t", $cleanArray);
     }
     
     public static function getFullHost(string $url): string {

@@ -40,11 +40,11 @@ class ReadLocalStorage extends Command {
         $fileName = $this->argument("fileName");
         try {
             if (Storage::disk("local")->exists($fileName)) {
-                $csvData = Storage::disk("local")->get($fileName);
-                $csvRows =  explode("\n", $csvData);
-                $progressBar = $this->output->createProgressBar(count($csvRows));
-                foreach ($csvRows as $row) {
-                    list($owner, $url, $label, $source, $address, $cryptoType) = explode(",", $row);
+                $tsvData = Storage::disk("local")->get($fileName);
+                $tsvRows =  explode("\n", $tsvData);
+                $progressBar = $this->output->createProgressBar(count($tsvRows));
+                foreach ($tsvRows as $row) {
+                    list($owner, $url, $label, $source, $address, $cryptoType) = explode("\t", $row);
                     $this->call('insert:db', [
                         'owner name' => $owner,
                         'url' => $url,

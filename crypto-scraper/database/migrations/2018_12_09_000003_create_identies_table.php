@@ -11,7 +11,7 @@ class CreateIdentiesTable extends Migration
         Schema::create(Identity::TABLE, function (Blueprint $table) {
             $table->bigIncrements(Identity::COL_ID);
             $table->string(Identity::COL_URL, 1024);
-            $table->string(Identity::COL_LABEL);
+            $table->text(Identity::COL_LABEL);
             $table->string(Identity::COL_SOURCE);
             $table->bigInteger(Identity::COL_ADDRID)->nullable();;
 
