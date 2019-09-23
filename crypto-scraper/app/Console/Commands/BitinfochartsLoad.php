@@ -10,7 +10,7 @@ use DateTime;;
 
 error_reporting(E_ALL ^ E_WARNING);
 
-class BitinfochartsLoadConfig extends GlobalCommand {
+class BitinfochartsLoad extends GlobalCommand {
 
     private const MAIN_URL = "https://bitinfocharts.com";
     private const PLACEHOLDER = "__placeholder__";

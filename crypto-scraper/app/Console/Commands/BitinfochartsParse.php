@@ -6,7 +6,7 @@ use App\Console\Utils;
 
 use DOMXPath;
 
-class BitinfochartsParsePage extends GlobalCommand
+class BitinfochartsParse extends GlobalCommand
 {
     /**
      * The name and signature of the console command.

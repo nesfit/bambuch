@@ -8,7 +8,7 @@ use Goutte;
 use GuzzleHttp;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcoinabuseParsePage extends GlobalCommand {
+class BitcoinabuseParse extends GlobalCommand {
     const REPORT_URL = '/reports/%s';
 
     /**
