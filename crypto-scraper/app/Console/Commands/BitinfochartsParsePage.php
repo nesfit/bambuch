@@ -40,6 +40,7 @@ class BitinfochartsParsePage extends GlobalCommand
     public function handle()
     {
         $this->verbose = $this->argument("verbose");
+        $dateTime = $this->argument("dateTime");
         $url = $this->argument("url");
 
         $source = Utils::getFullHost($url);
@@ -75,6 +76,7 @@ class BitinfochartsParsePage extends GlobalCommand
                         $owner, $url, $data['label'], $source, $address, $cryptoType, '');
                     $this->call("storage:write", [
                         "data" => $tsvData,
+                        "dateTime" => $dateTime,
                         "verbose" => $this->verbose
                     ]);
                     $this->line("Stored into file");

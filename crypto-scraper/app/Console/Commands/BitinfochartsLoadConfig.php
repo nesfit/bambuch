@@ -64,12 +64,14 @@ class BitinfochartsLoadConfig extends GlobalCommand {
      * @return void
      */
     private function parsePages($pages) {
+        $dateTime = date("Y-m-d H:i:s");
         foreach ($pages as $page) {
             for ($i=1; $i < $page['maxPage']; $i++) {
                 $url = $this->createPageUrl($page['path'], $i);
                 $this->call("bitinfocharts:parse", [
                     "url" => $url,
-                    "verbose" => $this->verbose
+                    "verbose" => $this->verbose,
+                    "dateTime" => $dateTime
                 ]);
             }
         }
