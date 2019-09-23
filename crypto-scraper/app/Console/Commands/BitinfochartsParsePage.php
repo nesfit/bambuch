@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Console\Config;
 use App\Console\Utils;
 
 use DOMXPath;
@@ -43,6 +42,7 @@ class BitinfochartsParsePage extends GlobalCommand
         $this->verbose = $this->argument("verbose");
         $url = $this->argument("url");
 
+        $source = Utils::getFullHost($url);
         $cryptoSettings = Utils::getCryptoSettings($url);
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
@@ -64,16 +64,19 @@ class BitinfochartsParsePage extends GlobalCommand
         $bodyXpath = Utils::getDOMXPath($body);
 
         $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
-        $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex);
-        // store wallets data into CSV file 
+        $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex, $source);
+        // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
         if (!empty($wallets)) {
             foreach ($wallets as $owner => $data) {
                 $this->printDetail("- " . $owner . "");
                 foreach ($data['addresses'] as $address) {
-                    $csvData = Utils::createCSVData(
-                        $owner, $url, $data['label'], Config::getSource(), $address, $cryptoType);
-                    $this->call("storage:write", ["data" => $csvData]);
+                    $tsvData = Utils::createTSVData(
+                        $owner, $url, $data['label'], $source, $address, $cryptoType, '');
+                    $this->call("storage:write", [
+                        "data" => $tsvData,
+                        "verbose" => $this->verbose
+                    ]);
                     $this->line("Stored into file");
                 }
             }
@@ -104,18 +107,19 @@ class BitinfochartsParsePage extends GlobalCommand
      * @param DOMXPath $bodyXpath Input for xpath
      * @param array $allAddresses All addresses extracted from single page
      * @param string $cryptoRegex Regex for additional address extraction
+     * @param string $source schema://host extracted from an url
      * @return array New wallets with assigned addresses
      */
-    private function getWallets($bodyXpath, $allAddresses, $cryptoRegex) {
+    private function getWallets($bodyXpath, $allAddresses, $cryptoRegex, $source) {
         $resultWallets = [];
         foreach ($allAddresses as $address) {
             $walletInfo = $this->getWalletInfo($bodyXpath, $address);
-            // parse only usefull wallets => no anonymous 
+            // parse only useful wallets => no anonymous 
             if (!empty($walletInfo)) {
                 $owner = $walletInfo["owner"];
                 $link = $walletInfo["link"];
                 $label = $walletInfo["label"];
-                $url = Config::getUrl($link);
+                $url = $source . $link;
                 $this->printDetail("- " . $owner . " ");
                 // check if a wallet has been already parsed in this page
                 if (!array_key_exists($owner, $resultWallets)) {
@@ -159,23 +163,27 @@ class BitinfochartsParsePage extends GlobalCommand
      * @return array Wallet info or empty array
      */
     private function getWalletInfo($bodyXpath, $address) {
-        $node = $bodyXpath->query("//text()[contains(.,'" .$address. "')]/../../small/a");
+        $nodeList = $bodyXpath->query("//text()[contains(.,'" .$address. "')]/../../small/a");
         // no label found for the address
-        if ($node->length) {
-            $label = $node[0]->nodeValue;
-            preg_match("/wallet: \d+/", $label, $anonymous, PREG_OFFSET_CAPTURE);
-            // anonymous wallet => skip
-            if (!empty($anonymous)) {
-                return [];
+        if ($nodeList->length) {
+            $node = $nodeList->item(0);
+            if ($node) {
+                $label = $node->nodeValue;
+                preg_match("/wallet: \d+/", $label, $anonymous, PREG_OFFSET_CAPTURE);
+                // anonymous wallet => skip
+                if (!empty($anonymous)) {
+                    return [];
+                }
+                preg_match("/wallet: (.*)/", $label, $wallet);
+                // unit owner names
+                $ownerName = Utils::getOwnerName($label);
+                return [
+                    "owner" => $ownerName,
+                    "link" => $node->getAttribute("href"),
+                    "label" => $wallet[1]
+                ];            
             }
-            preg_match("/wallet: (.*)/", $label, $wallet);
-            // unit owner names
-            $ownerName = Utils::getOwnerName($label);
-            return [
-                "owner" => $ownerName,
-                "link" => $node[0]->getAttribute("href"),
-                "label" => $wallet[1]
-            ];
+
         };
         return [];
     }

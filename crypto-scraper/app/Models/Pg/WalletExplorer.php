@@ -22,7 +22,7 @@ class WalletExplorer extends Model
     }
 
     public static function getByOwnerLike($owner) {
-        $dbInput = '%' . strtolower($owner) . '%';
+        $dbInput = '%LOWER(' . $owner . ')%';
         return self::where("owner", 'like', $dbInput)->get()->first();
     }
 }

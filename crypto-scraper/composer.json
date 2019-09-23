@@ -9,17 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-json": "*",
         "clue/block-react": "^1.3",
         "clue/buzz-react": "^2.6",
         "clue/http-proxy-react": "^1.4",
         "fabpot/goutte": "^3.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
-        "laravel/tinker": "^1.0",
-        "ext-pcntl": "*",
-        "ext-curl": "*",
-        "ext-dom": "*",
-        "ext-spltype": "*"
+        "laravel/tinker": "^1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

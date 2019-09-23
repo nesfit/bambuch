@@ -15,7 +15,7 @@ class InsertIntoDB extends Command {
      *
      * @var string
      */
-    protected $signature = 'insert:db {owner name} {url} {label} {source} {address} {crypto type}';
+    protected $signature = 'insert:db {owner name} {url} {label} {source} {address} {crypto type} {category}';
 
     /**
      * The console command description.
@@ -45,9 +45,10 @@ class InsertIntoDB extends Command {
         $source = $this->argument('source');
         $address = $this->argument('address');
         $cryptoType = $this->argument('crypto type');
+        $categoryFromText = $this->getCategoryFromText($this->argument('category'));
 
         $owner = Owner::getByName($ownerName);
-        $category = $this->getCategory($ownerName);
+        $category = $categoryFromText->name != Category::CAT_1 ? $categoryFromText : $this->getCategoryFromOwner($ownerName);
         $existingAddress = Address::getByAddress($address);
         
         if ($existingAddress == null) { // no address in the database
@@ -77,12 +78,22 @@ class InsertIntoDB extends Command {
      * @param string $ownerName
      * @return Category
      */
-    private function getCategory(string $ownerName) {
+    private function getCategoryFromOwner(string $ownerName) {
         $owner = WalletExplorer::getByOwnerLike($ownerName);
         if ($owner) {
             return Category::getByName($owner->category);
         }
         return Category::getByName(Category::CAT_1);
+    }    
+
+    /**
+     * Get specific category from `Category` class based on a text founded on a page.
+     *
+     * @param string $categoryText
+     * @return Category
+     */
+    private function getCategoryFromText(string $categoryText) {
+        return Category::getByPartialMatch($categoryText);
     }
 
     /**
