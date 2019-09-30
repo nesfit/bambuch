@@ -16,7 +16,7 @@ class BitcoinabuseParse extends GlobalCommand {
      *
      * @var string
      */
-    protected $signature = 'bitcoinabuse:parse {url} {dateTime?} {verbose=2}';
+    protected $signature = 'bitcoinabuse:parse {url} {verbose=2} {dateTime?} ';
 
     /**
      * The console command description.

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Utils;
 
+use App\Models\ParsedAddress;
 use DOMXPath;
 
 class BitinfochartsParse extends GlobalCommand
@@ -13,7 +14,7 @@ class BitinfochartsParse extends GlobalCommand
      *
      * @var string
      */
-    protected $signature = 'bitinfocharts:parse {url} {verbose=2}';
+    protected $signature = 'bitinfocharts:parse {url} {verbose=2} {dateTime?} ';
 
     /**
      * The console command description.
@@ -65,22 +66,19 @@ class BitinfochartsParse extends GlobalCommand
         $bodyXpath = Utils::getDOMXPath($body);
 
         $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
-        $wallets = $this->getWallets($bodyXpath, $allAddresses, $cryptoRegex, $source);
+        $parsedAddresses = $this->getParsedAddresses($bodyXpath, $allAddresses, $cryptoRegex, $source, $cryptoType);
         // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
-        if (!empty($wallets)) {
-            foreach ($wallets as $owner => $data) {
-                $this->printDetail("- " . $owner . "");
-                foreach ($data['addresses'] as $address) {
-                    $tsvData = Utils::createTSVData(
-                        $owner, $url, $data['label'], $source, $address, $cryptoType, '');
-                    $this->call("storage:write", [
-                        "data" => $tsvData,
-                        "dateTime" => $dateTime,
-                        "verbose" => $this->verbose
-                    ]);
-                    $this->line("Stored into file");
-                }
+        if (!empty($parsedAddresses)) {
+            print_r($parsedAddresses);
+            foreach ($parsedAddresses as $item) {
+                $tsvData = $item->createTSVData();
+                $this->call("storage:write", [
+                    "data" => $tsvData,
+                    "dateTime" => $dateTime,
+                    "verbose" => $this->verbose
+                ]);
+                $this->line("Stored into file");
             }
         } else {
             $this->printDetail("- no data to insert.\n");
@@ -89,6 +87,58 @@ class BitinfochartsParse extends GlobalCommand
         return true;
     }
 
+    /**
+     * Core function. Extracts info about wallets and returns it in an array for each address owner.
+     *
+     * @param DOMXPath $bodyXpath Input for xpath
+     * @param array $allAddresses All addresses extracted from single page
+     * @param string $cryptoRegex Regex for additional address extraction
+     * @param string $source schema://host extracted from an url
+     * @return ParsedAddress[]
+     */
+    private function getParsedAddresses($bodyXpath, $allAddresses, $cryptoRegex, $source, $cryptoType): array {
+        $result = [];
+        foreach ($allAddresses as $address) {
+            $walletInfo = $this->getWalletInfo($bodyXpath, $address);
+            // parse only useful wallets => no anonymous 
+            if (!empty($walletInfo)) {
+                $owner = $walletInfo["owner"];
+                $link = $walletInfo["link"];
+                $label = $walletInfo["label"];
+                $url = $source . $link;
+                $this->printDetail("- " . $owner . " ");
+                // check if a wallet has been already parsed in this page
+                
+//                print_r($result);
+                if (!ParsedAddress::ownerExists($owner, ...$result)) {
+                    $body = Utils::getContentFromURL($url);
+                    if ($body != "") {
+                        // get addresses from a wallet
+                        $walletAddresses = $this->getAddresses($body, $cryptoRegex);
+                        // always insert also the original address
+                        array_push($walletAddresses, $address);
+                        // map addresses to ParseAddress structure
+                        $result = array_reduce($walletAddresses, function ($acc, $address) use ($owner, $label, $url, $source, $cryptoType) {
+                            $newItem = new ParsedAddress($owner, $url, $label, $source, $address, $cryptoType, '');
+                            array_push($acc, $newItem);
+                            return $acc;
+                        }, $result);
+
+                        $addressCount = sizeof($walletAddresses);
+                        $this->printDetail("\t-> success: " . $addressCount . " addresses found. \n");
+                    } else {
+                        $newItem = new ParsedAddress($owner, $url, $label, $source, $address, $cryptoType, '');
+                        array_push($result, $newItem);
+                    }
+                } else {
+                    $newItem = new ParsedAddress($owner, $url, $label, $source, $address, $cryptoType, '');
+                    array_push($result, $newItem);
+                }
+            }
+        }
+        return $result;
+    }
+    
     /**
      * Gets addresses from a body according to crypto regex.
      *
@@ -100,61 +150,6 @@ class BitinfochartsParse extends GlobalCommand
         preg_match_all($cryptoRegex, $body, $matches, PREG_OFFSET_CAPTURE);
         $result = array_map(function($match) { return $match[0]; }, $matches[0]);
         return array_unique($result);
-    }
-
-
-    /**
-     * Core function. Extracts info about wallets and returns it in an array for each address owner.
-     *
-     * @param DOMXPath $bodyXpath Input for xpath
-     * @param array $allAddresses All addresses extracted from single page
-     * @param string $cryptoRegex Regex for additional address extraction
-     * @param string $source schema://host extracted from an url
-     * @return array New wallets with assigned addresses
-     */
-    private function getWallets($bodyXpath, $allAddresses, $cryptoRegex, $source) {
-        $resultWallets = [];
-        foreach ($allAddresses as $address) {
-            $walletInfo = $this->getWalletInfo($bodyXpath, $address);
-            // parse only useful wallets => no anonymous 
-            if (!empty($walletInfo)) {
-                $owner = $walletInfo["owner"];
-                $link = $walletInfo["link"];
-                $label = $walletInfo["label"];
-                $url = $source . $link;
-                $this->printDetail("- " . $owner . " ");
-                // check if a wallet has been already parsed in this page
-                if (!array_key_exists($owner, $resultWallets)) {
-                    $body = Utils::getContentFromURL($url);
-                    if ($body != "") {
-                        // get addresses from a wallet
-                        $walletAddresses = $this->getAddresses($body, $cryptoRegex);
-                        // always insert also the original address
-                        array_push($walletAddresses, $address);
-                        
-                        $addressCount = sizeof($walletAddresses);
-                        $this->printDetail("\t-> success: " . $addressCount . " addresses found. \n");
-                        
-                        // if no address found, add at least the one from the previous page
-                        $resultWallets[$owner] = Utils::newWallet(
-                            $url, $label, $addressCount ? $walletAddresses : [$address]
-                        );
-                    } else {
-                        $resultWallets[$owner] = Utils::newWallet($url, $label, [$address]);
-                        $this->printDetail("\t-> failed to obtain HTML body. Adding one address at least. \n");
-                    }
-                } else {
-                    $prevWallet = $resultWallets[$owner];
-                    $prevUrl = $prevWallet["url"];
-                    $prevLabel = $prevWallet["label"];
-                    $prevAddresses = $prevWallet["addresses"];
-                    array_push($prevAddresses, $address);
-                    $resultWallets[$owner] = Utils::newWallet($prevUrl, $prevLabel, $prevAddresses);
-                    $this->printDetail("\t-> adding one address into existing array. \n");
-                }
-            }
-        }
-        return $resultWallets;
     }
 
     /**

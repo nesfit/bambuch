@@ -101,6 +101,9 @@ class Utils {
         return CryptoCurrency::EMPTY;
     }
 
+    /**
+     * @deprecated
+    **/
     public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType, $category) {
         $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType, $category],
             function ($acc, $value)  {
