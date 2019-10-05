@@ -5,11 +5,10 @@ namespace App\Console\Commands;
 use App\Console\CryptoCurrency;
 use App\Console\Utils;
 use App\Models\ParsedAddress;
-use Goutte;
-use GuzzleHttp;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcoinabuseParse extends CryptoParser {
+class BitcoinabuseParse extends CryptoParser 
+{
     const REPORT_URL = '/reports/%s';
 
     /**
@@ -45,60 +44,53 @@ class BitcoinabuseParse extends CryptoParser {
         $url = $this->argument('url');
 
         $source = Utils::getFullHost($url);
-        $browser = new Goutte\Client();
 
         $this->printParsingPage($url);
         
-        list($hasNextPage, $addresses) = $this->loadDistinct($url, $browser);
+        list($hasNextPage, $addresses) = $this->getAddresses($url);
         
         foreach ($addresses as $address) {
             $url = $source . sprintf(self::REPORT_URL, $address);
             $this->printHeader("<fg=yellow>Getting report from page: ". $url . "</>");
-            $reports = $this->process($browser, $url, $source, $address);
-            $this->saveParsedData($dateTime, ...$reports);
-            return false; //TODO REMOVE
+            $parsedAddresses = $this->getParsedAddresses($url, $source, $address);
+            $this->saveParsedData($dateTime, ...$parsedAddresses);
         }
-        
         return $hasNextPage;
     }
 
-    private function loadDistinct(string $url, Goutte\Client $browser): array {
-        try {
-            $response = $browser->getClient()->request('GET', $url);
-            $body = $response->getBody();
-    
+    private function getAddresses(string $url): array {
+        $body = $this->getDOMBody($url);
+        if ($body) {
             $json = json_decode($body->getContents());
             $addresses = array_map(function ($item) {return $item->address;}, $json->data);
             $hasNextPage = $json->next_page_url != null;
-            
+
             return [$hasNextPage, $addresses];
-            
-        } catch (GuzzleHttp\Exception\GuzzleException $exception) {
-            $this->error($exception);
+        } else {
+            return [false, []];
         }
-        return [false, []];
     }
     
 
-    public function process(Goutte\Client $browser, string $url, $source, $address) {
-        $page = $this->loadPage(1, $browser, $url);
+    public function getParsedAddresses(string $url, $source, $address) {
+        $page = $this->loadReportPage(1, $url);
         $numPages = $page->filter('.page-item')->count() - 2; // -2 -> prev/next
         $reports = $this->parseReports($page, $url, $source, $address);
 
         for ($i = 2; $i <= $numPages; $i++) {
-            $page = $this->loadPage($i, $browser, $url);
+            $page = $this->loadReportPage($i, $url);
             $reports = array_merge($this->parseReports($page, $url, $source, $address), $reports);
         }
 
         return $reports;
     }
 
-    private function loadPage(int $pageNumber, Goutte\Client $browser, string $url): Crawler {
+    private function loadReportPage(int $pageNumber, string $url): Crawler {
         // delete history to prevent running out of memory
-        $browser->restart();
+        $this->browser->restart();
         $pageUrl = $url . sprintf('?page=%s', $pageNumber);
         print $pageUrl . "\n";
-        return $browser->request('GET', $pageUrl);
+        return $this->browser->request('GET', $pageUrl);
     }
 
     /**

@@ -6,16 +6,20 @@ namespace App\Console\Commands;
 
 use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
+use Goutte;
+use GuzzleHttp;
+use Psr\Http\Message\StreamInterface;
 
-class CryptoParser extends Command
+class CryptoParser extends Command 
 {
     protected $verbose = 1;
     protected $description = 'Global command';
     protected $signature = 'global:command';
+    protected $browser;
     
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
+        $this->browser = new Goutte\Client();
     }
 
     /**
@@ -69,5 +73,18 @@ class CryptoParser extends Command
     
     protected function printVerbose() {
         $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
+    }
+    
+    protected function getDOMBody(string $url): ?StreamInterface {
+        try {
+            return $this->browser
+                        ->getClient()
+                        ->request('GET', $url)
+                        ->getBody();
+
+        } catch (GuzzleHttp\Exception\GuzzleException $exception) {
+            $this->error($exception);
+            return null;
+        }
     }
 }

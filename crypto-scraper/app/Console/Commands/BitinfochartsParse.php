@@ -48,14 +48,15 @@ class BitinfochartsParse extends CryptoParser {
                 
         $this->printParsingPage($url);
         
-        $body = Utils::getContentFromURL($url);
-        if ($body == "") {
+        $body = $this->getDOMBody($url);
+        
+        if (!$body) {
             $this->line("<fg=red>No body found.</>");
             exit();
         }
 
-        $allAddresses = $this->getAddresses($body, $cryptoRegex);
-        if (empty($allAddresses)) {
+        $addresses = $this->getAddresses($body, $cryptoRegex);
+        if (empty($addresses)) {
             $this->line("<fg=red>No addresses found.</>");
             exit();
         }
@@ -63,7 +64,7 @@ class BitinfochartsParse extends CryptoParser {
         $bodyXpath = Utils::getDOMXPath($body);
 
         $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
-        $parsedAddresses = $this->getParsedAddresses($bodyXpath, $allAddresses, $cryptoRegex, $source, $cryptoType);
+        $parsedAddresses = $this->getParsedAddresses($bodyXpath, $addresses, $cryptoRegex, $source, $cryptoType);
         // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
         $this->saveParsedData($dateTime, ...$parsedAddresses);
@@ -74,14 +75,15 @@ class BitinfochartsParse extends CryptoParser {
      * Core function. Extracts info about wallets and returns it in an array for each address owner.
      *
      * @param DOMXPath $bodyXpath Input for xpath
-     * @param array $allAddresses All addresses extracted from single page
+     * @param array $addresses All addresses extracted from single page
      * @param string $cryptoRegex Regex for additional address extraction
      * @param string $source schema://host extracted from an url
      * @return ParsedAddress[]
      */
-    private function getParsedAddresses($bodyXpath, $allAddresses, $cryptoRegex, $source, $cryptoType): array {
+    private function getParsedAddresses($bodyXpath, $addresses, $cryptoRegex, $source, $cryptoType): array {
+        // TODO refactor to use array_map instead of foreach with side-effect
         $result = [];
-        foreach ($allAddresses as $address) {
+        foreach ($addresses as $address) {
             $walletInfo = $this->getWalletInfo($bodyXpath, $address);
             // parse only useful wallets => no anonymous 
             if (!empty($walletInfo)) {
