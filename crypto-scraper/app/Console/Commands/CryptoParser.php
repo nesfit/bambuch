@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
 
-class GlobalCommand extends Command
+class CryptoParser extends Command
 {
     protected $verbose = 1;
     protected $description = 'Global command';

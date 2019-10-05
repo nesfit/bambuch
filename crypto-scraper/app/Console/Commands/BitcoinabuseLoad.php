@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-class BitcoinabuseLoad extends GlobalCommand {
+class BitcoinabuseLoad extends CryptoParser {
     protected $signature = 'bitcoinabuse:load {verbose=1}';
     protected $description = 'Bitcoinabuse.com parser';
     protected $token = null;

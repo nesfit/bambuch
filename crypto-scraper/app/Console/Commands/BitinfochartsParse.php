@@ -7,7 +7,7 @@ use App\Console\Utils;
 use App\Models\ParsedAddress;
 use DOMXPath;
 
-class BitinfochartsParse extends GlobalCommand {
+class BitinfochartsParse extends CryptoParser {
     /**
      * The name and signature of the console command.
      *

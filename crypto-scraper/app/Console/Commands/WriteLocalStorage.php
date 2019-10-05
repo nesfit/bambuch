@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Support\Facades\Storage;
 
-class WriteLocalStorage extends GlobalCommand
+class WriteLocalStorage extends CryptoParser
 {
     /**
      * The name and signature of the console command.
