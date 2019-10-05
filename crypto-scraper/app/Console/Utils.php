@@ -135,5 +135,10 @@ class Utils {
 
         return $output;
     }
+    
+    public static function cleanText($text) {
+        $ascii = iconv("UTF-8", "UTF-8//TRANSLIT", $text);
+        return str_replace(["\r", "\n", "\t"], ' ', $ascii);
+    }
 }
    

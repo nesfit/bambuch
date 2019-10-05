@@ -3,6 +3,8 @@
 
 namespace App\Models;
 
+use App\Console\Utils;
+
 class ParsedAddress {
     private $owner, $url, $label, $source, $address, $type, $explicitCategory;
     
@@ -27,7 +29,7 @@ class ParsedAddress {
     public function createTSVData() {
         $cleanArray = array_reduce(self::getData(),
             function ($acc, $value)  {
-                array_push($acc, str_replace("\t", " ", $value));
+                array_push($acc, Utils::cleanText($value));
                 return $acc;
             }, []
         );

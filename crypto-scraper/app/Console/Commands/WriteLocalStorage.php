@@ -41,7 +41,7 @@ class WriteLocalStorage extends GlobalCommand
         $data = $this->argument("data");
         $dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $fileName = "scrapper_data_" . date("Y_m_d_H_i", strtotime($dateTime));
-        $this->printHeader("<fg=yellow>Writing into file: </>" . $fileName);
+//        $this->printHeader("<fg=yellow>Writing into file: </>" . $fileName);
         Storage::disk("local")->append($fileName, $data);
         return 1;
     }

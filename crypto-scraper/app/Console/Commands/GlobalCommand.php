@@ -4,6 +4,7 @@
 namespace App\Console\Commands;
 
 
+use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
 
 class GlobalCommand extends Command
@@ -40,6 +41,24 @@ class GlobalCommand extends Command
     protected function printDetail($text) {
         if ($this->verbose > 2) {
             print($text);
+        }
+    }
+
+    protected function saveParsedData(string $dateTime, ParsedAddress ...$parsedAddresses) {
+        if (!empty($parsedAddresses)) {
+            $progressBar = $this->output->createProgressBar(count($parsedAddresses));
+            foreach ($parsedAddresses as $item) {
+                $tsvData = $item->createTSVData();
+                $this->call("storage:write", [
+                    "data" => $tsvData,
+                    "dateTime" => $dateTime,
+                    "verbose" => $this->verbose
+                ]);
+                $progressBar->advance();
+            }
+            $progressBar->finish();
+        } else {
+            $this->printDetail("- no data to insert.\n");
         }
     }
 }

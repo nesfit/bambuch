@@ -7,8 +7,7 @@ use App\Console\Utils;
 use App\Models\ParsedAddress;
 use DOMXPath;
 
-class BitinfochartsParse extends GlobalCommand
-{
+class BitinfochartsParse extends GlobalCommand {
     /**
      * The name and signature of the console command.
      *
@@ -41,7 +40,7 @@ class BitinfochartsParse extends GlobalCommand
     public function handle()
     {
         $this->verbose = $this->argument("verbose");
-        $dateTime = $this->argument("dateTime");
+        $dateTime = $this->argument("dateTime") || '';
         $url = $this->argument("url");
 
         $source = Utils::getFullHost($url);
@@ -69,20 +68,7 @@ class BitinfochartsParse extends GlobalCommand
         $parsedAddresses = $this->getParsedAddresses($bodyXpath, $allAddresses, $cryptoRegex, $source, $cryptoType);
         // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
-        if (!empty($parsedAddresses)) {
-            print_r($parsedAddresses);
-            foreach ($parsedAddresses as $item) {
-                $tsvData = $item->createTSVData();
-                $this->call("storage:write", [
-                    "data" => $tsvData,
-                    "dateTime" => $dateTime,
-                    "verbose" => $this->verbose
-                ]);
-                $this->line("Stored into file");
-            }
-        } else {
-            $this->printDetail("- no data to insert.\n");
-        }
+        $this->saveParsedData($dateTime, ...$parsedAddresses);
         $this->printHeader("");
         return true;
     }
@@ -139,6 +125,7 @@ class BitinfochartsParse extends GlobalCommand
         return $result;
     }
     
+
     /**
      * Gets addresses from a body according to crypto regex.
      *

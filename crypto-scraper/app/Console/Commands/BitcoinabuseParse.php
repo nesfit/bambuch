@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\CryptoCurrency;
 use App\Console\Utils;
+use App\Models\ParsedAddress;
 use Goutte;
 use GuzzleHttp;
 use Symfony\Component\DomCrawler\Crawler;
@@ -51,10 +52,9 @@ class BitcoinabuseParse extends GlobalCommand {
         foreach ($addresses as $address) {
             $url = $source . sprintf(self::REPORT_URL, $address);
             $this->printHeader("<fg=yellow>Getting report from page: ". $url . "</>");
-            $reportPage = new ReportPage($browser, $url);
-            $reports = $reportPage->process();
-            
-            $this->saveReports($reports, $address, $source, $dateTime);
+            $reports = $this->process($browser, $url, $source, $address);
+            $this->saveParsedData($dateTime, ...$reports);
+            break; //TODO REMOVE
         }
         
         return $hasNextPage;
@@ -76,71 +76,54 @@ class BitcoinabuseParse extends GlobalCommand {
         }
         return [false, []];
     }
+    
 
-
-    private function saveReports($reports, $address, $source, $dateTime) {
-        foreach ($reports as $report) {
-            $tsvData = Utils::createTSVData(
-                $report['abuser'], $report['url'], $report['description'], $source, $address, CryptoCurrency::BTC["code"], $report['category']);
-            $this->call("storage:write", [
-                "data" => $tsvData, 
-                "dateTime" => $dateTime,
-                "verbose" => $this->verbose
-            ]);
-        }
-    }
-}
-
-class ReportPage {
-    private $browser;
-    private $url;
-
-    public function __construct(Goutte\Client $browser, string $url) {
-        $this->browser = $browser;
-        $this->url = $url;
-    }
-
-    public function process() {
-        $page = $this->loadPage(1);
+    public function process(Goutte\Client $browser, string $url, $source, $address) {
+        $page = $this->loadPage(1, $browser, $url);
         $numPages = $page->filter('.page-item')->count() - 2; // -2 -> prev/next
-        $reports = $this->parseReports($page);
+        $reports = $this->parseReports($page, $url, $source, $address);
 
         for ($i = 2; $i <= $numPages; $i++) {
-            $page = $this->loadPage($i);
-            $reports = array_merge($this->parseReports($page), $reports);
+            $page = $this->loadPage($i, $browser, $url);
+            $reports = array_merge($this->parseReports($page, $url, $source, $address), $reports);
         }
 
         return $reports;
     }
-    
-    private function loadPage(int $pageNumber): Crawler {
+
+    private function loadPage(int $pageNumber, Goutte\Client $browser, string $url): Crawler {
         // delete history to prevent running out of memory
-        $this->browser->restart();
-        $pageUrl = $this->url . sprintf('?page=%s', $pageNumber);
+        $browser->restart();
+        $pageUrl = $url . sprintf('?page=%s', $pageNumber);
         print $pageUrl . "\n";
-        return $this->browser->request('GET', $pageUrl);
+        return $browser->request('GET', $pageUrl);
     }
 
-    private function parseReports(Crawler $page) {
-        return $page->filterXPath('//table[2]/tbody/tr')->each(function (Crawler $tr) {
+    /**
+     * @param Crawler $page
+     * @param string $url
+     * @param $source
+     * @param $address
+     * @return ParsedAddress[]
+     */
+    private function parseReports(Crawler $page, string $url, $source, $address): array {
+        return $page->filterXPath('//table[2]/tbody/tr')->each(function (Crawler $tr) use ($url, $source, $address){
+            // get all "td" elements from the page
             list($date, $category, $abuser, $description) = $tr->filter('td')->each(function ($td): Crawler {
                 return $td;
             });
 
-            return [
-                'description' => trim($this->cleanText($description->text())),
-                'category' => trim($category->text()),
-                'abuser' => $this->getAbuserText($abuser),
-                'url' => $this->url,
-            ];
+            return new ParsedAddress(
+                $this->getAbuserText($abuser), 
+                $url, 
+                trim($description->text()), 
+                $source, 
+                $address, 
+                CryptoCurrency::BTC["code"], 
+                trim($category->text())
+            );
         });
     }
-
-    private function cleanText($text) {
-        $ascii = iconv("UTF-8", "UTF-8//TRANSLIT", $text);
-        return str_replace(["\r", "\n", "\t"], ' ', $ascii);
-    }
-
 
     private function getAbuserText(Crawler $abuserNode): string {
         $emailNode = $abuserNode->filter('.__cf_email__');
