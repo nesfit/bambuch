@@ -27,8 +27,7 @@ class BitinfochartsParse extends CryptoParser {
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -37,8 +36,7 @@ class BitinfochartsParse extends CryptoParser {
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         $this->verbose = $this->argument("verbose");
         $dateTime = $this->argument("dateTime") || '';
         $url = $this->argument("url");
@@ -48,7 +46,7 @@ class BitinfochartsParse extends CryptoParser {
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
                 
-        $this->line("<fg=cyan>Parsing page: " . $url ."</>");
+        $this->printParsingPage($url);
         
         $body = Utils::getContentFromURL($url);
         if ($body == "") {
@@ -69,7 +67,6 @@ class BitinfochartsParse extends CryptoParser {
         // store wallets data into TSV file 
         $this->printHeader("<fg=yellow>Inserting owner:</>");
         $this->saveParsedData($dateTime, ...$parsedAddresses);
-        $this->printHeader("");
         return true;
     }
 

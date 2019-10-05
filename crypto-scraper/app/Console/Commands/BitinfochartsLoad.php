@@ -48,7 +48,7 @@ class BitinfochartsLoad extends CryptoParser {
 
         $start  = new DateTime();
 
-        $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
+        $this->printVerbose();
 
         $this->parsePages($pages);
         

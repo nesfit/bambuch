@@ -57,8 +57,17 @@ class CryptoParser extends Command
                 $progressBar->advance();
             }
             $progressBar->finish();
+            $this->printHeader("");
         } else {
             $this->printDetail("- no data to insert.\n");
         }
+    }
+    
+    protected function printParsingPage(string $url) {
+        $this->line("<fg=cyan>Parsing page: " . $url ."</>");
+    }
+    
+    protected function printVerbose() {
+        $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
     }
 }

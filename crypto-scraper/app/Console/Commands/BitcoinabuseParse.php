@@ -47,6 +47,8 @@ class BitcoinabuseParse extends CryptoParser {
         $source = Utils::getFullHost($url);
         $browser = new Goutte\Client();
 
+        $this->printParsingPage($url);
+        
         list($hasNextPage, $addresses) = $this->loadDistinct($url, $browser);
         
         foreach ($addresses as $address) {
@@ -54,7 +56,7 @@ class BitcoinabuseParse extends CryptoParser {
             $this->printHeader("<fg=yellow>Getting report from page: ". $url . "</>");
             $reports = $this->process($browser, $url, $source, $address);
             $this->saveParsedData($dateTime, ...$reports);
-            break; //TODO REMOVE
+            return false; //TODO REMOVE
         }
         
         return $hasNextPage;

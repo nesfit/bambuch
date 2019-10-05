@@ -24,10 +24,11 @@ class BitcoinabuseLoad extends CryptoParser {
         $token = env('BITCOIN_ABUSE_TOKEN', '');
         $dateTime = date("Y-m-d H:i:s");
 
+        $this->printVerbose();
+        
         $mainUrl = self::URL . $token;
         for ($page = 1;; $page++) {
             $url = $mainUrl  . "&page=" . $page;
-            $this->line("<fg=cyan>Parsing page: " . $url ."</>");
             $hasNextPage = $this->call("bitcoinabuse:parse", [
                 "url" => $url,
                 "verbose" => $this->verbose,
@@ -37,9 +38,7 @@ class BitcoinabuseLoad extends CryptoParser {
             if (!$hasNextPage) {
                 break;
             }
-            print "continue \n";
             sleep(2);
         }
-        print "ending \n";
     }
 }
