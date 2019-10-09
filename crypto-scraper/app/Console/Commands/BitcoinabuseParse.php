@@ -72,7 +72,7 @@ class BitcoinabuseParse extends CryptoParser
         $reports = [];
         foreach ($addresses as $address) {
             $url = $source . sprintf(self::REPORT_URL, $address);
-            $this->printHeader("<fg=yellow>Getting report from page: ". $url . "</>");
+            $this->printVerbose2("<fg=yellow>Getting report from page: ". $url . "</>");
             $page = $this->loadReportPage(1, $url);
             $numPages = $page->filter('.page-item')->count() - 2; // -2 -> prev/next
             array_push($reports, ...$this->parseReports($page, $url, $source, $address));
@@ -87,10 +87,9 @@ class BitcoinabuseParse extends CryptoParser
     }
 
     private function loadReportPage(int $pageNumber, string $url): Crawler {
-        // delete history to prevent running out of memory
-        $this->browser->restart();
         $pageUrl = $url . sprintf('?page=%s', $pageNumber);
-        return $this->browser->request('GET', $pageUrl);
+        $this->printVerbose3("<fg=white>Getting report from sub-page: ". $pageUrl . "</>");
+        return $this->getPageCrawler($pageUrl);
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 use Goutte;
 use GuzzleHttp;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 class CryptoParser extends Command 
 {
@@ -29,8 +30,21 @@ class CryptoParser extends Command
      * @param string $text Text to print
      * @return void
      */
-    protected function printHeader($text) {
+    protected function printVerbose2($text) {
         if ($this->verbose > 1) {
+            $this->line($text);
+        }
+    }
+    
+    /**
+     * Print a string when verbose > 1.
+     * Verbose output printing management.
+     *
+     * @param string $text Text to print
+     * @return void
+     */
+    protected function printVerbose3($text) {
+        if ($this->verbose > 2) {
             $this->line($text);
         }
     }
@@ -86,5 +100,11 @@ class CryptoParser extends Command
             $this->error($exception);
             return null;
         }
+    }
+    
+    protected function getPageCrawler(string $url): Crawler {
+        // delete history to prevent running out of memory
+        $this->browser->restart();
+        return $this->browser->request('GET', $url);
     }
 }

@@ -63,10 +63,10 @@ class BitinfochartsParse extends CryptoParser {
 
         $bodyXpath = Utils::getDOMXPath($body);
 
-        $this->printHeader("<fg=yellow>Getting addresses from wallet:</>");
+        $this->printVerbose2("<fg=yellow>Getting addresses from wallet:</>");
         $parsedAddresses = $this->getParsedAddresses($bodyXpath, $addresses, $cryptoRegex, $source, $cryptoType);
         // store wallets data into TSV file 
-        $this->printHeader("<fg=yellow>Inserting owner:</>");
+        $this->printVerbose2("<fg=yellow>Inserting owner:</>");
         $this->saveParsedData($dateTime, ...$parsedAddresses);
         return true;
     }
