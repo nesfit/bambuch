@@ -50,7 +50,7 @@ class BitcoinabuseParse extends CryptoParser implements ParserInterface
         
         list($hasNextPage, $addresses) = $this->getAddresses($url);
         
-        $parsedAddresses = $this->getParsedAddresses($source, null, null, null, ...$addresses);
+        $parsedAddresses = $this->getParsedAddresses($source, $addresses);
         $this->saveParsedData($dateTime, ...$parsedAddresses);
         // Artisan super-command cannot receive boolean values         
         return $hasNextPage ? 1 : 0;
@@ -69,7 +69,7 @@ class BitcoinabuseParse extends CryptoParser implements ParserInterface
         }
     }
 
-    public function getParsedAddresses(string $source, Crawler $crawler, string $cryptoRegex, string $cryptoType, ParsedAddress ...$addresses): array {
+    public function getParsedAddresses(string $source, array $addresses, Crawler $crawler=null, string $cryptoRegex=null, string $cryptoType=null): array {
         $reports = [];
         foreach ($addresses as $address) {
             $url = $source . sprintf(self::REPORT_URL, $address);

@@ -3,7 +3,6 @@
 
 namespace App\Console;
 
-use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
 
 interface ParserInterface {
@@ -21,9 +20,9 @@ interface ParserInterface {
      * @param Crawler|null $crawler
      * @param string|null $cryptoRegex
      * @param string|null $cryptoType
-     * @param ParsedAddress ...$addresses
+     * @param string ...$addresses
      * @return array
      */
-    function getParsedAddresses(string $source, ?Crawler $crawler, ?string $cryptoRegex, ?string $cryptoType, ParsedAddress ...$addresses): array;
+    function getParsedAddresses(string $source, array $addresses, Crawler $crawler=null, string $cryptoRegex=null, string $cryptoType=null): array;
     
 }

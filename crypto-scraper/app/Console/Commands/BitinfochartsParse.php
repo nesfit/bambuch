@@ -68,7 +68,7 @@ class BitinfochartsParse extends CryptoParser implements ParserInterface {
         $pageCrawler = $this->getPageCrawler($url);
 
         $this->printVerbose2("<fg=yellow>Getting addresses from wallet:</>");
-        $parsedAddresses = $this->getParsedAddresses($source, $pageCrawler, $cryptoRegex, $cryptoType, ...$addresses);
+        $parsedAddresses = $this->getParsedAddresses($source, $addresses, $pageCrawler, $cryptoRegex, $cryptoType);
         // store wallets data into TSV file 
         $this->printVerbose2("<fg=yellow>Inserting owner:</>");
         $this->saveParsedData($dateTime, ...$parsedAddresses);
@@ -76,7 +76,7 @@ class BitinfochartsParse extends CryptoParser implements ParserInterface {
     }
 
 
-    public function getParsedAddresses(string $source, ?Crawler $crawler, ?string $cryptoRegex, ?string $cryptoType, ParsedAddress ...$addresses): array {
+    public function getParsedAddresses(string $source, array $addresses, Crawler $crawler=null, string $cryptoRegex=null, string $cryptoType=null): array {
         // TODO refactor to use array_map instead of foreach with side-effect
         $result = [];
         foreach ($addresses as $address) {
