@@ -61,7 +61,7 @@ class CryptoParser extends Command
                 $progressBar->advance();
             }
             $progressBar->finish();
-            $this->printHeader("");
+            print("\n");
         } else {
             $this->printDetail("- no data to insert.\n");
         }

@@ -94,7 +94,6 @@ class BitinfochartsParse extends CryptoParser {
                 $this->printDetail("- " . $owner . " ");
                 // check if a wallet has been already parsed in this page
                 
-//                print_r($result);
                 if (!ParsedAddress::ownerExists($owner, ...$result)) {
                     $body = Utils::getContentFromURL($url);
                     if ($body != "") {
