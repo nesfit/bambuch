@@ -3,11 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Console\CryptoCurrency;
+use App\Console\ParserInterface;
 use App\Console\Utils;
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcoinabuseParse extends CryptoParser 
+class BitcoinabuseParse extends CryptoParser implements ParserInterface
 {
     const REPORT_URL = '/reports/%s';
 
@@ -49,13 +50,13 @@ class BitcoinabuseParse extends CryptoParser
         
         list($hasNextPage, $addresses) = $this->getAddresses($url);
         
-        $parsedAddresses = $this->getParsedAddresses($source, $addresses);
+        $parsedAddresses = $this->getParsedAddresses($source, null, null, null, ...$addresses);
         $this->saveParsedData($dateTime, ...$parsedAddresses);
         // Artisan super-command cannot receive boolean values         
         return $hasNextPage ? 1 : 0;
     }
 
-    private function getAddresses(string $url): array {
+    public function getAddresses(string $url, string $cryptoType=''): array {
         $body = $this->getDOMBody($url);
         if ($body) {
             $json = json_decode($body->getContents());
@@ -68,7 +69,7 @@ class BitcoinabuseParse extends CryptoParser
         }
     }
 
-    private function getParsedAddresses($source, $addresses) {
+    public function getParsedAddresses(string $source, Crawler $crawler, string $cryptoRegex, string $cryptoType, ParsedAddress ...$addresses): array {
         $reports = [];
         foreach ($addresses as $address) {
             $url = $source . sprintf(self::REPORT_URL, $address);

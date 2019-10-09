@@ -37,7 +37,7 @@ class CryptoParser extends Command
     }
     
     /**
-     * Print a string when verbose > 1.
+     * Print a string when verbose > 2.
      * Verbose output printing management.
      *
      * @param string $text Text to print
