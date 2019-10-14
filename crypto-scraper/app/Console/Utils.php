@@ -101,6 +101,9 @@ class Utils {
         return CryptoCurrency::EMPTY;
     }
 
+    /**
+     * @deprecated
+    **/
     public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType, $category) {
         $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType, $category],
             function ($acc, $value)  {
@@ -131,6 +134,11 @@ class Utils {
         }
 
         return $output;
+    }
+    
+    public static function cleanText($text) {
+        $ascii = iconv("UTF-8", "UTF-8//TRANSLIT", $text);
+        return str_replace(["\r", "\n", "\t"], ' ', $ascii);
     }
 }
    

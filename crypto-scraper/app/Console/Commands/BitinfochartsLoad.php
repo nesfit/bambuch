@@ -10,7 +10,7 @@ use DateTime;;
 
 error_reporting(E_ALL ^ E_WARNING);
 
-class BitinfochartsLoad extends GlobalCommand {
+class BitinfochartsLoad extends CryptoParser {
 
     private const MAIN_URL = "https://bitinfocharts.com";
     private const PLACEHOLDER = "__placeholder__";
@@ -48,7 +48,7 @@ class BitinfochartsLoad extends GlobalCommand {
 
         $start  = new DateTime();
 
-        $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
+        $this->printVerbose();
 
         $this->parsePages($pages);
         
