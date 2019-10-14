@@ -27,7 +27,7 @@ class CryptoParser extends Command
     
     public function handle() {
         $this->verbose = $this->argument("verbose");
-        $this->dateTime = $this->argument("dateTime");
+        $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $this->url = $this->argument('url');
 
         $this->printParsingPage($this->url);
