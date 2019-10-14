@@ -40,38 +40,35 @@ class BitinfochartsParse extends CryptoParser implements ParserInterface {
      * @return mixed
      */
     public function handle() {
-        $this->verbose = $this->argument("verbose");
-        $dateTime = $this->argument("dateTime");
-        $url = $this->argument("url");
+        parent::handle();
 
-        $source = Utils::getFullHost($url);
-        $cryptoSettings = Utils::getCryptoSettings($url);
+        $source = $this->getFullHost();
+        $cryptoSettings = Utils::getCryptoSettings($this->url);
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
                 
-        $this->printParsingPage($url);
         
-        $body = $this->getDOMBody($url);
+        $body = $this->getDOMBody($this->url);
         
         if (!$body) {
             $this->line("<fg=red>No body found.</>");
             exit();
         }
 
-        $addresses = $this->getAddresses($url, $cryptoRegex);
+        $addresses = $this->getAddresses($this->url, $cryptoRegex);
 
         if (empty($addresses)) {
             $this->line("<fg=red>No addresses found.</>");
             exit();
         }
 
-        $pageCrawler = $this->getPageCrawler($url);
+        $pageCrawler = $this->getPageCrawler($this->url);
 
         $this->printVerbose2("<fg=yellow>Getting addresses from wallet:</>");
         $parsedAddresses = $this->getParsedAddresses($source, $addresses, $pageCrawler, $cryptoRegex, $cryptoType);
         // store wallets data into TSV file 
         $this->printVerbose2("<fg=yellow>Inserting owner:</>");
-        $this->saveParsedData($dateTime, ...$parsedAddresses);
+        $this->saveParsedData($this->dateTime, ...$parsedAddresses);
         return true;
     }
 

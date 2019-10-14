@@ -17,12 +17,22 @@ class CryptoParser extends Command
     protected $description = 'Global command';
     protected $signature = 'global:command';
     protected $browser;
+    protected $dateTime;
+    protected $url;
     
     public function __construct() {
         parent::__construct();
         $this->browser = new Goutte\Client();
     }
+    
+    public function handle() {
+        $this->verbose = $this->argument("verbose");
+        $this->dateTime = $this->argument("dateTime");
+        $this->url = $this->argument('url');
 
+        $this->printParsingPage($this->url);
+    }
+    
     /**
      * Print a string when verbose > 1.
      * Verbose output printing management.
@@ -106,5 +116,10 @@ class CryptoParser extends Command
         // delete history to prevent running out of memory
         $this->browser->restart();
         return $this->browser->request('GET', $url);
+    }
+    
+    protected function getFullHost(): string {
+        $parsedUrl = parse_url($this->url);
+        return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
 }
