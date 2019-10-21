@@ -8,14 +8,14 @@ use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcointalkParse extends CryptoParser
+class BitcointalkParseTopic extends CryptoParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse {url} {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:parse_topic {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -42,10 +42,31 @@ class BitcointalkParse extends CryptoParser
         parent::handle();
         
         $source = $this->getFullHost();
+        $this->parseTopic($this->url, $source);
         
-        $parsedAddresses = $this->getParsedAddresses($this->url, $source);
-        $this->saveParsedData($this->dateTime, ...$parsedAddresses);
         return 1;
+    }
+
+    /**
+     * @param string|null $url
+     * @param string $source
+     */
+    private function parseTopic(?string $url, string $source) {
+        if ($url) {
+            $nextPage = $this->getNextPage($url);
+            $this->printVerbose3("<fg=blue>Next page: " . $nextPage ."</>");
+            $parsedAddresses = $this->getParsedAddresses($this->url, $source);
+            $this->saveParsedData($this->dateTime, ...$parsedAddresses);
+            sleep(1);
+            $this->parseTopic($nextPage, $source);
+        }
+    }
+    
+    private function getNextPage(string $url): ?string {
+        $crawler = $this->getPageCrawler($url);
+        $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
+               
+        return $node ? $node->nodeValue : null;
     }
     
     public function getParsedAddresses(string $url, string $source): array {
