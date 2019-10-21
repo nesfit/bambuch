@@ -115,7 +115,12 @@ class CryptoParser extends Command
     protected function getPageCrawler(string $url): Crawler {
         // delete history to prevent running out of memory
         $this->browser->restart();
-        return $this->browser->request('GET', $url);
+        $response = $this->browser->request('GET', $url);
+        $status = $this->browser->getResponse()->getStatus();
+        if ($status != 200) {
+            $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
+        }
+        return $response;
     }
     
     protected function getFullHost(): string {
