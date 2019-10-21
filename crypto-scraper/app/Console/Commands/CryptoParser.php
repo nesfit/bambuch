@@ -9,10 +9,10 @@ use Illuminate\Console\Command;
 use Goutte;
 use GuzzleHttp;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
 
-class CryptoParser extends Command 
-{
+class CryptoParser extends Command {
     protected $verbose = 1;
     protected $description = 'Global command';
     protected $signature = 'global:command';
@@ -23,6 +23,8 @@ class CryptoParser extends Command
     public function __construct() {
         parent::__construct();
         $this->browser = new Goutte\Client();
+        // TODO define custom progress bar with message
+        ProgressBar::setFormatDefinition('custom', ' %percent% -- %message%');
     }
     
     public function handle() {
@@ -75,6 +77,8 @@ class CryptoParser extends Command
     protected function saveParsedData(string $dateTime, ParsedAddress ...$parsedAddresses) {
         if (!empty($parsedAddresses)) {
             $progressBar = $this->output->createProgressBar(count($parsedAddresses));
+//            $progressBar->setFormat('custom');
+//            $progressBar->setMessage('Saving results...');
             foreach ($parsedAddresses as $item) {
                 $tsvData = $item->createTSVData();
                 $this->call("storage:write", [
@@ -115,6 +119,8 @@ class CryptoParser extends Command
     protected function getPageCrawler(string $url): Crawler {
         // delete history to prevent running out of memory
         $this->browser->restart();
+        // to prevent traffic overloading
+        sleep(0.5);
         $response = $this->browser->request('GET', $url);
         $status = $this->browser->getResponse()->getStatus();
         if ($status != 200) {
@@ -126,5 +132,26 @@ class CryptoParser extends Command
     protected function getFullHost(): string {
         $parsedUrl = parse_url($this->url);
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
+    }
+
+    protected function getNextPage(string $url): ?string {
+        $crawler = $this->getPageCrawler($url);
+        $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
+
+        if ($node) {
+            $nextPage = $node->nodeValue;
+            $this->printVerbose3("<fg=blue>Next page: " . $nextPage ."</>");
+            return $nextPage;
+        }
+        
+        return null;
+    }
+    
+    protected function getLinksFromPage(string $url, string $pageType): array {
+        $crawler = $this->getPageCrawler($url);
+        $allLinks = $crawler->filterXPath('//a[contains(@href,"https://bitcointalk.org/index.php?' . $pageType. '")]/@href')->each(function (Crawler $node) {
+            return $node->getNode(0)->nodeValue;
+        });
+        return array_unique($allLinks);
     }
 }

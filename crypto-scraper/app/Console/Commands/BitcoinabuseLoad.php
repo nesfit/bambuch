@@ -38,7 +38,6 @@ class BitcoinabuseLoad extends CryptoParser {
             if (!$hasNextPage) {
                 break;
             }
-            sleep(2);
         }
     }
 }

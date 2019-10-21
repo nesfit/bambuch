@@ -32,6 +32,7 @@ class Utils {
 
     /**
      * Uses curl to get DOM from a url.
+     * @deprecated 
      *
      * @param string $url
      * @return string
