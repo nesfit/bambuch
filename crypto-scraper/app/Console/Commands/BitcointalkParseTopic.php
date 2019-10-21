@@ -8,8 +8,7 @@ use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcointalkParseTopic extends CryptoParser
-{
+class BitcointalkParseTopic extends CryptoParser {
     /**
      * The name and signature of the console command.
      *
@@ -22,7 +21,7 @@ class BitcointalkParseTopic extends CryptoParser
      *
      * @var string
      */
-    protected $description = 'Parse bitcointalk topic';
+    protected $description = 'Parse bitcointalk topic.';
 
     /**
      * Create a new command instance.
@@ -54,23 +53,14 @@ class BitcointalkParseTopic extends CryptoParser
     private function parseTopic(?string $url, string $source) {
         if ($url) {
             $nextPage = $this->getNextPage($url);
-            $this->printVerbose3("<fg=blue>Next page: " . $nextPage ."</>");
             $parsedAddresses = $this->getParsedAddresses($this->url, $source);
             $this->saveParsedData($this->dateTime, ...$parsedAddresses);
-            sleep(1);
             $this->parseTopic($nextPage, $source);
         }
     }
-    
-    private function getNextPage(string $url): ?string {
-        $crawler = $this->getPageCrawler($url);
-        $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
-               
-        return $node ? $node->nodeValue : null;
-    }
-    
+        
     public function getParsedAddresses(string $url, string $source): array {
-        $profileLinks = $this->getProfileLinks($url);
+        $profileLinks = $this->getLinksFromPage($url, 'action=profile');
         if ($profileLinks) {
             $maybeNull = array_map(function ($url) use ($source) {
                 list($name, $address) = $this->parseProfile($url);
@@ -92,15 +82,7 @@ class BitcointalkParseTopic extends CryptoParser
         }
         return [];
     }
-    
-    private function getProfileLinks(string $url): array {
-        $crawler = $this->getPageCrawler($url);
-        $allLinks = $crawler->filterXPath('//a[contains(@href,"https://bitcointalk.org/index.php?action=profile")]/@href')->each(function (Crawler $node) {
-            return $node->getNode(0)->nodeValue;
-        });
-        return array_unique($allLinks);
-    }
-    
+        
     private function parseProfile(string $url): array {
         $this->printVerbose2("<fg=white>Parsing profile: ". $url . "</>");
 
