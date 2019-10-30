@@ -4,7 +4,7 @@ namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Commands\CryptoParser;
 
-class BitcointalkParseBoard extends CryptoParser {
+class ParseBoard extends CryptoParser {
     /**
      * The name and signature of the console command.
      *

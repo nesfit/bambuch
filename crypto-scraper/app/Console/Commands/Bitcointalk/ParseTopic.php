@@ -7,7 +7,7 @@ use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use App\Console\Commands\CryptoParser;
 
-class BitcointalkParseTopic extends CryptoParser {
+class ParseTopic extends CryptoParser {
     /**
      * The name and signature of the console command.
      *

@@ -9,7 +9,7 @@ use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Console\Commands\CryptoParser;
 
-class BitcoinabuseParse extends CryptoParser implements ParserInterface
+class Parse extends CryptoParser implements ParserInterface
 {
     const REPORT_URL = '/reports/%s';
 

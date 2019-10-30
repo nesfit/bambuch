@@ -11,7 +11,7 @@ use App\Console\Commands\CryptoParser;
 
 error_reporting(E_ALL ^ E_WARNING);
 
-class BitinfochartsLoad extends CryptoParser {
+class Load extends CryptoParser {
 
     private const MAIN_URL = "https://bitinfocharts.com";
     private const PLACEHOLDER = "__placeholder__";
