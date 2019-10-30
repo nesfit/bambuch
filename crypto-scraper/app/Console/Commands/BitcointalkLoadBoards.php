@@ -68,6 +68,10 @@ class BitcointalkLoadBoards extends CryptoParser {
         print("\n");
     }
     
+    private function getLastBoardPage(string $url) {
+
+    }
+    
     public static function getMainBoards(array $allBoards): array {
         return array_filter($allBoards, function (string $item) {
             return preg_match('/board=\d+\.0$/', $item, $matches) === 1;
@@ -82,6 +86,11 @@ class BitcointalkLoadBoards extends CryptoParser {
         return array_filter($allBoards, function (string $item) {
             return preg_match('/board=\d+\.[^0]\d+$/', $item, $matches) === 1;
         });
+    }
+    
+    public static function getBoardId(string $boardPage): ?int {
+        preg_match('/board=\d+\.(\d+)$/', $boardPage, $matches);
+        return $matches[1] ?? null;
     }
     
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
