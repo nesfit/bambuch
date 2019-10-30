@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 
 use App\Models\Pg\BitcointalkMainBoard;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class BitcointalkLoadBoards extends CryptoParser {
     /**
@@ -12,7 +11,7 @@ class BitcointalkLoadBoards extends CryptoParser {
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:load_boards {url=https://bitcointalk.org/} {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:load_boards {url=https://bitcointalk.org} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -38,7 +37,13 @@ class BitcointalkLoadBoards extends CryptoParser {
     public function handle() {
         parent::handle();
         
-        $this->loadMainBoards($this->url);
+        if (self::mainBoardValid($this->url)) {
+            $this->loadMainBoards($this->url);
+            return 1;
+        } else {
+            $this->printRedLine('Invalid main board url: ' . $this->url);
+            return 0;
+        }
     }
     
     private function loadMainBoards(string $url) {
@@ -48,13 +53,6 @@ class BitcointalkLoadBoards extends CryptoParser {
             $this->saveMainBoards($mainBoards);
         }
     }
-    
-    public static function getMainBoards(array $allBoards) {
-        return array_filter($allBoards, function (string $item) {
-            return preg_match('/board=\d+\.0/', $item, $matches) === 1;
-        });
-    }
-    
     private function saveMainBoards(array $mainBoards) {
         $progressBar = $this->output->createProgressBar(count($mainBoards));
         foreach ($mainBoards as $board) {
@@ -67,5 +65,15 @@ class BitcointalkLoadBoards extends CryptoParser {
         }
         $progressBar->finish();
         print("\n");
+    }
+    
+    public static function getMainBoards(array $allBoards): array {
+        return array_filter($allBoards, function (string $item) {
+            return preg_match('/board=\d+\.0$/', $item, $matches) === 1;
+        });
+    }
+
+    public static function mainBoardValid(string $url): bool {
+        return preg_match('/board=\d+\.0$|^https:\/\/bitcointalk.org$/', $url, $matches) === 1;
     }
 }

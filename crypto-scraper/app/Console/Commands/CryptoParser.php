@@ -73,6 +73,10 @@ class CryptoParser extends Command {
             print($text);
         }
     }
+    
+    protected function printRedLine($text) {
+        $this->line('<fg=red>' . $text . '</>');
+    }
 
     protected function saveParsedData(string $dateTime, ParsedAddress ...$parsedAddresses) {
         if (!empty($parsedAddresses)) {
