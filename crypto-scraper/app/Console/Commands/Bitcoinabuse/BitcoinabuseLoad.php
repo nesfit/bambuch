@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitcoinabuse;
+
+use App\Console\Commands\CryptoParser;
 
 class BitcoinabuseLoad extends CryptoParser {
     protected $signature = 'bitcoinabuse:load {verbose=1}';

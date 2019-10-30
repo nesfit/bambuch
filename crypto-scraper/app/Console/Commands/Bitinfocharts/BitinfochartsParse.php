@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitinfocharts;
 
 use App\Console\CryptoCurrency;
 use App\Console\ParserInterface;
@@ -8,6 +8,7 @@ use App\Console\Utils;
 
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Console\Commands\CryptoParser;
 
 
 class BitinfochartsParse extends CryptoParser implements ParserInterface {

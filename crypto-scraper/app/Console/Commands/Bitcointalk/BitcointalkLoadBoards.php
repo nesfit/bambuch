@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
-
+namespace App\Console\Commands\Bitcointalk;
 
 use App\Models\Pg\BoardPage;
 use App\Models\Pg\MainBoard;
+use App\Console\Commands\CryptoParser;
 
 class BitcointalkLoadBoards extends CryptoParser {
     /**

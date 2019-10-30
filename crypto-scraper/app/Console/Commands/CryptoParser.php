@@ -3,7 +3,6 @@
 
 namespace App\Console\Commands;
 
-
 use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
 use Goutte;

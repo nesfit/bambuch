@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
-
+namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
+use App\Console\Commands\CryptoParser;
 
 class BitcointalkParseTopic extends CryptoParser {
     /**
