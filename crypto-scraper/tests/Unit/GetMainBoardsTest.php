@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Console\Commands\BitcointalkLoadBoards;
 use Tests\TestCase;
 
-class MainBoardTest extends TestCase
+class GetMainBoardsTest extends TestCase
 {
     /**
      * A basic unit test example.
@@ -41,6 +41,18 @@ class MainBoardTest extends TestCase
     public function testEmptyBoards() {
         $input = [];
         $expected = [];
+        $output = BitcointalkLoadBoards::getMainBoards($input);
+        $this->assertEquals($expected, $output);
+    }
+    
+    public function testBrokenBoards() {
+        $input = [
+            'https://bitcointalk.org/index.php?board=2.0',
+            'https://bitcointalk.org/index.php?board=83.0;sort=replies'
+        ];
+        $expected = [
+            'https://bitcointalk.org/index.php?board=2.0'
+        ];
         $output = BitcointalkLoadBoards::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
