@@ -6,7 +6,6 @@ namespace App\Console\Commands;
 use App\Console\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
-use Symfony\Component\DomCrawler\Crawler;
 
 class BitcointalkParseTopic extends CryptoParser {
     /**
