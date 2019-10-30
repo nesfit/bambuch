@@ -4,7 +4,7 @@ namespace App\Console\Commands\Bitcoinabuse;
 
 use App\Console\Commands\CryptoParser;
 
-class BitcoinabuseLoad extends CryptoParser {
+class Load extends CryptoParser {
     protected $signature = 'bitcoinabuse:load {verbose=1}';
     protected $description = 'Bitcoinabuse.com parser';
     protected $token = null;

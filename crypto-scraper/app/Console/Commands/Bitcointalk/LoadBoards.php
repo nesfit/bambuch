@@ -6,7 +6,7 @@ use App\Models\Pg\BoardPage;
 use App\Models\Pg\MainBoard;
 use App\Console\Commands\CryptoParser;
 
-class BitcointalkLoadBoards extends CryptoParser {
+class LoadBoards extends CryptoParser {
     /**
      * The name and signature of the console command.
      *
