@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitcoinabuse;
 
 use App\Console\CryptoCurrency;
 use App\Console\ParserInterface;
 use App\Console\Utils;
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Console\Commands\CryptoParser;
 
 class BitcoinabuseParse extends CryptoParser implements ParserInterface
 {

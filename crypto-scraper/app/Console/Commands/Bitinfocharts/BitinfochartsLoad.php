@@ -4,9 +4,10 @@
  * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
  */
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitinfocharts;
 
-use DateTime;;
+use DateTime;
+use App\Console\Commands\CryptoParser;
 
 error_reporting(E_ALL ^ E_WARNING);
 

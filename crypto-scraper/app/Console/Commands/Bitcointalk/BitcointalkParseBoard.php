@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitcointalk;
 
+use App\Console\Commands\CryptoParser;
 
 class BitcointalkParseBoard extends CryptoParser {
     /**
