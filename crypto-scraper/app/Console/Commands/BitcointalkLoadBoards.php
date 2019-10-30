@@ -39,9 +39,10 @@ class BitcointalkLoadBoards extends CryptoParser {
         
         if (self::mainBoardValid($this->url)) {
             $mainBoards = $this->loadMainBoards($this->url);
-            if (count($mainBoards)) {
-                $this->saveMainBoards($mainBoards);
-            }
+            $this->saveMainBoards($mainBoards);
+
+            $boardPages = $this->loadBoardPages($this->url);
+            print_r($boardPages);
             return 1;
         } else {
             $this->printRedLine('Invalid main board url: ' . $this->url);
@@ -68,8 +69,13 @@ class BitcointalkLoadBoards extends CryptoParser {
         print("\n");
     }
     
-    private function getLastBoardPage(string $url) {
-
+    private function loadBoardPages(string $url): array {
+        $maxBoardPage = $this->getMaxPage($url);
+        $mainBoardId = self::getMainBoardId($url);
+        $fromBoardId = self::getBoardPageId($url);
+        $toBoardId = self::getBoardPageId($maxBoardPage);
+        
+        return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);
     }
     
     public static function getMainBoards(array $allBoards): array {
@@ -88,8 +94,13 @@ class BitcointalkLoadBoards extends CryptoParser {
         });
     }
     
-    public static function getBoardId(string $boardPage): ?int {
-        preg_match('/board=\d+\.(\d+)$/', $boardPage, $matches);
+    public static function getBoardPageId(string $url): ?int {
+        preg_match('/board=\d+\.(\d+)$/', $url, $matches);
+        return $matches[1] ?? null;
+    }
+    
+    public static function getMainBoardId(string $url): ?int {
+        preg_match('/board=(\d+)\.\d+$/', $url, $matches);
         return $matches[1] ?? null;
     }
     

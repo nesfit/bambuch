@@ -161,7 +161,7 @@ class CryptoParser extends Command {
 
     protected function getMaxPage(string $url): ?string {
         $crawler = $this->getPageCrawler($url);
-        $node = $crawler->filterXPath('//a[@class="navPages"][last()]/@href')->getNode(0);
+        $node = $crawler->filterXPath('//td/a[@class="navPages"][last()]/@href')->getNode(0);
 
         if ($node) {
             $nextPage = $node->nodeValue;
