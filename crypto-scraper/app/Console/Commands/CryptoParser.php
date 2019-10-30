@@ -158,4 +158,17 @@ class CryptoParser extends Command {
         });
         return array_unique($allLinks);
     }
+
+    protected function getMaxPage(string $url): ?string {
+        $crawler = $this->getPageCrawler($url);
+        $node = $crawler->filterXPath('//a[@class="navPages"][last()]/@href')->getNode(0);
+
+        if ($node) {
+            $nextPage = $node->nodeValue;
+            $this->printVerbose3("<fg=blue>Max page: " . $nextPage ."</>");
+            return $nextPage;
+        }
+
+        return null;
+    }
 }
