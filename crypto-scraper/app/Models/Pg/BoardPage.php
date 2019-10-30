@@ -4,7 +4,7 @@ namespace App\Models\Pg;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BitcointalkBoardPage extends Model
+class BoardPage extends Model
 {
     const COL_ID        = 'id';
     const COL_URL       = 'url';
@@ -19,7 +19,15 @@ class BitcointalkBoardPage extends Model
     protected $table = self::TABLE;
     protected $connection = 'pgsql';
     
-    public function bitcointalk_main_boards() {
-        $this->belongsTo(BitcointalkMainBoard::class);
+    public function main_board() {
+        $this->belongsTo(MainBoard::class);
+    }
+
+    public static function getByUrl(string $url) {
+        return self::where("url", $url)->get()->first();
+    }
+
+    public static function boardPageExists(string $url) {
+        return self::getByUrl($url) !== null;
     }
 }

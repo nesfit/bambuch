@@ -4,10 +4,10 @@ namespace App\Models\Pg;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BitcointalkMainBoard extends Model
+class MainBoard extends Model
 {
     const COL_ID        = 'id';
-    const COL_URL       = 'url'; 
+    const COL_URL       = 'url';
 
     const COL_CREATEDAT = 'created_at';
     const COL_UPDATEDAT = 'updated_at';
@@ -16,11 +16,11 @@ class BitcointalkMainBoard extends Model
     protected $table    = self::TABLE;
     protected $connection = 'pgsql';
     
-    public function bitcointalk_board_pages() {
-        return $this->hasMany(BitcointalkBoardPage::class);
+    public function board_pages() {
+        return $this->hasMany(BoardPage::class);
     }
 
-    public static function getByUrl(string $url) {
+    public static function getByUrl(string $url): ?MainBoard {
         return self::where("url", $url)->get()->first();
     }
     
