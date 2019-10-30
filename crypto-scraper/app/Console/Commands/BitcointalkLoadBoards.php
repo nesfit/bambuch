@@ -3,7 +3,8 @@
 namespace App\Console\Commands;
 
 
-use App\Models\Pg\BitcointalkMainBoard;
+use App\Models\Pg\BoardPage;
+use App\Models\Pg\MainBoard;
 
 class BitcointalkLoadBoards extends CryptoParser {
     /**
@@ -42,7 +43,7 @@ class BitcointalkLoadBoards extends CryptoParser {
             $this->saveMainBoards($mainBoards);
 
             $boardPages = $this->loadBoardPages($this->url);
-            print_r($boardPages);
+            $this->saveBoardPages($boardPages, $this->url);
             return 1;
         } else {
             $this->printRedLine('Invalid main board url: ' . $this->url);
@@ -58,10 +59,30 @@ class BitcointalkLoadBoards extends CryptoParser {
     private function saveMainBoards(array $mainBoards) {
         $progressBar = $this->output->createProgressBar(count($mainBoards));
         foreach ($mainBoards as $board) {
-            if (!BitcointalkMainBoard::mainBoardExists($board)) {
-                $newBoard = new BitcointalkMainBoard();
-                $newBoard->setAttribute('url', $board);
+            if (!MainBoard::mainBoardExists($board)) {
+                $newBoard = new MainBoard();
+                $newBoard->setAttribute(MainBoard::COL_URL, $board);
                 $newBoard->save();
+            }
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        print("\n");
+    }
+    
+    private function saveBoardPages(array $boardPages, string $mainUrl) {
+        $pagesCount = count($boardPages);
+        $progressBar = $this->output->createProgressBar($pagesCount);
+        foreach ($boardPages as $key => $page) {
+            if (!BoardPage::boardPageExists($page)) {
+                $newBoard = new BoardPage();
+                $newBoard->setAttribute(BoardPage::COL_URL, $page);
+                $newBoard->setAttribute(BoardPage::COL_PARSED, false);
+                $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
+                $newBoard->save();
+                
+                $mainBoard = MainBoard::getByUrl($mainUrl);
+                $mainBoard->board_pages()->save($newBoard);
             }
             $progressBar->advance();
         }
@@ -71,11 +92,14 @@ class BitcointalkLoadBoards extends CryptoParser {
     
     private function loadBoardPages(string $url): array {
         $maxBoardPage = $this->getMaxPage($url);
-        $mainBoardId = self::getMainBoardId($url);
-        $fromBoardId = self::getBoardPageId($url);
-        $toBoardId = self::getBoardPageId($maxBoardPage);
-        
-        return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);
+        if ($maxBoardPage) {
+            $mainBoardId = self::getMainBoardId($url);
+            $fromBoardId = self::getBoardPageId($url);
+            $toBoardId = self::getBoardPageId($maxBoardPage);
+            
+            return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);
+        }
+        return [];
     }
     
     public static function getMainBoards(array $allBoards): array {

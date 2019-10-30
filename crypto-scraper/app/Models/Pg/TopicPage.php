@@ -4,7 +4,7 @@ namespace App\Models\Pg;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BitcointalkTopicPage extends Model
+class TopicPage extends Model
 {
     const COL_ID        = 'id';
     const COL_URL       = 'url';

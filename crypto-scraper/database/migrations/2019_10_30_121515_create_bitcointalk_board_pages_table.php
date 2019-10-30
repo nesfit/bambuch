@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Pg\BitcointalkBoardPage;
+use App\Models\Pg\BoardPage;
 
 class CreateBitcointalkBoardPagesTable extends Migration
 {
@@ -14,16 +14,16 @@ class CreateBitcointalkBoardPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create(BitcointalkBoardPage::TABLE, function (Blueprint $table) {
-            $table->bigIncrements(BitcointalkBoardPage::COL_ID);
-            $table->boolean(BitcointalkBoardPage::COL_PARSED);
-            $table->boolean(BitcointalkBoardPage::COL_LAST);
-            $table->string(BitcointalkBoardPage::COL_URL, 256);
-            $table->bigInteger(BitcointalkBoardPage::COL_MAIN_BOARD);
-
+        Schema::create(BoardPage::TABLE, function (Blueprint $table) {
+            $table->bigIncrements(BoardPage::COL_ID);
+            $table->boolean(BoardPage::COL_PARSED);
+            $table->boolean(BoardPage::COL_LAST);
+            $table->string(BoardPage::COL_URL, 256);
+            $table->bigInteger(BoardPage::COL_MAIN_BOARD)->nullable();
+            
             $table->timestamps();
 
-            $table->index([BitcointalkBoardPage::COL_URL]);
+            $table->index([BoardPage::COL_URL]);
         });
     }
 

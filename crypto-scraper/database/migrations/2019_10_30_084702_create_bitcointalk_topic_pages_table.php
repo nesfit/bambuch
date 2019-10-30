@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Pg\BitcointalkTopicPage;
+use App\Models\Pg\TopicPage;
 
 class CreateBitcointalkTopicPagesTable extends Migration
 {
@@ -14,15 +14,15 @@ class CreateBitcointalkTopicPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create(BitcointalkTopicPage::TABLE, function (Blueprint $table) {
-            $table->bigIncrements(BitcointalkTopicPage::COL_ID);
-            $table->boolean(BitcointalkTopicPage::COL_PARSED);
-            $table->boolean(BitcointalkTopicPage::COL_LAST);
-            $table->string(BitcointalkTopicPage::COL_URL, 256);
+        Schema::create(TopicPage::TABLE, function (Blueprint $table) {
+            $table->bigIncrements(TopicPage::COL_ID);
+            $table->boolean(TopicPage::COL_PARSED);
+            $table->boolean(TopicPage::COL_LAST);
+            $table->string(TopicPage::COL_URL, 256);
 
             $table->timestamps();
             
-            $table->index([BitcointalkTopicPage::COL_URL]);
+            $table->index([TopicPage::COL_URL]);
         });
     }
 
@@ -33,6 +33,6 @@ class CreateBitcointalkTopicPagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(BitcointalkTopicPage::TABLE);
+        Schema::dropIfExists(TopicPage::TABLE);
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Pg\BitcointalkMainBoard;
+use App\Models\Pg\MainBoard;
 
 class CreateBitcointalkMainBoardsTable extends Migration
 {
@@ -14,9 +14,10 @@ class CreateBitcointalkMainBoardsTable extends Migration
      */
     public function up()
     {
-        Schema::create(BitcointalkMainBoard::TABLE, function (Blueprint $table) {
-            $table->bigIncrements(BitcointalkMainBoard::COL_ID);
-            $table->string(BitcointalkMainBoard::COL_URL, 256);
+        Schema::create(MainBoard::TABLE, function (Blueprint $table) {
+            $table->bigIncrements(MainBoard::COL_ID);
+            $table->string(MainBoard::COL_URL, 256);
+            
             $table->timestamps();
         });
     }
