@@ -38,7 +38,10 @@ class BitcointalkLoadBoards extends CryptoParser {
         parent::handle();
         
         if (self::mainBoardValid($this->url)) {
-            $this->loadMainBoards($this->url);
+            $mainBoards = $this->loadMainBoards($this->url);
+            if (count($mainBoards)) {
+                $this->saveMainBoards($mainBoards);
+            }
             return 1;
         } else {
             $this->printRedLine('Invalid main board url: ' . $this->url);
@@ -46,13 +49,11 @@ class BitcointalkLoadBoards extends CryptoParser {
         }
     }
     
-    private function loadMainBoards(string $url) {
+    private function loadMainBoards(string $url): array {
         $allBoards = $this->getLinksFromPage($url, 'board');
-        $mainBoards = self::getMainBoards($allBoards);
-        if (count($mainBoards)) {
-            $this->saveMainBoards($mainBoards);
-        }
+        return self::getMainBoards($allBoards);
     }
+
     private function saveMainBoards(array $mainBoards) {
         $progressBar = $this->output->createProgressBar(count($mainBoards));
         foreach ($mainBoards as $board) {
@@ -75,5 +76,19 @@ class BitcointalkLoadBoards extends CryptoParser {
 
     public static function mainBoardValid(string $url): bool {
         return preg_match('/board=\d+\.0$|^https:\/\/bitcointalk.org$/', $url, $matches) === 1;
+    }
+    
+    public static function getBoardPages(array $allBoards): array {
+        return array_filter($allBoards, function (string $item) {
+            return preg_match('/board=\d+\.[^0]\d+$/', $item, $matches) === 1;
+        });
+    }
+    
+    public static function calculateBoardPages(int $boardId, int $from, int $to): array {
+        $boardPages = [];
+        for (; $from <= $to; $from += 40) {
+            array_push($boardPages, sprintf('https://bitcointalk.org/index.php?board=%s.%s', $boardId, $from));
+        }
+        return $boardPages;
     }
 }
