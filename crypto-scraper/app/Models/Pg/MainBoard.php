@@ -27,5 +27,8 @@ class MainBoard extends Model
     public static function mainBoardExists(string $url) {
         return self::getByUrl($url) !== null;
     }
-
+    
+    public static function getAllBoards() {
+        return self::all()->pluck(self::COL_URL);
+    }
 }
