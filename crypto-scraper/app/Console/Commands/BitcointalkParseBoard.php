@@ -45,14 +45,12 @@ class BitcointalkParseBoard extends CryptoParser {
         if ($url) {
             $nextPage = $this->getNextPage($url);
             $topicLinks = $this->getLinksFromPage($url, 'topic');
-            $progressBar = $this->output->createProgressBar(count($topicLinks));
             foreach ($topicLinks as $topicLink) {
                 $this->call("bitcointalk:parse_topic", [
                     "url" => $topicLink,
                     "dateTime" => $this->dateTime,
                     "verbose" => $this->verbose
                 ]);
-                $progressBar->advance();
             }
             $this->parseBoard($nextPage);
         } 
