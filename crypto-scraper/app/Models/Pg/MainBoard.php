@@ -22,14 +22,18 @@ class MainBoard extends Model
     }
 
     public static function getByUrl(string $url): ?MainBoard {
-        return self::where("url", $url)->get()->first();
+        return self::where(self::COL_URL, $url)->get()->first();
     }
     
     public static function mainBoardExists(string $url) {
         return self::getByUrl($url) !== null;
     }
     
-    public static function getAllBoards() {
-        return self::all()->pluck(self::COL_URL);
+    public static function getNonParsedBoards() {
+        return self::where(self::COL_PARSED, false)->pluck(self::COL_URL);
     }
+    
+    public static function setParsedToAll(bool $value) {
+        self::whereNotNull(self::COL_ID)->update(array(self::COL_PARSED => $value));
+    } 
 }

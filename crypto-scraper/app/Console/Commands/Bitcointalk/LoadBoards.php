@@ -86,9 +86,10 @@ class LoadBoards extends CryptoParser {
                 $newBoard->save();
                 
                 $mainBoard->board_pages()->save($newBoard);
-                $mainBoard->setAttribute(MainBoard::COL_PARSED, true);
-                $mainBoard->save();
             }
+            $mainBoard->setAttribute(MainBoard::COL_PARSED, true);
+            $mainBoard->save();
+           
             $progressBar->advance();
         }
         $progressBar->finish();

@@ -12,7 +12,7 @@ class UpdateMainBoards extends CryptoParser
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:update_main_boards {verbose=1}';
+    protected $signature = 'bitcointalk:update_main_boards {verbose=1} {--force}';
 
     /**
      * The console command description.
@@ -37,8 +37,12 @@ class UpdateMainBoards extends CryptoParser
      */
     public function handle() {
         $this->verbose = $this->argument("verbose");
+        if($this->option("force")) {
+            $this->printCyanLine("Force update!");
+            MainBoard::setParsedToAll(false);
+        }
 
-        $allMainBoards = MainBoard::getAllBoards();
+        $allMainBoards = MainBoard::getNonParsedBoards();
         foreach ($allMainBoards as $mainBoard) {
             $this->call("bitcointalk:load_boards", [
                 "url" => $mainBoard,
