@@ -16,6 +16,7 @@ class CreateBitcointalkMainBoardsTable extends Migration
     {
         Schema::create(MainBoard::TABLE, function (Blueprint $table) {
             $table->bigIncrements(MainBoard::COL_ID);
+            $table->boolean(MainBoard::COL_PARSED);
             $table->string(MainBoard::COL_URL, 256);
             
             $table->timestamps();

@@ -8,6 +8,7 @@ class MainBoard extends Model
 {
     const COL_ID        = 'id';
     const COL_URL       = 'url';
+    const COL_PARSED    = 'parsed';
 
     const COL_CREATEDAT = 'created_at';
     const COL_UPDATEDAT = 'updated_at';
