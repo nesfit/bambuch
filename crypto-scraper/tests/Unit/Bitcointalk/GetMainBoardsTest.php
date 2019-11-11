@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\BitcointalkLoadBoards;
+use App\Console\Commands\Bitcointalk\LoadBoards;
 use Tests\TestCase;
 
 class GetMainBoardsTest extends TestCase
@@ -18,7 +18,7 @@ class GetMainBoardsTest extends TestCase
             'https://bitcointalk.org/index.php?board=22.0',
             'https://bitcointalk.org/index.php?board=22222.0'
         ];
-        $output = BitcointalkLoadBoards::getMainBoards($input);
+        $output = LoadBoards::getMainBoards($input);
         $this->assertEquals($input, $output);
     }
     
@@ -34,14 +34,14 @@ class GetMainBoardsTest extends TestCase
             'https://bitcointalk.org/index.php?board=22.0',
             'https://bitcointalk.org/index.php?board=22222.0'
         ];
-        $output = BitcointalkLoadBoards::getMainBoards($input);
+        $output = LoadBoards::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
     
     public function testEmptyBoards() {
         $input = [];
         $expected = [];
-        $output = BitcointalkLoadBoards::getMainBoards($input);
+        $output = LoadBoards::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
     
@@ -53,7 +53,7 @@ class GetMainBoardsTest extends TestCase
         $expected = [
             'https://bitcointalk.org/index.php?board=2.0'
         ];
-        $output = BitcointalkLoadBoards::getMainBoards($input);
+        $output = LoadBoards::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
 }
