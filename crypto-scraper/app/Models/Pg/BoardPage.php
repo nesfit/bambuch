@@ -30,4 +30,11 @@ class BoardPage extends Model
     public static function boardPageExists(string $url) {
         return self::getByUrl($url) !== null;
     }
+    
+    public static function unsetLastBoard(int $mainBoardId) {
+        return self::where(self::COL_MAIN_BOARD, $mainBoardId)
+            ->where(self::COL_LAST, true)
+            ->update(array(self::COL_LAST => false));
+    } 
+    
 }
