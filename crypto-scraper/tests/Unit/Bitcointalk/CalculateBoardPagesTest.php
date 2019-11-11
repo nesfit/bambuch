@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\BitcointalkLoadBoards;
+use App\Console\Commands\Bitcointalk\LoadBoards;
 use Tests\TestCase;
 
 class CalculateBoardPagesTest extends TestCase
@@ -13,7 +13,7 @@ class CalculateBoardPagesTest extends TestCase
      * @return void
      */
     public function testCorrectValues() {
-        $output = BitcointalkLoadBoards::calculateBoardPages(1, 0, 120);
+        $output = LoadBoards::calculateBoardPages(1, 0, 120);
         $expected = [
           'https://bitcointalk.org/index.php?board=1.0',  
           'https://bitcointalk.org/index.php?board=1.40',  
@@ -24,7 +24,7 @@ class CalculateBoardPagesTest extends TestCase
     }
     
     public function testWrongBoundaries() {
-        $output = BitcointalkLoadBoards::calculateBoardPages(1, 0, 110);
+        $output = LoadBoards::calculateBoardPages(1, 0, 110);
         $expected = [
           'https://bitcointalk.org/index.php?board=1.0',  
           'https://bitcointalk.org/index.php?board=1.40',  
@@ -34,7 +34,7 @@ class CalculateBoardPagesTest extends TestCase
     }   
 
     public function testTheSameBoundaries() {
-        $output = BitcointalkLoadBoards::calculateBoardPages(1, 40, 40);
+        $output = LoadBoards::calculateBoardPages(1, 40, 40);
         $expected = [
             'https://bitcointalk.org/index.php?board=1.40'
         ];
