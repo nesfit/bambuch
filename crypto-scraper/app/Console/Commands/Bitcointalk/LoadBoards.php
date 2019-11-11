@@ -60,10 +60,10 @@ class LoadBoards extends CryptoParser {
         $progressBar = $this->output->createProgressBar(count($mainBoards));
         foreach ($mainBoards as $board) {
             if (!MainBoard::mainBoardExists($board)) {
-                $newBoard = new MainBoard();
-                $newBoard->setAttribute(MainBoard::COL_URL, $board);
+                $mainBoard = new MainBoard();
+                $mainBoard->setAttribute(MainBoard::COL_URL, $board);
                 $mainBoard->setAttribute(MainBoard::COL_PARSED, false);
-                $newBoard->save();
+                $mainBoard->save();
             }
             $progressBar->advance();
         }
@@ -72,6 +72,9 @@ class LoadBoards extends CryptoParser {
     }
     
     private function saveBoardPages(array $boardPages, string $mainUrl) {
+        $mainBoard = MainBoard::getByUrl($mainUrl);
+        BoardPage::unsetLastBoard($mainBoard->getAttribute(MainBoard::COL_ID));
+        
         $pagesCount = count($boardPages);
         $progressBar = $this->output->createProgressBar($pagesCount);
         foreach ($boardPages as $key => $page) {
@@ -82,7 +85,6 @@ class LoadBoards extends CryptoParser {
                 $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
                 $newBoard->save();
                 
-                $mainBoard = MainBoard::getByUrl($mainUrl);
                 $mainBoard->board_pages()->save($newBoard);
                 $mainBoard->setAttribute(MainBoard::COL_PARSED, true);
                 $mainBoard->save();
