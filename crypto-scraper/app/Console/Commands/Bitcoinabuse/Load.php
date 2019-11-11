@@ -26,7 +26,7 @@ class Load extends CryptoParser {
         $token = env('BITCOIN_ABUSE_TOKEN', '');
         $dateTime = date("Y-m-d H:i:s");
 
-        $this->printVerbose();
+        $this->printVerbosity();
         
         $mainUrl = self::URL . $token;
         for ($page = 1;; $page++) {
