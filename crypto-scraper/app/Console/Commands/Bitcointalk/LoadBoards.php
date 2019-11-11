@@ -7,6 +7,8 @@ use App\Models\Pg\MainBoard;
 use App\Console\Commands\CryptoParser;
 
 class LoadBoards extends CryptoParser {
+    const ENTITY = 'board';
+
     /**
      * The name and signature of the console command.
      *
@@ -109,36 +111,26 @@ class LoadBoards extends CryptoParser {
     }
     
     public static function getMainBoards(array $allBoards): array {
-        return array_filter($allBoards, function (string $item) {
-            return preg_match('/board=\d+\.0$/', $item, $matches) === 1;
-        });
+        return Utils::getMainEntity(self::ENTITY, $allBoards);
     }
 
     public static function mainBoardValid(string $url): bool {
-        return preg_match('/board=\d+\.0$|^https:\/\/bitcointalk.org$/', $url, $matches) === 1;
+        return Utils::mainEntityValid(self::ENTITY, $url);
     }
     
     public static function getBoardPages(array $allBoards): array {
-        return array_filter($allBoards, function (string $item) {
-            return preg_match('/board=\d+\.[^0]\d+$/', $item, $matches) === 1;
-        });
+        return Utils::getEntityPages(self::ENTITY, $allBoards);
     }
     
     public static function getBoardPageId(string $url): ?int {
-        preg_match('/board=\d+\.(\d+)$/', $url, $matches);
-        return $matches[1] ?? null;
+        return Utils::getEntityPageId(self::ENTITY, $url);
     }
     
     public static function getMainBoardId(string $url): ?int {
-        preg_match('/board=(\d+)\.\d+$/', $url, $matches);
-        return $matches[1] ?? null;
+        return Utils::getMainEntityId(self::ENTITY, $url);
     }
     
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
-        $boardPages = [];
-        for (; $from <= $to; $from += 40) {
-            array_push($boardPages, sprintf('https://bitcointalk.org/index.php?board=%s.%s', $boardId, $from));
-        }
-        return $boardPages;
+        return Utils::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
     }
 }
