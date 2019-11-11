@@ -49,7 +49,7 @@ class Load extends CryptoParser {
 
         $start  = new DateTime();
 
-        $this->printVerbose();
+        $this->printVerbosity();
 
         $this->parsePages($pages);
         

@@ -76,6 +76,10 @@ class CryptoParser extends Command {
     protected function printRedLine($text) {
         $this->line('<fg=red>' . $text . '</>');
     }
+    
+    protected function printCyanLine($text) {
+        $this->line('<fg=cyan>' . $text . '</>');
+    }
 
     protected function saveParsedData(string $dateTime, ParsedAddress ...$parsedAddresses) {
         if (!empty($parsedAddresses)) {
@@ -102,7 +106,7 @@ class CryptoParser extends Command {
         $this->line("<fg=cyan>Parsing page: " . $url ."</>");
     }
     
-    protected function printVerbose() {
+    protected function printVerbosity() {
         $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
     }
     
