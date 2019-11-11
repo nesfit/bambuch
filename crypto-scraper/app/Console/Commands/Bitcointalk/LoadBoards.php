@@ -62,6 +62,7 @@ class LoadBoards extends CryptoParser {
             if (!MainBoard::mainBoardExists($board)) {
                 $newBoard = new MainBoard();
                 $newBoard->setAttribute(MainBoard::COL_URL, $board);
+                $mainBoard->setAttribute(MainBoard::COL_PARSED, false);
                 $newBoard->save();
             }
             $progressBar->advance();
@@ -83,6 +84,8 @@ class LoadBoards extends CryptoParser {
                 
                 $mainBoard = MainBoard::getByUrl($mainUrl);
                 $mainBoard->board_pages()->save($newBoard);
+                $mainBoard->setAttribute(MainBoard::COL_PARSED, true);
+                $mainBoard->save();
             }
             $progressBar->advance();
         }
