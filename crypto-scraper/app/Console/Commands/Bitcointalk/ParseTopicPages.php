@@ -7,13 +7,13 @@ use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use App\Console\Commands\CryptoParser;
 
-class ParseTopic extends CryptoParser {
+class ParseTopicPages extends CryptoParser {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_topic {url} {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:parse_topic_pages {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.

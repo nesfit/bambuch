@@ -54,7 +54,7 @@ class LoadBoards extends CryptoParser {
     }
     
     private function loadMainBoards(string $url): array {
-        $allBoards = $this->getLinksFromPage($url, 'board');
+        $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         return self::getMainBoards($allBoards);
     }
 
