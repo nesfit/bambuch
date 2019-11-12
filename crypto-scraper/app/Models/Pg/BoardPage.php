@@ -3,7 +3,6 @@
 namespace App\Models\Pg;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class BoardPage extends Model
 {
@@ -24,8 +23,11 @@ class BoardPage extends Model
         $this->belongsTo(MainBoard::class);
     }
 
-    public static function getByUrl(string $url) {
-        return self::where("url", $url)->get()->first();
+    public static function getByUrl(string $url): ?BoardPage {
+        return self::query()
+            ->where("url", $url)
+            ->get()
+            ->first();
     }
 
     public static function boardPageExists(string $url) {
@@ -33,14 +35,17 @@ class BoardPage extends Model
     }
     
     public static function unsetLastBoard(int $mainBoardId) {
-        return self::where(self::COL_MAIN_BOARD, $mainBoardId)
+        return self::query()
+            ->where(self::COL_MAIN_BOARD, $mainBoardId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
-    } 
-    
-    public static function getUnparsedBoardPages() {
-        return DB::table(self::TABLE)
-            ->select(BoardPage::COL_URL)
+    }
+
+    /**
+     * @return BoardPage[]
+     */
+    public static function getUnparsedBoardPages(): array {
+        return self::query()
             ->where(self::COL_PARSED, false)
             ->get()
             ->all();

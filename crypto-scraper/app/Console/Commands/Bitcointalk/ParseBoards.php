@@ -36,13 +36,18 @@ class ParseBoards extends CryptoParser {
      */
     public function handle() {
         $this->verbose = $this->argument("verbose");
-
+        
         $boardPages = BoardPage::getUnparsedBoardPages();
-        foreach ($boardPages as $boardPage) {;
-            $this->call("bitcointalk:load_main_topics", [
-                "url" => $boardPage->url,
+        foreach ($boardPages as $boardPage) {
+            $parsed = $this->call("bitcointalk:load_main_topics", [
+                "url" => $boardPage->getAttribute(BoardPage::COL_URL),
                 "verbose" => $this->verbose
             ]);
+            
+            if ($parsed) {
+                $boardPage->setAttribute(BoardPage::COL_PARSED, true);
+                $boardPage->save();
+            }
         }
         return 1;
     }
