@@ -24,6 +24,15 @@ class Utils {
     public static function mainEntityValid(string $entity, string $url): bool {
         return preg_match('/'. $entity .'=\d+\.0$|^https:\/\/bitcointalk.org$/', $url, $matches) === 1;
     }
+    
+    /**
+     * @param string $entity "topic|board"
+     * @param string $url
+     * @return bool
+     */
+    public static function pageEntityValid(string $entity, string $url): bool {
+        return preg_match('/'. $entity .'=\d+\.\d+$/', $url, $matches) === 1;
+    }
 
     /**
      * @param string $entity "topic|board"
@@ -58,16 +67,16 @@ class Utils {
 
     /**
      * @param string $entity "topic|board"
-     * @param int $boardId
+     * @param int $entityId
      * @param int $from
      * @param int $to
      * @return array
      */
-    public static function calculateEntityPages(string $entity, int $boardId, int $from, int $to): array {
-        $boardPages = [];
+    public static function calculateEntityPages(string $entity, int $entityId, int $from, int $to): array {
+        $entityPages = [];
         for (; $from <= $to; $from += 40) {
-            array_push($boardPages, sprintf('https://bitcointalk.org/index.php?%s=%s.%s', $entity, $boardId, $from));
+            array_push($entityPages, sprintf('https://bitcointalk.org/index.php?%s=%s.%s', $entity, $entityId, $from));
         }
-        return $boardPages;
+        return $entityPages;
     }
 }

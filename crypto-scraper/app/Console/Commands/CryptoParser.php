@@ -153,7 +153,12 @@ class CryptoParser extends Command {
         
         return null;
     }
-    
+
+    /**
+     * @param string $url "board|topic|action=profile"
+     * @param string $pageType
+     * @return array
+     */
     protected function getLinksFromPage(string $url, string $pageType): array {
         $crawler = $this->getPageCrawler($url);
         $allLinks = $crawler->filterXPath('//a[contains(@href,"https://bitcointalk.org/index.php?' . $pageType. '")]/@href')->each(function (Crawler $node) {

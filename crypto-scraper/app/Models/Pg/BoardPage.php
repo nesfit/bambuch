@@ -3,6 +3,7 @@
 namespace App\Models\Pg;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BoardPage extends Model
 {
@@ -37,4 +38,11 @@ class BoardPage extends Model
             ->update(array(self::COL_LAST => false));
     } 
     
+    public static function getUnparsedBoardPages() {
+        return DB::table(self::TABLE)
+            ->select(BoardPage::COL_URL)
+            ->where(self::COL_PARSED, false)
+            ->get()
+            ->all();
+    }
 }
