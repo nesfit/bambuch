@@ -42,7 +42,7 @@ class UpdateMainBoards extends CryptoParser
             MainBoard::setParsedToAll(false);
         }
 
-        $allMainBoards = MainBoard::getNonParsedBoards();
+        $allMainBoards = MainBoard::getUnParsedBoards();
         foreach ($allMainBoards as $mainBoard) {
             $this->call("bitcointalk:load_boards", [
                 "url" => $mainBoard,

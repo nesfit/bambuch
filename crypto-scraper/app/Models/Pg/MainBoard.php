@@ -29,7 +29,7 @@ class MainBoard extends Model
         return self::getByUrl($url) !== null;
     }
     
-    public static function getNonParsedBoards() {
+    public static function getUnParsedBoards() {
         return self::where(self::COL_PARSED, false)->pluck(self::COL_URL);
     }
     
