@@ -52,27 +52,31 @@ class LoadTopicPages extends CryptoParser {
 
     private function saveTopicPages(array $boardPages, string $mainUrl) {
         $mainBoard = MainTopic::getByUrl($mainUrl);
-        TopicPage::unsetLastTopic($mainBoard->getAttribute(MainTopic::COL_ID));
-
-        $pagesCount = count($boardPages);
-        $progressBar = $this->output->createProgressBar($pagesCount);
-        foreach ($boardPages as $key => $page) {
-            if (!TopicPage::topicPageExists($page)) {
-                $newBoard = new TopicPage();
-                $newBoard->setAttribute(TopicPage::COL_URL, $page);
-                $newBoard->setAttribute(TopicPage::COL_PARSED, false);
-                $newBoard->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
-                $newBoard->save();
-
-                $mainBoard->board_topics()->save($newBoard);
+        if ($mainBoard) {
+            TopicPage::unsetLastTopic($mainBoard->getAttribute(MainTopic::COL_ID));
+    
+            $pagesCount = count($boardPages);
+            $progressBar = $this->output->createProgressBar($pagesCount);
+            foreach ($boardPages as $key => $page) {
+                if (!TopicPage::topicPageExists($page)) {
+                    $newBoard = new TopicPage();
+                    $newBoard->setAttribute(TopicPage::COL_URL, $page);
+                    $newBoard->setAttribute(TopicPage::COL_PARSED, false);
+                    $newBoard->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
+                    $newBoard->save();
+    
+                    $mainBoard->board_topics()->save($newBoard);
+                }
+                $mainBoard->setAttribute(MainTopic::COL_PARSED, true);
+                $mainBoard->save();
+    
+                $progressBar->advance();
             }
-            $mainBoard->setAttribute(MainTopic::COL_PARSED, true);
-            $mainBoard->save();
-
-            $progressBar->advance();
+            $progressBar->finish();
+            print("\n");
+        } else {
+            $this->printRedLine('Main topic not found: ' . $mainUrl);
         }
-        $progressBar->finish();
-        print("\n");
     }
 
     private function loadTopicPages(string $url): array {

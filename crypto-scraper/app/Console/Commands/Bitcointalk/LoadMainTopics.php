@@ -4,6 +4,7 @@ namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Commands\CryptoParser;
 use App\Models\Pg\Bitcointalk\MainTopic;
+use App\Models\Pg\BoardPage;
 
 class LoadMainTopics extends CryptoParser {
     const ENTITY = 'topic';
@@ -41,7 +42,7 @@ class LoadMainTopics extends CryptoParser {
         
         if (self::boardPageValid($this->url)) {
             $mainTopics = $this->loadMainTopics($this->url);
-            $this->saveMainTopics($mainTopics);
+            $this->saveMainTopics($mainTopics, $this->url);
             return 1;
         } else {
             $this->printRedLine('Invalid main topic url: ' . $this->url);
@@ -54,19 +55,27 @@ class LoadMainTopics extends CryptoParser {
         return self::getMainTopics($allBoards);
     }
 
-    private function saveMainTopics(array $mainBoards) {
-        $progressBar = $this->output->createProgressBar(count($mainBoards));
-        foreach ($mainBoards as $board) {
-            if (!MainTopic::mainTopicExists($board)) {
-                $mainBoard = new MainTopic();
-                $mainBoard->setAttribute(MainTopic::COL_URL, $board);
-                $mainBoard->setAttribute(MainTopic::COL_PARSED, false);
-                $mainBoard->save();
+    private function saveMainTopics(array $mainTopics, string $boardUrl) {
+        $progressBar = $this->output->createProgressBar(count($mainTopics));
+        
+        $boardPage = BoardPage::getByUrl($boardUrl);
+        if ($boardPage) {
+            $boardPageId = $boardPage->getAttribute(BoardPage::COL_ID);
+            foreach ($mainTopics as $topic) {
+                if (!MainTopic::mainTopicExists($topic)) {
+                    $mainTopic = new MainTopic();
+                    $mainTopic->setAttribute(MainTopic::COL_URL, $topic);
+                    $mainTopic->setAttribute(MainTopic::COL_PARSED, false);
+                    $mainTopic->setAttribute(MainTopic::COL_BOARD_PAGE, $boardPageId);
+                    $mainTopic->save();
+                }
+                $progressBar->advance();
             }
-            $progressBar->advance();
+            $progressBar->finish();
+            print("\n");
+        } else {
+            $this->printRedLine('Board page not found: ' . $boardUrl);
         }
-        $progressBar->finish();
-        print("\n");
     }
 
     public static function getMainTopics(array $allTopics): array {

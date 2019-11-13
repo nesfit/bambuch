@@ -20,7 +20,7 @@ class ParseTopicPages extends CryptoParser {
      *
      * @var string
      */
-    protected $description = 'Parse bitcointalk topic.';
+    protected $description = 'Extract bitcoin addresses from profiles and messages.';
 
     /**
      * Create a new command instance.
