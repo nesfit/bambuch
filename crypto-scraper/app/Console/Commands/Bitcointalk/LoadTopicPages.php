@@ -53,8 +53,8 @@ class LoadTopicPages extends CryptoParser {
     private function saveTopicPages(array $boardPages, string $mainUrl) {
         $mainTopic = MainTopic::getByUrl($mainUrl);
         if ($mainTopic) {
-            TopicPage::unsetLastTopic($mainTopic->getAttribute(MainTopic::COL_ID));
             $mainTopicId = $mainTopic->getAttribute(MainTopic::COL_ID);
+            TopicPage::unsetLastTopic($mainTopicId);
     
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
