@@ -75,27 +75,31 @@ class LoadBoards extends CryptoParser {
     
     private function saveBoardPages(array $boardPages, string $mainUrl) {
         $mainBoard = MainBoard::getByUrl($mainUrl);
-        BoardPage::unsetLastBoard($mainBoard->getAttribute(MainBoard::COL_ID));
-        
-        $pagesCount = count($boardPages);
-        $progressBar = $this->output->createProgressBar($pagesCount);
-        foreach ($boardPages as $key => $page) {
-            if (!BoardPage::boardPageExists($page)) {
-                $newBoard = new BoardPage();
-                $newBoard->setAttribute(BoardPage::COL_URL, $page);
-                $newBoard->setAttribute(BoardPage::COL_PARSED, false);
-                $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
-                $newBoard->save();
-                
-                $mainBoard->board_pages()->save($newBoard);
+        if ($mainBoard) {
+            $mainBoardId = $mainBoard->getAttribute(MainBoard::COL_ID);
+            BoardPage::unsetLastBoard($mainBoardId);
+            
+            $pagesCount = count($boardPages);
+            $progressBar = $this->output->createProgressBar($pagesCount);
+            foreach ($boardPages as $key => $page) {
+                if (!BoardPage::boardPageExists($page)) {
+                    $newBoard = new BoardPage();
+                    $newBoard->setAttribute(BoardPage::COL_URL, $page);
+                    $newBoard->setAttribute(BoardPage::COL_PARSED, false);
+                    $newBoard->setAttribute(BoardPage::COL_MAIN_BOARD, $mainBoardId);
+                    $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
+                    $newBoard->save();
+                }
+                $progressBar->advance();
             }
             $mainBoard->setAttribute(MainBoard::COL_PARSED, true);
             $mainBoard->save();
-           
-            $progressBar->advance();
+
+            $progressBar->finish();
+            print("\n");
+        } else {
+            $this->printRedLine('Main board not found: ' . $mainUrl);
         }
-        $progressBar->finish();
-        print("\n");
     }
     
     private function loadBoardPages(string $url): array {

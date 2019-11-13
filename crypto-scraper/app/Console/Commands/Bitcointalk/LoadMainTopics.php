@@ -71,6 +71,9 @@ class LoadMainTopics extends CryptoParser {
                 }
                 $progressBar->advance();
             }
+            $boardPage->setAttribute(BoardPage::COL_PARSED, true);
+            $boardPage->save();
+            
             $progressBar->finish();
             print("\n");
         } else {
