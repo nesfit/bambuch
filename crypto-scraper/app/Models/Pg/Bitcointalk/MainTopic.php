@@ -23,14 +23,23 @@ class MainTopic extends Model
     }
 
     public static function getByUrl(string $url): ?MainTopic {
-        return self::where(self::COL_URL, $url)->get()->first();
+        return self::query()
+            ->where(self::COL_URL, $url)
+            ->get()
+            ->first();
     }
 
     public static function mainTopicExists(string $url) {
         return self::getByUrl($url) !== null;
     }
 
-    public static function getNonParsedTopics() {
-        return self::where(self::COL_PARSED, false)->pluck(self::COL_URL);
+    /**
+     * @return MainTopic[]
+     */
+    public static function getUnParsedTopics(): array {
+        return self::query()
+            ->where(self::COL_PARSED, false)
+            ->get()
+            ->all();
     }
 }

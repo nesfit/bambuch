@@ -3,22 +3,23 @@
 namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Commands\CryptoParser;
-use App\Models\Pg\BoardPage;
+use App\Models\Pg\Bitcointalk\MainTopic;
 
-class ParseBoards extends CryptoParser {
+class ParseMainTopics extends CryptoParser
+{
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_boards {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:parse_main_topics {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Load bitcointalk main topics from all board pages.';
+    protected $description = 'Load bitcointalk topic pages from all main topics.';
 
     /**
      * Create a new command instance.
@@ -36,19 +37,18 @@ class ParseBoards extends CryptoParser {
      */
     public function handle() {
         $this->verbose = $this->argument("verbose");
-        
-        $boardPages = BoardPage::getUnparsedBoardPages();
-        foreach ($boardPages as $boardPage) {
-            $parsed = $this->call("bitcointalk:load_main_topics", [
-                "url" => $boardPage->getAttribute(BoardPage::COL_URL),
+
+        $mainTopics = MainTopic::getUnParsedTopics();
+        foreach ($mainTopics as $mainTopic) {
+            $parsed = $this->call("bitcointalk:load_topic_pages", [
+                "url" => $mainTopic->getAttribute(MainTopic::COL_URL),
                 "verbose" => $this->verbose
             ]);
-            
+
             if ($parsed) {
-                $boardPage->setAttribute(BoardPage::COL_PARSED, true);
-                $boardPage->save();
+                $mainTopic->setAttribute(MainTopic::COL_PARSED, true);
+                $mainTopic->save();
             }
         }
-        return 1;
     }
 }

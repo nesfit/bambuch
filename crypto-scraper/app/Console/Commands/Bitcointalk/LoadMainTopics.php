@@ -45,7 +45,7 @@ class LoadMainTopics extends CryptoParser {
             $this->saveMainTopics($mainTopics, $this->url);
             return 1;
         } else {
-            $this->printRedLine('Invalid main topic url: ' . $this->url);
+            $this->printRedLine('Invalid board page url: ' . $this->url);
             return 0;
         }
     }
