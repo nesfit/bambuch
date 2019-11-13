@@ -16,7 +16,7 @@ class CreateBitcointalkMainTopicTable extends Migration
     public function up()
     {
         Schema::create(MainTopic::TABLE, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements(MainTopic::COL_ID);
             $table->boolean(MainTopic::COL_PARSED);
             $table->string(MainTopic::COL_URL, 256);
             $table->bigInteger(MainTopic::COL_BOARD_PAGE);

@@ -51,24 +51,24 @@ class LoadTopicPages extends CryptoParser {
     }
 
     private function saveTopicPages(array $boardPages, string $mainUrl) {
-        $mainBoard = MainTopic::getByUrl($mainUrl);
-        if ($mainBoard) {
-            TopicPage::unsetLastTopic($mainBoard->getAttribute(MainTopic::COL_ID));
+        $mainTopic = MainTopic::getByUrl($mainUrl);
+        if ($mainTopic) {
+            TopicPage::unsetLastTopic($mainTopic->getAttribute(MainTopic::COL_ID));
+            $mainTopicId = $mainTopic->getAttribute(MainTopic::COL_ID);
     
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
             foreach ($boardPages as $key => $page) {
                 if (!TopicPage::topicPageExists($page)) {
-                    $newBoard = new TopicPage();
-                    $newBoard->setAttribute(TopicPage::COL_URL, $page);
-                    $newBoard->setAttribute(TopicPage::COL_PARSED, false);
-                    $newBoard->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
-                    $newBoard->save();
-    
-                    $mainBoard->board_topics()->save($newBoard);
+                    $topicPage = new TopicPage();
+                    $topicPage->setAttribute(TopicPage::COL_URL, $page);
+                    $topicPage->setAttribute(TopicPage::COL_PARSED, false);
+                    $topicPage->setAttribute(TopicPage::COL_MAIN_TOPIC, $mainTopicId);
+                    $topicPage->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
+                    $topicPage->save();
                 }
-                $mainBoard->setAttribute(MainTopic::COL_PARSED, true);
-                $mainBoard->save();
+                $mainTopic->setAttribute(MainTopic::COL_PARSED, true);
+                $mainTopic->save();
     
                 $progressBar->advance();
             }
