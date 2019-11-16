@@ -60,7 +60,7 @@ class LoadTopicPages extends BitcointalkParser {
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
             foreach ($boardPages as $key => $page) {
-                if (!TopicPage::topicPageExists($page)) {
+                if (!TopicPage::exists($page)) {
                     $topicPage = new TopicPage();
                     $topicPage->setAttribute(TopicPage::COL_URL, $page);
                     $topicPage->setAttribute(TopicPage::COL_PARSED, false);
