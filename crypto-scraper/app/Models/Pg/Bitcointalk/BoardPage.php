@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Pg;
+namespace App\Models\Pg\Bitcointalk;
 
 use Illuminate\Database\Eloquent\Model;
 
