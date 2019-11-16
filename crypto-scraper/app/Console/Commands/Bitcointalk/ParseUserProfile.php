@@ -44,7 +44,6 @@ class ParseUserProfile extends BitcointalkParser
         if (self::profilePageValid($this->url)) {
             $source = $this->getFullHost();
             list($name, $address) = $this->parseProfile($this->url);
-
             if ($name) {
                 $this->saveParsedData($this->dateTime, ...[
                     new ParsedAddress(
@@ -57,13 +56,10 @@ class ParseUserProfile extends BitcointalkParser
                         Category::CAT_2
                     )
                 ]);
-                return 1; 
-            } else {
-                $this->printRedLine('No name found in profile: ' . $this->url);
-                return 0;
             }
+            return 1; 
         } else {
-            $this->printRedLine('Invalid topic page url: ' . $this->url);
+            $this->printRedLine('Invalid use profile page url: ' . $this->url);
             return 0;
         }
     }
