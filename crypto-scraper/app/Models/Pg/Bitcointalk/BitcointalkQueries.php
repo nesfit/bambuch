@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models\Pg\Bitcointalk;
 
 
