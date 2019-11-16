@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Console\Commands;
 
@@ -29,9 +29,9 @@ class CryptoParser extends Command {
     public function handle() {
         $this->verbose = $this->argument("verbose");
         $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
-        $this->url = $this->argument('url');
+        $this->url = $this->hasArgument('url') ? $this->argument('url') : null;
 
-        $this->printParsingPage($this->url);
+        $this->url && $this->printParsingPage($this->url);
     }
     
     /**

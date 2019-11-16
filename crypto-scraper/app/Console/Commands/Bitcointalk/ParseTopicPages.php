@@ -37,14 +37,15 @@ class ParseTopicPages extends BitcointalkParser
      * @return mixed
      */
     public function handle() {
-        $this->verbose = $this->argument("verbose");
-
+        parent::handle();
+        
         $mainTopics = TopicPage::getAllUnParsed();
         if (count($mainTopics)) {
             foreach ($mainTopics as $mainTopic) {
                 $parsed = $this->call("bitcointalk:parse_topic_page", [
                     "url" => $mainTopic->getAttribute(TopicPage::COL_URL),
-                    "verbose" => $this->verbose
+                    "verbose" => $this->verbose,
+                    "dateTime" => $this->dateTime
                 ]);
 
                 if ($parsed) {
