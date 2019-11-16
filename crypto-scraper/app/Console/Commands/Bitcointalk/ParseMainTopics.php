@@ -38,7 +38,7 @@ class ParseMainTopics extends BitcointalkParser
     public function handle() {
         $this->verbose = $this->argument("verbose");
 
-        $mainTopics = MainTopic::getUnParsedTopics();
+        $mainTopics = MainTopic::getAllUnParsed();
         if (count($mainTopics)) {
             foreach ($mainTopics as $mainTopic) {
                 $parsed = $this->call("bitcointalk:load_topic_pages", [

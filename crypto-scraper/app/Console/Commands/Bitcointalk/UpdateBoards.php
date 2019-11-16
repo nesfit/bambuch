@@ -42,7 +42,7 @@ class UpdateBoards extends BitcointalkParser
             MainBoard::setParsedToAll(false);
         }
 
-        $allMainBoards = MainBoard::getUnParsedBoards();
+        $allMainBoards = MainBoard::getAllUnParsed();
         if (count($allMainBoards)) {
             foreach ($allMainBoards as $mainBoard) {
                 $this->call("bitcointalk:load_boards", [

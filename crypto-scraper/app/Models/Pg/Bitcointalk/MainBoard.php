@@ -1,10 +1,11 @@
-<?php
+<?php 
+declare(strict_types=1);
 
 namespace App\Models\Pg\Bitcointalk;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MainBoard extends Model
+class MainBoard extends Model implements BitcointalkQueries
 {
     const COL_ID        = 'id';
     const COL_URL       = 'url';
@@ -21,28 +22,28 @@ class MainBoard extends Model
         return $this->hasMany(BoardPage::class);
     }
 
-    public static function getByUrl(string $url): ?MainBoard {
+    public static function getByUrl(string $url): ?Model {
         return self::query()
             ->where(self::COL_URL, $url)
             ->get()
             ->first();
     }
     
-    public static function mainBoardExists(string $url) {
+    public static function exists(string $url): bool {
         return self::getByUrl($url) !== null;
     }
 
     /**
      * @return MainBoard[]
      */
-    public static function getUnParsedBoards(): array {
+    public static function getAllUnParsed(): array {
         return self::query()
             ->where(self::COL_PARSED, false)
             ->get(self::COL_URL)
             ->all();
     }
     
-    public static function setParsedToAll(bool $value) {
+    public static function setParsedToAll(bool $value): void {
         self::query()
             ->whereNotNull(self::COL_ID)
             ->update(array(self::COL_PARSED => $value));

@@ -1,10 +1,11 @@
-<?php
+<?php 
+declare(strict_types=1);
 
 namespace App\Models\Pg\Bitcointalk;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BoardPage extends Model
+class BoardPage extends Model implements BitcointalkQueries
 {
     const COL_ID        = 'id';
     const COL_URL       = 'url';
@@ -23,17 +24,6 @@ class BoardPage extends Model
         $this->belongsTo(MainBoard::class);
     }
 
-    public static function getByUrl(string $url): ?BoardPage {
-        return self::query()
-            ->where("url", $url)
-            ->get()
-            ->first();
-    }
-
-    public static function boardPageExists(string $url) {
-        return self::getByUrl($url) !== null;
-    }
-    
     public static function unsetLastBoard(int $mainBoardId) {
         return self::query()
             ->where(self::COL_MAIN_BOARD, $mainBoardId)
@@ -41,17 +31,28 @@ class BoardPage extends Model
             ->update(array(self::COL_LAST => false));
     }
 
+    public static function getByUrl(string $url): ?Model {
+        return self::query()
+            ->where("url", $url)
+            ->get()
+            ->first();
+    }
+
+    public static function exists(string $url): bool {
+        return self::getByUrl($url) !== null;
+    }
+
     /**
      * @return BoardPage[]
      */
-    public static function getUnparsedBoardPages(): array {
+    public static function getAllUnParsed(): array {
         return self::query()
             ->where(self::COL_PARSED, false)
             ->get()
             ->all();
     }
     
-    public static function setParsedToAll(bool $value) {
+    public static function setParsedToAll(bool $value): void {
         self::query()
             ->whereNotNull(self::COL_ID)
             ->update(array(self::COL_PARSED => $value));

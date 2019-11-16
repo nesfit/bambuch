@@ -1,4 +1,5 @@
-<?php
+<?php 
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
 
@@ -61,7 +62,7 @@ class LoadBoards extends BitcointalkParser {
     private function saveMainBoards(array $mainBoards) {
         $progressBar = $this->output->createProgressBar(count($mainBoards));
         foreach ($mainBoards as $board) {
-            if (!MainBoard::mainBoardExists($board)) {
+            if (!MainBoard::exists($board)) {
                 $mainBoard = new MainBoard();
                 $mainBoard->setAttribute(MainBoard::COL_URL, $board);
                 $mainBoard->setAttribute(MainBoard::COL_PARSED, false);
@@ -83,7 +84,7 @@ class LoadBoards extends BitcointalkParser {
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
             foreach ($boardPages as $key => $page) {
-                if (!BoardPage::boardPageExists($page)) {
+                if (!BoardPage::exists($page)) {
                     $newBoard = new BoardPage();
                     $newBoard->setAttribute(BoardPage::COL_URL, $page);
                     $newBoard->setAttribute(BoardPage::COL_PARSED, false);

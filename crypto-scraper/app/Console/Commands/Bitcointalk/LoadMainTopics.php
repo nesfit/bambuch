@@ -62,7 +62,7 @@ class LoadMainTopics extends BitcointalkParser {
         if ($boardPage) {
             $boardPageId = $boardPage->getAttribute(BoardPage::COL_ID);
             foreach ($mainTopics as $topic) {
-                if (!MainTopic::mainTopicExists($topic)) {
+                if (!MainTopic::exists($topic)) {
                     $mainTopic = new MainTopic();
                     $mainTopic->setAttribute(MainTopic::COL_URL, $topic);
                     $mainTopic->setAttribute(MainTopic::COL_PARSED, false);
