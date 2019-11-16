@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
 
@@ -12,7 +13,7 @@ class ParseMainTopics extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_main_topics {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:parse_main_topics {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -37,6 +38,11 @@ class ParseMainTopics extends BitcointalkParser
      */
     public function handle() {
         $this->verbose = $this->argument("verbose");
+
+        if($this->option("force")) {
+            $this->printCyanLine("Force update!");
+            MainTopic::setParsedToAll(false);
+        }
 
         $mainTopics = MainTopic::getAllUnParsed();
         if (count($mainTopics)) {
