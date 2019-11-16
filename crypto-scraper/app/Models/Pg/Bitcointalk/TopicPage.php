@@ -31,7 +31,7 @@ class TopicPage extends Model implements BitcointalkQueries
             ->update(array(self::COL_LAST => false));
     }
     
-    public static function getByUrl(string $url): Model {
+    public static function getByUrl(string $url): ?Model {
         return self::query()
             ->where("url", $url)
             ->get()
