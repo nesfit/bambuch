@@ -77,6 +77,7 @@ class LoadBoards extends BitcointalkParser {
         $mainBoard = MainBoard::getByUrl($mainUrl);
         if ($mainBoard) {
             $mainBoardId = $mainBoard->getAttribute(MainBoard::COL_ID);
+            // TODO BUG FIX: when no new board pages, no row with last=true in DB
             BoardPage::unsetLastBoard($mainBoardId);
             
             $pagesCount = count($boardPages);

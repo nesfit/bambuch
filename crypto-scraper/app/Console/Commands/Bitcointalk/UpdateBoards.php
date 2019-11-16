@@ -43,12 +43,17 @@ class UpdateBoards extends BitcointalkParser
         }
 
         $allMainBoards = MainBoard::getUnParsedBoards();
-        foreach ($allMainBoards as $mainBoard) {
-            $this->call("bitcointalk:load_boards", [
-                "url" => $mainBoard,
-                "verbose" => $this->verbose
-            ]);
+        if (count($allMainBoards)) {
+            foreach ($allMainBoards as $mainBoard) {
+                $this->call("bitcointalk:load_boards", [
+                    "url" => $mainBoard->getAttribute(MainBoard::COL_URL),
+                    "verbose" => $this->verbose
+                ]);
+            }
+            return 1;
+        } else {
+            $this->printRedLine("No unparsed main boards!");
+            return 0;
         }
-        return 1;
     }
 }

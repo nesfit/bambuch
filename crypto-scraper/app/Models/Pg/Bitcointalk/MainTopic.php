@@ -42,4 +42,10 @@ class MainTopic extends Model
             ->get()
             ->all();
     }
+    
+    public static function setParsedToAll(bool $value) {
+        self::query()
+            ->whereNotNull(self::COL_ID)
+            ->update(array(self::COL_PARSED => $value));
+    }
 }

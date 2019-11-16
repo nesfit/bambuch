@@ -31,11 +31,15 @@ class MainBoard extends Model
     public static function mainBoardExists(string $url) {
         return self::getByUrl($url) !== null;
     }
-    
-    public static function getUnParsedBoards() {
+
+    /**
+     * @return MainBoard[]
+     */
+    public static function getUnParsedBoards(): array {
         return self::query()
             ->where(self::COL_PARSED, false)
-            ->pluck(self::COL_URL);
+            ->get(self::COL_URL)
+            ->all();
     }
     
     public static function setParsedToAll(bool $value) {
