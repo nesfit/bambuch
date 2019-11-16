@@ -24,7 +24,10 @@ class TopicPage extends Model
     }
 
     public static function getByUrl(string $url) {
-        return self::where("url", $url)->get()->first();
+        return self::query()
+            ->where("url", $url)
+            ->get()
+            ->first();
     }
 
     public static function topicPageExists(string $url) {
@@ -32,7 +35,8 @@ class TopicPage extends Model
     }
 
     public static function unsetLastTopic(int $mainTopicId) {
-        return self::where(self::COL_MAIN_TOPIC, $mainTopicId)
+        return self::query()
+            ->where(self::COL_MAIN_TOPIC, $mainTopicId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
     }

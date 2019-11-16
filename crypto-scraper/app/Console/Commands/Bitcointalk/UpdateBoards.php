@@ -5,14 +5,14 @@ namespace App\Console\Commands\Bitcointalk;
 use App\Console\BitcointalkParser;
 use App\Models\Pg\MainBoard;
 
-class UpdateMainBoards extends BitcointalkParser
+class UpdateBoards extends BitcointalkParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:update_main_boards {verbose=1} {--force}';
+    protected $signature = 'bitcointalk:update_boards {verbose=1} {--force}';
 
     /**
      * The console command description.
