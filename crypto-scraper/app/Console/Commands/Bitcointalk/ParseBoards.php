@@ -37,7 +37,7 @@ class ParseBoards extends BitcointalkParser {
     public function handle() {
         $this->verbose = $this->argument("verbose");
         
-        $boardPages = BoardPage::getUnparsedBoardPages();
+        $boardPages = BoardPage::getAllUnParsed();
         if (count($boardPages)) {
             foreach ($boardPages as $boardPage) {
                 $parsed = $this->call("bitcointalk:load_main_topics", [
