@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
 
@@ -55,7 +56,7 @@ class LoadTopicPages extends BitcointalkParser {
         if ($mainTopic) {
             $mainTopicId = $mainTopic->getAttribute(MainTopic::COL_ID);
             TopicPage::unsetLastTopic($mainTopicId);
-    
+
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
             foreach ($boardPages as $key => $page) {
@@ -69,7 +70,7 @@ class LoadTopicPages extends BitcointalkParser {
                 }
                 $mainTopic->setAttribute(MainTopic::COL_PARSED, true);
                 $mainTopic->save();
-    
+
                 $progressBar->advance();
             }
             $progressBar->finish();
@@ -88,7 +89,7 @@ class LoadTopicPages extends BitcointalkParser {
 
             return self::calculateTopicPages($mainTopicId, $fromTopicId, $toTopicId);
         }
-        return [];
+        return [$url];
     }
 
     public static function mainTopicValid(string $url): bool {

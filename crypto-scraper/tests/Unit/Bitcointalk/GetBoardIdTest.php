@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
@@ -22,17 +23,18 @@ class GetBoardIdTest extends TestCase
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.asdf'),
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=+š83.234'),
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.234asdf'),
-            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.')
+            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.'),
+            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.0')
         ];
-        $expected = [ null, null, null, null ];
+        $expected = [ null, null, null, null, 0 ];
         $this->assertEquals($expected, $output);
     }
-    
+
     public function testCorrectMainBoardId() {
         $output = LoadBoards::getMainBoardId('https://bitcointalk.org/index.php?board=83.1');
         $this->assertEquals(83, $output);
     }
-    
+
     public function testWrongMainBoardId() {
         $output = [
             LoadBoards::getMainBoardId('https://bitcointalk.org/index.php?board=83.asdf'),

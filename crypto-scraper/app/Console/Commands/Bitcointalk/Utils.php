@@ -1,4 +1,4 @@
-<?php 
+<?php
 declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
@@ -24,7 +24,7 @@ class Utils {
     public static function mainEntityValid(string $entity, string $url): bool {
         return preg_match('/'. $entity .'=\d+\.0$|^https:\/\/bitcointalk.org$/', $url, $matches) === 1;
     }
-    
+
     /**
      * @param string $entity "topic|board"
      * @param string $url
@@ -52,7 +52,7 @@ class Utils {
      */
     public static function getEntityPageId(string $entity, string $url): ?int {
         preg_match('/'. $entity .'=\d+\.(\d+)$/', $url, $matches);
-        return $matches[1] ?? null;
+        return isset($matches[1]) ? intval($matches[1]) : null;
     }
 
     /**
@@ -62,7 +62,7 @@ class Utils {
      */
     public static function getMainEntityId(string $entity, string $url): ?int {
         preg_match('/'. $entity .'=(\d+)\.\d+$/', $url, $matches);
-        return $matches[1] ?? null;
+        return isset($matches[1]) ? intval($matches[1]) : null;
     }
 
     /**
@@ -74,7 +74,7 @@ class Utils {
      */
     public static function calculateEntityPages(string $entity, int $entityId, int $from, int $to): array {
         $entityPages = [];
-        for (; $from <= $to; $from += 40) {
+        for (; $from <= $to; $from += 20) {
             array_push($entityPages, sprintf('https://bitcointalk.org/index.php?%s=%s.%s', $entity, $entityId, $from));
         }
         return $entityPages;
