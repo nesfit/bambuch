@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
 
@@ -11,7 +12,7 @@ class ParseBoards extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_boards {verbose=1} {dateTime?}';
+    protected $signature = 'bitcointalk:parse_boards {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -36,6 +37,11 @@ class ParseBoards extends BitcointalkParser {
      */
     public function handle() {
         $this->verbose = $this->argument("verbose");
+
+        if($this->option("force")) {
+            $this->printCyanLine("Force update!");
+            BoardPage::setParsedToAll(false);
+        }
         
         $boardPages = BoardPage::getAllUnParsed();
         if (count($boardPages)) {
