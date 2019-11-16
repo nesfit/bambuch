@@ -39,16 +39,22 @@ class ParseMainTopics extends BitcointalkParser
         $this->verbose = $this->argument("verbose");
 
         $mainTopics = MainTopic::getUnParsedTopics();
-        foreach ($mainTopics as $mainTopic) {
-            $parsed = $this->call("bitcointalk:load_topic_pages", [
-                "url" => $mainTopic->getAttribute(MainTopic::COL_URL),
-                "verbose" => $this->verbose
-            ]);
-
-            if ($parsed) {
-                $mainTopic->setAttribute(MainTopic::COL_PARSED, true);
-                $mainTopic->save();
+        if (count($mainTopics)) {
+            foreach ($mainTopics as $mainTopic) {
+                $parsed = $this->call("bitcointalk:load_topic_pages", [
+                    "url" => $mainTopic->getAttribute(MainTopic::COL_URL),
+                    "verbose" => $this->verbose
+                ]);
+    
+                if ($parsed) {
+                    $mainTopic->setAttribute(MainTopic::COL_PARSED, true);
+                    $mainTopic->save();
+                }
             }
+            return 1;
+        } else {
+            $this->printRedLine("No unparsed main topics found!");
+            return 0;
         }
     }
 }
