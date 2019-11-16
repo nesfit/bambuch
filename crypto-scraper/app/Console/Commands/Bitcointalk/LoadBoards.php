@@ -1,4 +1,4 @@
-<?php 
+<?php
 declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
@@ -40,7 +40,7 @@ class LoadBoards extends BitcointalkParser {
      */
     public function handle() {
         parent::handle();
-        
+
         if (self::mainBoardValid($this->url)) {
             $mainBoards = $this->loadMainBoards($this->url);
             $this->saveMainBoards($mainBoards);
@@ -53,7 +53,7 @@ class LoadBoards extends BitcointalkParser {
             return 0;
         }
     }
-    
+
     private function loadMainBoards(string $url): array {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         return self::getMainBoards($allBoards);
@@ -73,14 +73,14 @@ class LoadBoards extends BitcointalkParser {
         $progressBar->finish();
         print("\n");
     }
-    
+
     private function saveBoardPages(array $boardPages, string $mainUrl) {
         $mainBoard = MainBoard::getByUrl($mainUrl);
         if ($mainBoard) {
             $mainBoardId = $mainBoard->getAttribute(MainBoard::COL_ID);
             // TODO BUG FIX: when no new board pages, no row with last=true in DB
             BoardPage::unsetLastBoard($mainBoardId);
-            
+
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
             foreach ($boardPages as $key => $page) {
@@ -103,19 +103,19 @@ class LoadBoards extends BitcointalkParser {
             $this->printRedLine('Main board not found: ' . $mainUrl);
         }
     }
-    
+
     private function loadBoardPages(string $url): array {
         $maxBoardPage = $this->getMaxPage($url);
         if ($maxBoardPage) {
             $mainBoardId = self::getMainBoardId($url);
             $fromBoardId = self::getBoardPageId($url);
             $toBoardId = self::getBoardPageId($maxBoardPage);
-            
+
             return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);
         }
-        return [];
+        return [$url];
     }
-    
+
     public static function getMainBoards(array $allBoards): array {
         return Utils::getMainEntity(self::ENTITY, $allBoards);
     }
@@ -123,19 +123,19 @@ class LoadBoards extends BitcointalkParser {
     public static function mainBoardValid(string $url): bool {
         return Utils::mainEntityValid(self::ENTITY, $url);
     }
-    
+
     public static function getBoardPages(array $allBoards): array {
         return Utils::getEntityPages(self::ENTITY, $allBoards);
     }
-    
+
     public static function getBoardPageId(string $url): ?int {
         return Utils::getEntityPageId(self::ENTITY, $url);
     }
-    
+
     public static function getMainBoardId(string $url): ?int {
         return Utils::getMainEntityId(self::ENTITY, $url);
     }
-    
+
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
         return Utils::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
     }
