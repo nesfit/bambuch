@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands\Bitcointalk;
 
+use App\Console\BitcointalkParser;
 use App\Models\Pg\BoardPage;
 use App\Models\Pg\MainBoard;
-use App\Console\Commands\CryptoParser;
 
-class LoadBoards extends CryptoParser {
+class LoadBoards extends BitcointalkParser {
     const ENTITY = 'board';
 
     /**

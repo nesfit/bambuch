@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands\Bitcointalk;
 
-use App\Console\Commands\CryptoParser;
+use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\BoardPage;
 
-class LoadMainTopics extends CryptoParser {
+class LoadMainTopics extends BitcointalkParser {
     const ENTITY = 'topic';
 
     /**

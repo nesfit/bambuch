@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands\Bitcointalk;
 
+use App\Console\BitcointalkParser;
 use App\Console\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
-use App\Console\Commands\CryptoParser;
 
-class ParseTopicPages extends CryptoParser {
+class ParseTopicPages extends BitcointalkParser {
     /**
      * The name and signature of the console command.
      *

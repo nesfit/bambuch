@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Bitcointalk;
 
-use App\Console\Commands\CryptoParser;
+use App\Console\BitcointalkParser;
 use App\Models\Pg\BoardPage;
 
-class ParseBoards extends CryptoParser {
+class ParseBoards extends BitcointalkParser {
     /**
      * The name and signature of the console command.
      *
