@@ -22,7 +22,10 @@ class MainBoard extends Model
     }
 
     public static function getByUrl(string $url): ?MainBoard {
-        return self::where(self::COL_URL, $url)->get()->first();
+        return self::query()
+            ->where(self::COL_URL, $url)
+            ->get()
+            ->first();
     }
     
     public static function mainBoardExists(string $url) {
@@ -30,10 +33,14 @@ class MainBoard extends Model
     }
     
     public static function getUnParsedBoards() {
-        return self::where(self::COL_PARSED, false)->pluck(self::COL_URL);
+        return self::query()
+            ->where(self::COL_PARSED, false)
+            ->pluck(self::COL_URL);
     }
     
     public static function setParsedToAll(bool $value) {
-        self::whereNotNull(self::COL_ID)->update(array(self::COL_PARSED => $value));
+        self::query()
+            ->whereNotNull(self::COL_ID)
+            ->update(array(self::COL_PARSED => $value));
     } 
 }
