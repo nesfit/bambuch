@@ -3,8 +3,8 @@
 namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\BitcointalkParser;
-use App\Models\Pg\BoardPage;
-use App\Models\Pg\MainBoard;
+use App\Models\Pg\Bitcointalk\BoardPage;
+use App\Models\Pg\Bitcointalk\MainBoard;
 
 class LoadBoards extends BitcointalkParser {
     const ENTITY = 'board';

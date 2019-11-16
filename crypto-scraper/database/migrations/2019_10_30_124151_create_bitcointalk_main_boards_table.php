@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\Pg\MainBoard;
+use App\Models\Pg\Bitcointalk\MainBoard;
 
 class CreateBitcointalkMainBoardsTable extends Migration
 {

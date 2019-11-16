@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\BitcointalkParser;
-use App\Models\Pg\BoardPage;
+use App\Models\Pg\Bitcointalk\BoardPage;
 
 class ParseBoards extends BitcointalkParser {
     /**
