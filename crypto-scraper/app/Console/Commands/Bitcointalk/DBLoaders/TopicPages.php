@@ -25,7 +25,7 @@ class TopicPages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $description = 'Loads all topic pages from a main topic.';
+    protected $description = 'Loads all topic pages from a main topic url.';
 
     /**
      * Create a new command instance.

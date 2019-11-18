@@ -24,7 +24,7 @@ class MainTopics extends BitcointalkParser {
      *
      * @var string
      */
-    protected $description = 'Loads main topics from a single board page.';
+    protected $description = 'Loads main topics from a single board page url.';
 
     /**
      * Create a new command instance.
