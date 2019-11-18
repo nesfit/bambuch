@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\LoadBoards;
-use App\Console\Commands\Bitcointalk\Utils;
+use App\Console\Commands\Bitcointalk\DBLoaders\Boards as LoadBoards;
+use App\Console\Commands\Bitcointalk\DBLoaders\UrlValidations;
 use Tests\TestCase;
 
-class GetBoardPagesTest extends TestCase
-{
+class GetBoardPagesTest extends TestCase {
+    use UrlValidations;
     /**
      * A basic unit test example.
      *
@@ -59,13 +60,13 @@ class GetBoardPagesTest extends TestCase
     
     public function testPageBoardValid() {
         $input = 'https://bitcointalk.org/index.php?board=2.2345';
-        $output = Utils::pageEntityValid('board', $input);
+        $output = self::pageEntityValid('board', $input);
         $this->assertEquals($output, true);
     }
     
     public function testPageBoardInvalid() {
         $input = 'https://bitcointalk.org/index.php?board=2.2345asdf';
-        $output = Utils::pageEntityValid('board', $input);
+        $output = self::pageEntityValid('board', $input);
         $this->assertEquals($output, false);
     }
 }
