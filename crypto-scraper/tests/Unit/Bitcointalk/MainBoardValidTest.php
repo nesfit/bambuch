@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\LoadBoards;
+use App\Console\Commands\Bitcointalk\DBLoaders\Boards as LoadBoards;
 use Tests\TestCase;
 
 class MainBoardValidTest extends TestCase
