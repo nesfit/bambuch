@@ -1,27 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Parsers;
 
 use App\AddressMatcher;
 use App\Console\BitcointalkParser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ParseTopicMessages extends BitcointalkParser
-{
+class ParseTopicMessages extends BitcointalkParser {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_topics_messages {url} {verbose=1} {dateTime?}';
+    protected $signature = self::PARSE_TOPIC_MESSAGES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Extracts crypto addresses from single topic page.';
+    protected $description = 'Extracts crypto addresses from a single topic page.';
 
     /**
      * Create a new command instance.

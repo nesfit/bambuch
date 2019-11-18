@@ -1,12 +1,15 @@
 <?php
+declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\DBLoaders;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
-class LoadMainTopics extends BitcointalkParser {
+class MainTopics extends BitcointalkParser {
+    use UrlValidations;
+
     const ENTITY = 'topic';
 
     /**
@@ -14,14 +17,14 @@ class LoadMainTopics extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:load_main_topics {url} {verbose=1} {dateTime?}';
+    protected $signature = self::LOAD_MAIN_TOPICS .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads main topics from single board page.';
+    protected $description = 'Loads main topics from a single board page.';
 
     /**
      * Create a new command instance.
@@ -82,10 +85,10 @@ class LoadMainTopics extends BitcointalkParser {
     }
 
     public static function getMainTopics(array $allTopics): array {
-        return Utils::getMainEntity(self::ENTITY, $allTopics);
+        return self::getMainEntity(self::ENTITY, $allTopics);
     }
 
     public static function boardPageValid(string $url): bool {
-        return Utils::pageEntityValid('board', $url);
+        return self::pageEntityValid('board', $url);
     }
 }

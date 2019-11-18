@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\DBLoaders;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
-class LoadTopicPages extends BitcointalkParser {
+class TopicPages extends BitcointalkParser {
+    use UrlValidations;
+    use UrlCalculations;
+
     const ENTITY = 'topic';
 
     /**
@@ -15,14 +18,14 @@ class LoadTopicPages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:load_topic_pages {url} {verbose=1} {dateTime?}';
+    protected $signature = self::LOAD_TOPICS_PAGES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads all topic pages from main topic.';
+    protected $description = 'Loads all topic pages from a main topic.';
 
     /**
      * Create a new command instance.
@@ -93,18 +96,18 @@ class LoadTopicPages extends BitcointalkParser {
     }
 
     public static function mainTopicValid(string $url): bool {
-        return Utils::mainEntityValid(self::ENTITY, $url);
+        return self::mainEntityValid(self::ENTITY, $url);
     }
 
     public static function getTopicPageId(string $url): ?int {
-        return Utils::getEntityPageId(self::ENTITY, $url);
+        return self::getEntityPageId(self::ENTITY, $url);
     }
 
     public static function getMainTopicId(string $url): ?int {
-        return Utils::getMainEntityId(self::ENTITY, $url);
+        return self::getMainEntityId(self::ENTITY, $url);
     }
 
     public static function calculateTopicPages(int $topicId, int $from, int $to): array {
-        return Utils::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
+        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
     }
 }

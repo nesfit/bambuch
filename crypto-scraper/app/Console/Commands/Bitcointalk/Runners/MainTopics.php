@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
-class ParseMainTopics extends BitcointalkParser
+class MainTopics extends BitcointalkParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_main_topics {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::RUN_MAIN_TOPICS .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Load bitcointalk topic pages from all main topics.';
+    protected $description = 'Runs '. self::LOAD_TOPICS_PAGES .' on every unparsed main topic.';
 
     /**
      * Create a new command instance.
@@ -47,7 +47,7 @@ class ParseMainTopics extends BitcointalkParser
         $mainTopics = MainTopic::getAllUnParsed();
         if (count($mainTopics)) {
             foreach ($mainTopics as $mainTopic) {
-                $parsed = $this->call("bitcointalk:load_topic_pages", [
+                $parsed = $this->call(self::LOAD_TOPICS_PAGES, [
                     "url" => $mainTopic->getAttribute(MainTopic::COL_URL),
                     "verbose" => $this->verbose
                 ]);

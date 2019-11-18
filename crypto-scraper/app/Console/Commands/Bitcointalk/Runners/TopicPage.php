@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\BitcointalkParser;
 
-class ParseTopicPage extends BitcointalkParser {
+class TopicPage extends BitcointalkParser {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_topic_page {url} {verbose=1} {dateTime?}';
+    protected $signature = self::RUN_TOPICS_PAGE .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Extract bitcoin addresses from profiles and messages.';
+    protected $description = 'Runs '. self::LOAD_USER_PROFILES .' and '. self::PARSE_TOPIC_MESSAGES .' on a url.';
 
     /**
      * Create a new command instance.
@@ -37,12 +37,12 @@ class ParseTopicPage extends BitcointalkParser {
     public function handle() {
         parent::handle();
 
-        $this->call("bitcointalk:load_user_profiles", [
+        $this->call(self::LOAD_USER_PROFILES, [
             "url" => $this->url,
             "verbose" => $this->verbose
         ]);
 
-        $this->call("bitcointalk:parse_topics_messages", [
+        $this->call(self::PARSE_TOPIC_MESSAGES, [
             "url" => $this->url,
             "verbose" => $this->verbose
         ]);

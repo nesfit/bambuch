@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\BitcointalkParser;
-use App\Models\Pg\Bitcointalk\TopicPage;
+use App\Models\Pg\Bitcointalk\UserProfile;
 
-class ParseTopicPages extends BitcointalkParser
+class UserProfiles extends BitcointalkParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_topic_pages {verbose=1} {dateTime?}';
+    protected $signature = self::RUN_USER_PROFILES .' {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Parses all topics pages from DB.';
+    protected $description = 'Runs '. self::PARSE_USER_PROFILE .' on every unparsed user profile.';
 
     /**
      * Create a new command instance.
@@ -39,23 +39,23 @@ class ParseTopicPages extends BitcointalkParser
     public function handle() {
         parent::handle();
         
-        $mainTopics = TopicPage::getAllUnParsed();
-        if (count($mainTopics)) {
-            foreach ($mainTopics as $mainTopic) {
-                $parsed = $this->call("bitcointalk:parse_topic_page", [
-                    "url" => $mainTopic->getAttribute(TopicPage::COL_URL),
+        $userProfiles = UserProfile::getAllUnParsed();
+        if (count($userProfiles)) {
+            foreach ($userProfiles as $userProfile) {
+                $parsed = $this->call(self::PARSE_USER_PROFILE, [
+                    "url" => $userProfile->getAttribute(UserProfile::COL_URL),
                     "verbose" => $this->verbose,
                     "dateTime" => $this->dateTime
                 ]);
 
                 if ($parsed) {
-                    $mainTopic->setAttribute(TopicPage::COL_PARSED, true);
-                    $mainTopic->save();
+                    $userProfile->setAttribute(UserProfile::COL_PARSED, true);
+                    $userProfile->save();
                 }
             }
             return 1;
         } else {
-            $this->printRedLine("No unparsed main topics found!");
+            $this->printRedLine("No unparsed user profiles found!");
             return 0;
         }
     }

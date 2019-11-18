@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\DBLoaders;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-class LoadBoards extends BitcointalkParser {
+class Boards extends BitcointalkParser {
+    use UrlValidations;
+    use UrlCalculations;
+
     const ENTITY = 'board';
 
     /**
@@ -15,14 +18,14 @@ class LoadBoards extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:load_boards {url=https://bitcointalk.org} {verbose=1} {dateTime?}';
+    protected $signature = self::LOAD_BOARDS .' {url='. self::BITCOINTALK_URL .'} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads all bitcointalk boards.';
+    protected $description = 'Loads main boards and board pages from a page (or from '. self::BITCOINTALK_URL .').';
 
     /**
      * Create a new command instance.
@@ -117,26 +120,26 @@ class LoadBoards extends BitcointalkParser {
     }
 
     public static function getMainBoards(array $allBoards): array {
-        return Utils::getMainEntity(self::ENTITY, $allBoards);
+        return self::getMainEntity(self::ENTITY, $allBoards);
     }
 
     public static function mainBoardValid(string $url): bool {
-        return Utils::mainEntityValid(self::ENTITY, $url);
+        return self::mainEntityValid(self::ENTITY, $url);
     }
 
     public static function getBoardPages(array $allBoards): array {
-        return Utils::getEntityPages(self::ENTITY, $allBoards);
+        return self::getEntityPages(self::ENTITY, $allBoards);
     }
 
     public static function getBoardPageId(string $url): ?int {
-        return Utils::getEntityPageId(self::ENTITY, $url);
+        return self::getEntityPageId(self::ENTITY, $url);
     }
 
     public static function getMainBoardId(string $url): ?int {
-        return Utils::getMainEntityId(self::ENTITY, $url);
+        return self::getMainEntityId(self::ENTITY, $url);
     }
 
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
-        return Utils::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
+        return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
     }
 }
