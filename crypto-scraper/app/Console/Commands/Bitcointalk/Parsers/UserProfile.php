@@ -8,7 +8,7 @@ use App\Console\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 
-class ParseUserProfile extends BitcointalkParser
+class UserProfile extends BitcointalkParser
 {
     /**
      * The name and signature of the console command.

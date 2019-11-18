@@ -7,7 +7,7 @@ use App\AddressMatcher;
 use App\Console\BitcointalkParser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ParseTopicMessages extends BitcointalkParser {
+class TopicMessages extends BitcointalkParser {
     /**
      * The name and signature of the console command.
      *
