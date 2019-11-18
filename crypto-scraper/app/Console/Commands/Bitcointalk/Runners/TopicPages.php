@@ -59,7 +59,7 @@ class TopicPages extends BitcointalkParser {
             }
             return 1;
         } else {
-            $this->printRedLine("No unparsed main topics found!");
+            $this->printRedLine("No unparsed topic pages found!");
             return 0;
         }
     }
