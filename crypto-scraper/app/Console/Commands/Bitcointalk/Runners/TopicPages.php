@@ -12,7 +12,7 @@ class TopicPages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::RUN_TOPICS_PAGES .' {verbose=1} {dateTime?}';
+    protected $signature = self::RUN_TOPICS_PAGES .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -37,7 +37,12 @@ class TopicPages extends BitcointalkParser {
      */
     public function handle() {
         parent::handle();
-        
+
+        if($this->option("force")) {
+            $this->printCyanLine("Force update!");
+            TopicPage::setParsedToAll(false);
+        }
+
         $mainTopics = TopicPage::getAllUnParsed();
         if (count($mainTopics)) {
             foreach ($mainTopics as $mainTopic) {

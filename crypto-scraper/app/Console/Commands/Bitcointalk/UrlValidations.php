@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Loaders;
+namespace App\Console\Commands\Bitcointalk;
 
 
 trait UrlValidations {
