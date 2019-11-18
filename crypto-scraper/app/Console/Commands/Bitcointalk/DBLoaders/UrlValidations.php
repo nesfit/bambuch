@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\DBLoaders;
 
 
-class Utils {
+trait UrlValidations {
     /**
      * @param string $entity "topic|board"
      * @param array $allItems
@@ -63,20 +63,5 @@ class Utils {
     public static function getMainEntityId(string $entity, string $url): ?int {
         preg_match('/'. $entity .'=(\d+)\.\d+$/', $url, $matches);
         return isset($matches[1]) ? intval($matches[1]) : null;
-    }
-
-    /**
-     * @param string $entity "topic|board"
-     * @param int $entityId
-     * @param int $from
-     * @param int $to
-     * @return array
-     */
-    public static function calculateEntityPages(string $entity, int $entityId, int $from, int $to): array {
-        $entityPages = [];
-        for (; $from <= $to; $from += 20) {
-            array_push($entityPages, sprintf('https://bitcointalk.org/index.php?%s=%s.%s', $entity, $entityId, $from));
-        }
-        return $entityPages;
     }
 }

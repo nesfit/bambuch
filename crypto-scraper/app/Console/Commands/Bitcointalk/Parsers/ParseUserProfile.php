@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Parsers;
 
 use App\Console\BitcointalkParser;
 use App\Console\CryptoCurrency;
@@ -15,14 +15,14 @@ class ParseUserProfile extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:parse_user_profile {url} {verbose=1} {dateTime?}';
+    protected $signature = self::PARSE_USER_PROFILE .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Extracts bitcoin address from user profile.';
+    protected $description = 'Extracts bitcoin address from a user profile.';
 
     /**
      * Create a new command instance.

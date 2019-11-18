@@ -1,26 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\DBLoaders;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\UserProfile;
 
-class LoadUserProfiles extends BitcointalkParser
-{
+class UserProfiles extends BitcointalkParser {
+    use UrlValidations;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bitcointalk:load_user_profiles {url} {verbose=1} {dateTime?}';
+    protected $signature = self::LOAD_USER_PROFILES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads user profile url from a topic page.';
+    protected $description = 'Loads user profile urls from a topic page.';
 
     /**
      * Create a new command instance.
@@ -70,6 +71,6 @@ class LoadUserProfiles extends BitcointalkParser
     }
 
     private static function topicPageValid(string $url): bool {
-        return Utils::pageEntityValid('topic', $url);
+        return self::pageEntityValid('topic', $url);
     }
 }
