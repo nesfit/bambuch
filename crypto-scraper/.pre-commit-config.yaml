@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: php-lint
       - id: php-unit
-        files: Test\.(php)$
+        files: \.(php)$
 #      - id: php-cs
 #        args: [--standard=PSR1 -p]
 #      - id: php-cbf
