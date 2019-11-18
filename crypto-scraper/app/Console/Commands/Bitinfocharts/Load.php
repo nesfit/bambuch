@@ -1,13 +1,10 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitinfocharts;
 
 use DateTime;
-use App\Console\Commands\CryptoParser;
+use App\Console\CryptoParser;
 
 error_reporting(E_ALL ^ E_WARNING);
 

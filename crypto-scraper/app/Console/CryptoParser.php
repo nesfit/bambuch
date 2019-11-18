@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console;
 
 use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
@@ -13,8 +13,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class CryptoParser extends Command {
     protected $verbose = 1;
-    protected $description = 'Global command';
-    protected $signature = 'global:command';
     protected $browser;
     protected $dateTime;
     protected $url;
