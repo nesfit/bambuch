@@ -5,9 +5,16 @@ namespace App\Console\Commands\Bitcointalk\Parsers;
 
 use App\AddressMatcher;
 use App\Console\BitcointalkParser;
+use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\CryptoCurrency;
+use App\Models\ParsedAddress;
+use App\Models\Pg\Category;
+use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
 class TopicMessages extends BitcointalkParser {
+    use UrlValidations; 
+    
     /**
      * The name and signature of the console command.
      *
@@ -41,9 +48,9 @@ class TopicMessages extends BitcointalkParser {
 
         if (self::topicPageValid($this->url)) {
             $parsedAddresses = $this->getAddresses($this->url);
-            //TODO save parsed addresses into tsv
-            print_r($parsedAddresses);
-//            $this->saveParsedData($this->dateTime, ...$parsedAddresses);
+            if (count($parsedAddresses)) {
+                $this->saveParsedData($this->dateTime, ...$parsedAddresses);
+            }
             return 1;
         } else {
             $this->printRedLine('Invalid main topic url: ' . $this->url);
@@ -61,22 +68,28 @@ class TopicMessages extends BitcointalkParser {
             $userName = $userInfo->filter('a')->first()->text();
             $msgURL = $node->filter('a')->first()->attr('href');
 
-            if($addresses) {
-                return [
-                    'username' => $userName,
-                    'addresses' => $addresses,
-                    'url' => $this->url,
-                    'label' => $title,
-                    'mdgUrl' => $msgURL,
-                ];
+            if(count($addresses)) {
+                return array_reduce($addresses, function ($acc, $address) use ($userName, $msgURL, $title) {
+                    array_push($acc, 
+                        new ParsedAddress(
+                            $userName,
+                            $msgURL,
+                            $title,
+                            $this->url,
+                            $address,
+                            CryptoCurrency::BTC["code"],
+                            Category::CAT_1
+                        )
+                    );
+                    return $acc;
+                }, []);
             }
             return null;
         });
-        
-        return array_filter($results);
+        return array_filter(Arr::flatten($results, 2));
     }
     
     private static function topicPageValid(string $url): bool {
-        return Utils::pageEntityValid('topic', $url);
+        return self::pageEntityValid('topic', $url);
     }
 }

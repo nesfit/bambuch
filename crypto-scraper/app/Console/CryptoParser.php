@@ -16,6 +16,7 @@ class CryptoParser extends Command {
     protected $browser;
     protected $dateTime;
     protected $url;
+    protected $print = true;
     
     public function __construct() {
         parent::__construct();
@@ -29,7 +30,7 @@ class CryptoParser extends Command {
         $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $this->url = $this->hasArgument('url') ? $this->argument('url') : null;
 
-        $this->url && $this->printParsingPage($this->url);
+        $this->print && $this->url && $this->printParsingPage($this->url);
     }
     
     /**

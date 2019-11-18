@@ -35,16 +35,19 @@ class TopicPage extends BitcointalkParser {
      * @return mixed
      */
     public function handle() {
+        $this->print = false;
         parent::handle();
 
         $this->call(self::LOAD_USER_PROFILES, [
             "url" => $this->url,
-            "verbose" => $this->verbose
+            "verbose" => $this->verbose,
+            "dateTime" => $this->dateTime
         ]);
 
         $this->call(self::PARSE_TOPIC_MESSAGES, [
             "url" => $this->url,
-            "verbose" => $this->verbose
+            "verbose" => $this->verbose,
+            "dateTime" => $this->dateTime
         ]);
         return 1;
     }
