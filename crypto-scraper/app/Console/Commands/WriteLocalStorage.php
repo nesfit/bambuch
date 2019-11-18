@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands;
 
 use Illuminate\Support\Facades\Storage;
+use App\Console\CryptoParser;
 
 class WriteLocalStorage extends CryptoParser
 {
