@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\DBLoaders;
+namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\UserProfile;
