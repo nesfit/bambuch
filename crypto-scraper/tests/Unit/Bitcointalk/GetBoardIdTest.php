@@ -24,10 +24,9 @@ class GetBoardIdTest extends TestCase
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=+š83.234'),
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.234asdf'),
             LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.'),
-            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.0'),
-            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.2')
+            LoadBoards::getBoardPageId('https://bitcointalk.org/index.php?board=83.0')
         ];
-        $expected = [ null, null, null, null, 0, 1 ];
+        $expected = [ null, null, null, null, 0 ];
         $this->assertEquals($expected, $output);
     }
 
