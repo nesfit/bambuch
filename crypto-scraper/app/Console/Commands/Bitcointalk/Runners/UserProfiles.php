@@ -13,7 +13,7 @@ class UserProfiles extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = self::RUN_USER_PROFILES .' {verbose=1} {dateTime?}';
+    protected $signature = self::RUN_USER_PROFILES .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -38,6 +38,11 @@ class UserProfiles extends BitcointalkParser
      */
     public function handle() {
         parent::handle();
+        
+        if($this->option("force")) {
+            $this->printCyanLine("Force update!");
+            UserProfile::setParsedToAll(false);
+        }
         
         $userProfiles = UserProfile::getAllUnParsed();
         if (count($userProfiles)) {

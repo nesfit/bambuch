@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\BitcointalkParser;
+use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
@@ -102,6 +103,8 @@ class Boards extends BitcointalkParser {
 
             $progressBar->finish();
             print("\n");
+        } else if ($mainUrl === self::BITCOINTALK_URL) {
+            $this->printCyanLine('Peacefully ending...');
         } else {
             $this->printRedLine('Main board not found: ' . $mainUrl);
         }
