@@ -9,9 +9,9 @@ repos:
     sha: 1.3.0
     hooks:
       - id: php-lint
-#      - id: php-unit
+      - id: php-unit
+        files: Test\.(php)$
 #      - id: php-cs
-#        files: \.(php)$
 #        args: [--standard=PSR1 -p]
 #      - id: php-cbf
 #        files: \.(php)$
