@@ -25,7 +25,7 @@ class Boards extends BitcointalkParser {
      *
      * @var string
      */
-    protected $description = 'Loads main boards and board pages from a page (or from '. self::BITCOINTALK_URL .').';
+    protected $description = 'Loads main boards and board pages from a url (or from '. self::BITCOINTALK_URL .').';
 
     /**
      * Create a new command instance.

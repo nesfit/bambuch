@@ -21,7 +21,7 @@ class UserProfiles extends BitcointalkParser {
      *
      * @var string
      */
-    protected $description = 'Loads user profile urls from a topic page.';
+    protected $description = 'Loads user profile urls from a topic page url.';
 
     /**
      * Create a new command instance.

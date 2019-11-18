@@ -22,7 +22,7 @@ class ParseUserProfile extends BitcointalkParser
      *
      * @var string
      */
-    protected $description = 'Extracts bitcoin address from a user profile.';
+    protected $description = 'Extracts bitcoin address from a user profile url.';
 
     /**
      * Create a new command instance.
