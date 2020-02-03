@@ -2,3 +2,5 @@ version: "3"
 services:
   laravel:
     command: php artisan migrate
+    depends_on:
+      - db

@@ -23,6 +23,8 @@ class BitcointalkParser extends CryptoParser {
     const LOAD_USER_PROFILES = self::BITCOINTALK . 'load_user_profiles';
     const PARSE_USER_PROFILE = self::BITCOINTALK . 'parse_user_profile';
     const PARSE_TOPIC_MESSAGES = self::BITCOINTALK . 'parse_topic_messages';
+    const BOARD_CONSUMER = self::BITCOINTALK . 'board_consumer';
+    const BOARD_PRODUCER = self::BITCOINTALK . 'board_producer';
 
     public function __construct() {
         parent::__construct();
