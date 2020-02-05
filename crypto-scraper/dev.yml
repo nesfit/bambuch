@@ -21,7 +21,8 @@ services:
       - kafka
 
   consumer:
-    command: php artisan bitcointalk:board_consumer
+#    command: php artisan bitcointalk:board_consumer
+    command: php artisan consumer:scrape scrapeGroup bitcointalkScrapes 
     image: crypto-scraper_laravel
     volumes:
       - ./:/app
@@ -31,3 +32,7 @@ services:
     depends_on:
       - db
       - kafka
+        
+        
+        
+#  docker-compose -f common.yml -f dev.yml run consumer --entrypoint php artisan consumer:scrape scrapeGroup bitcointalkScrapes

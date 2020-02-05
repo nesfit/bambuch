@@ -12,7 +12,7 @@
 #
 #CMD [ "php", "artisan", "bitcointalk:load_boards" ]
 
-FROM php:7.4
+FROM php:7.4.2
 
 RUN apt-get update -y && apt-get install -y openssl zip unzip git libpq-dev librdkafka-dev
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

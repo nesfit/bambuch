@@ -28,3 +28,21 @@ Run the project script:
 * Calculate `maxPage` automatically from DOM difference.
 * Add more cryptocurrencies from the web.
                  
+                 
+                 
+                 
+## Install composer dependencies in Docker
+Run the container
+```bash
+docker-compose -f common.yml -f dev.yml up
+``` 
+
+Install the dependencies
+```bash
+docker exec crypto-scraper_laravel_1 composer update php
+```
+
+## Run consumer 
+```bash
+ docker-compose -f common.yml -f dev.yml run --rm --name consumer_scrape consumer php artisan consumer:scrape scrapeGroup bitcointalkScrapes
+```
