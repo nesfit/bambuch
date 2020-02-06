@@ -32,6 +32,17 @@ services:
     depends_on:
       - db
       - kafka
+      
+  test:
+    image: crypto-scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+      - kafka
+    depends_on:
+      - db
+      - kafka
         
         
         

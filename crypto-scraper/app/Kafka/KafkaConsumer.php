@@ -12,7 +12,7 @@ use Exception;
 abstract class KafkaConsumer extends Command {
     private string $groupID;
     private string $broker = "kafka";
-    private string $topic;
+    private string $topicName;
     private int $timeout = 2000;
 
     public function __construct() {
@@ -21,10 +21,10 @@ abstract class KafkaConsumer extends Command {
 
     public function handle() {
         $groupID = $this->argument("groupID");
-        $topic = $this->argument("topic");
+        $topicName = $this->argument("topicName");
         
         $this->groupID = $groupID;
-        $this->topic = $topic;
+        $this->topicName = $topicName;
         
         $conf = new Conf();
         $conf->set('group.id', $this->groupID);
@@ -34,13 +34,13 @@ abstract class KafkaConsumer extends Command {
         $consumer = new Consumer($conf);
         
         try {
-            $consumer->subscribe([$this->topic]);
+            $consumer->subscribe([$this->topicName]);
         } catch (Exception $e) {
             print "Something wrong with consumer subscription: " . $e->getMessage();
         }
         
         try {
-            print "Going to read from '" . $this->topic . "' in group '" . $this->groupID . "'\n"; 
+            print "Going to read from '" . $this->topicName . "' in group '" . $this->groupID . "'\n"; 
             while (true) {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
@@ -59,7 +59,7 @@ abstract class KafkaConsumer extends Command {
                 }
             }
         } catch (Exception $e) {
-            print "Something wrong then consuming from: " . $this->topic . "\n";
+            print "Something wrong then consuming from: " . $this->topicName . "\n";
             print $e->getMessage();
         }
     }

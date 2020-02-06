@@ -11,7 +11,7 @@ class ScrapeConsumer extends KafkaConsumer {
      *
      * @var string
      */
-    protected $signature = 'consumer:scrape {groupID} {topic}';
+    protected $signature = 'consumer:scrape {groupID} {topicName}';
 
     /**
      * The console command description.
