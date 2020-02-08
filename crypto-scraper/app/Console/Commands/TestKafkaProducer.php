@@ -20,7 +20,7 @@ class TestKafkaProducer extends KafkaProducer {
         for ($i = 0; $i < 100; $i++) {
 //            print "producing... \n";
             $this->produce(strval($i));
-            sleep(2);
+            sleep(1);
         }
     }
 }

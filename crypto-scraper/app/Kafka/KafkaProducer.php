@@ -16,11 +16,11 @@ abstract class KafkaProducer extends KafkaCommon {
         parent::__construct();
     }
 
-    public function handle() {
-        parent::handle();
+    protected function handle() {
         $this->outputTopic = $this->argument("outputTopic");
 
-        $this->producer = new Producer($this->config);
+        $config = $this->getProducerConfig();
+        $this->producer = new Producer($config);
 
         $this->topic = $this->producer->newTopic($this->outputTopic);
 
@@ -30,10 +30,9 @@ abstract class KafkaProducer extends KafkaCommon {
     }
     
     protected function produce(string $message) {
-
         $this->topic->produce(0, 0, $message);
         $result = $this->producer->flush(10000);
-        
+
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {
             throw new RuntimeException('Was unable to flush, messages might be lost!');
         }
