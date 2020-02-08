@@ -1,33 +1,30 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Kafka;
 
-use Illuminate\Console\Command;
-use RdKafka\Conf;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
+use RuntimeException;
 
-abstract class KafkaProducer extends Command {
-    private string $broker = "kafka";
-    private string $debug = "generic";
+abstract class KafkaProducer extends KafkaCommon {
     private Producer $producer;
     private ProducerTopic $topic;
+    private string $outputTopic;
 
     public function __construct() {
         parent::__construct();
     }
 
     public function handle() {
-        $topicName = $this->argument("topicName");
-        
-        $conf = new Conf();
-        $conf->set('debug',$this->debug);
-        $conf->set('metadata.broker.list', $this->broker);
+        parent::handle();
+        $this->outputTopic = $this->argument("outputTopic");
 
-        $this->producer = new Producer($conf);
+        $this->producer = new Producer($this->config);
 
-        $this->topic = $this->producer->newTopic($topicName);
+        $this->topic = $this->producer->newTopic($this->outputTopic);
+
+        print "Going to write into '" . $this->outputTopic . "' topic \n";
 
         return 1;
     }
@@ -38,7 +35,7 @@ abstract class KafkaProducer extends Command {
         $result = $this->producer->flush(10000);
         
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {
-            throw new \RuntimeException('Was unable to flush, messages might be lost!');
+            throw new RuntimeException('Was unable to flush, messages might be lost!');
         }
     } 
 }

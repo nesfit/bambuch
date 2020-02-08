@@ -36,3 +36,9 @@ Producer test
 ```bash
 docker-compose -f common.yml -f dev.yml run test php artisan producer:test testTopic 
 ```
+
+## Dev commands
+Stop all test runs
+```bash
+docker stop $(docker ps | grep test_run | awk '{print $1}')
+```

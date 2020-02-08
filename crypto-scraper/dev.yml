@@ -1,16 +1,13 @@
 version: "3"
 services:
   laravel:
-#    command: php artisan bitcointalk:board_consumer
     volumes:
       - .:/app
     working_dir: /app
-#    command: php run_producer.php
-#    command: php run_consumer.php
 
   producer:
     command: php artisan bitcointalk:board_producer
-    image: crypto-scraper_laravel
+    image: crypto_scraper_laravel
     volumes:
       - ./:/app
     links:
@@ -23,7 +20,7 @@ services:
   consumer:
 #    command: php artisan bitcointalk:board_consumer
     command: php artisan consumer:scrape scrapeGroup bitcointalkScrapes 
-    image: crypto-scraper_laravel
+    image: crypto_scraper_laravel
     volumes:
       - ./:/app
     links:
@@ -34,7 +31,7 @@ services:
       - kafka
       
   test:
-    image: crypto-scraper_laravel
+    image: crypto_scraper_laravel
     volumes:
       - ./:/app
     links:
@@ -43,7 +40,3 @@ services:
     depends_on:
       - db
       - kafka
-        
-        
-        
-#  docker-compose -f common.yml -f dev.yml run consumer --entrypoint php artisan consumer:scrape scrapeGroup bitcointalkScrapes

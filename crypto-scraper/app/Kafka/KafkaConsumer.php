@@ -1,46 +1,39 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Kafka;
 
-use Illuminate\Console\Command;
-use RdKafka\Conf;
 use RdKafka\Message;
 use RdKafka\KafkaConsumer as Consumer;
 use Exception;
 
-abstract class KafkaConsumer extends Command {
-    private string $groupID;
-    private string $broker = "kafka";
-    private string $topicName;
+abstract class KafkaConsumer extends KafkaCommon {
     private int $timeout = 2000;
+    private string $groupID;
+    private string $inputTopic;
 
     public function __construct() {
         parent::__construct();
     }
 
     public function handle() {
-        $groupID = $this->argument("groupID");
-        $topicName = $this->argument("topicName");
+        parent::handle();
+        $this->inputTopic = $this->argument("inputTopic");
+        $this->groupID = $this->argument("groupID");
         
-        $this->groupID = $groupID;
-        $this->topicName = $topicName;
+        $this->config->set('auto.offset.reset', 'smallest'); // start from the beginning
+        $this->config->set('group.id', $this->groupID);
         
-        $conf = new Conf();
-        $conf->set('group.id', $this->groupID);
-        $conf->set('metadata.broker.list', $this->broker);
-        $conf->set('auto.offset.reset', 'smallest'); // start from the beginning
-
-        $consumer = new Consumer($conf);
+        $consumer = new Consumer($this->config);
         
         try {
-            $consumer->subscribe([$this->topicName]);
+            $consumer->subscribe([$this->inputTopic]);
         } catch (Exception $e) {
             print "Something wrong with consumer subscription: " . $e->getMessage();
         }
         
         try {
-            print "Going to read from '" . $this->topicName . "' in group '" . $this->groupID . "'\n"; 
+            print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n"; 
             while (true) {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
@@ -54,12 +47,12 @@ abstract class KafkaConsumer extends Command {
                         echo "Timed out\n";
                         break;
                     default:
-                        throw new \Exception($message->errstr(), $message->err);
+                        throw new Exception($message->errstr(), $message->err);
                         break;
                 }
             }
         } catch (Exception $e) {
-            print "Something wrong then consuming from: " . $this->topicName . "\n";
+            print "Something wrong then consuming from: " . $this->inputTopic . "\n";
             print $e->getMessage();
         }
     }

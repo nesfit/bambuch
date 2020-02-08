@@ -15,7 +15,7 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
-    image: laravel_core:v1
+    image: "crypto_scraper_laravel"
     ports:
       - 3000:8181
     volumes:

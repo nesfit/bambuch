@@ -9,7 +9,7 @@ use RdKafka\Message;
 
 class TestKafkaConsumer extends KafkaConsumer {
 
-    protected $signature = 'consumer:test {topicName} {groupID}';
+    protected $signature = 'consumer:test {inputTopic} {groupID}';
     protected $description = 'Testing kafka consumer';
 
 
