@@ -11,11 +11,14 @@ use RdKafka\Message;
 trait ConsumerFeatures {
     private int $timeout = 5000;
 
-    protected function startSubscribe(Conf $config, string $inputTopic) {
-        $consumer = new Consumer($config);
+    protected string $inputTopic;
+    protected Conf $config;
+
+    protected function startSubscribe() {
+        $consumer = new Consumer($this->config);
         
         try {
-            $consumer->subscribe([$inputTopic]);
+            $consumer->subscribe([$this->inputTopic]);
         } catch (Exception $e) {
             print "Something wrong with consumer subscription: " . $e->getMessage();
         }
@@ -39,7 +42,7 @@ trait ConsumerFeatures {
                 }
             }
         } catch (Exception $e) {
-            print "Something wrong then consuming from: " . $inputTopic . "\n";
+            print "Something wrong then consuming from: " . $this->inputTopic . "\n";
             print $e->getMessage();
         }
     }

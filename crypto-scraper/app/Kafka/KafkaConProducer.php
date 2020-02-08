@@ -8,13 +8,13 @@ abstract class KafkaConProducer extends KafkaProducer {
 
     protected function handle() {
         parent::handle();
-        $inputTopic = $this->argument("inputTopic");
+        $this->inputTopic = $this->argument("inputTopic");
         $groupID = $this->argument("groupID");
 
-        $config = $this->getConsumerConfig($groupID);
+        $this->config = $this->getConsumerConfig($groupID);
 
-        print "Going to read from '" . $inputTopic . "' in group '" . $groupID . "'\n";
+        print "Going to read from '" . $this->inputTopic . "' in group '" . $groupID . "'\n";
 
-        $this->startSubscribe($config, $inputTopic);
+        $this->startSubscribe();
     }
 }
