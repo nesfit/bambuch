@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 
-
-namespace App\Console\Commands;
-
+namespace App\Console\Commands\Tests\KafkaSingle;
 
 use App\Kafka\KafkaConsumer;
 use RdKafka\Message;
