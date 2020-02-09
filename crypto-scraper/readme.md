@@ -5,9 +5,9 @@ Cryptocurrency address parser made in PHP - Laravel.
 Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
 
 ## Run project
-Prepare DB tables:
+Migrate DB tables:
 ```bash
-docker-compose -f common.yml -f dev.yml -f migrate.yml up
+docker-compose -f common.yml -f migrate.yml up migrate
 ```
                  
 ## Install composer dependencies in Docker
