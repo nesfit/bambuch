@@ -24,7 +24,7 @@ trait ProducerFeatures {
         print "Going to write into '" . $this->outputTopic . "' topic \n";
     }
     
-    protected function produce(string $message) {
+    protected function kafkaProduce(string $message) {
         $this->topic->produce(0, 0, $message);
         $result = $this->producer->flush(10000);
 

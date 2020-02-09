@@ -40,3 +40,13 @@ services:
     depends_on:
       - db
       - kafka
+
+  seed:
+    image: crypto_scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+    depends_on:
+      - db
+    

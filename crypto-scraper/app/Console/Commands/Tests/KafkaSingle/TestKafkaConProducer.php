@@ -21,6 +21,6 @@ class TestKafkaConProducer extends KafkaConProducer {
     protected function handleKafkaRead(Message $message) {
         $value = intval($message->payload) * 10;
         
-        $this->produce("reproduced: " . $value);
+        $this->kafkaProduce("reproduced: " . $value);
     }
 }

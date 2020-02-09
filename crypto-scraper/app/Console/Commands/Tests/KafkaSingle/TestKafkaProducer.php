@@ -19,7 +19,7 @@ class TestKafkaProducer extends KafkaProducer {
         
         $message = "Original message";
         print $message . "\n";
-        $this->produce($message);
+        $this->kafkaProduce($message);
         return 1;
     }
 }

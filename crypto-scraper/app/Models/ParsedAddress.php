@@ -26,7 +26,7 @@ class ParsedAddress {
         return [$this->owner, $this->url, $this->label, $this->source, $this->address, $this->type, $this->explicitCategory];
     }
     
-    public function createTSVData() {
+    public function createTSVData(): string {
         $cleanArray = array_reduce(self::getData(),
             function ($acc, $value)  {
                 array_push($acc, Utils::cleanText($value));

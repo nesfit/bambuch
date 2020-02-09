@@ -5,13 +5,15 @@ namespace App\Console\Commands;
 use App\Kafka\KafkaConsumer;
 use RdKafka\Message;
 
+//docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape scrapeTopic scrapeGroup
+
 class ScrapeConsumer extends KafkaConsumer {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'consumer:scrape {groupID} {topicName}';
+    protected $signature = 'consumer:scrape {inputTopic} {groupID}';
 
     /**
      * The console command description.
@@ -41,6 +43,7 @@ class ScrapeConsumer extends KafkaConsumer {
     
     protected function handleKafkaRead(Message $message) {
         list($owner, $url, $label, $source, $address, $cryptoType, $category) = explode("\t", $message->payload); 
+        print "Inserting: " . $url . "\n";
         
         $this->call('insert:db', [
             'owner name' => $owner,

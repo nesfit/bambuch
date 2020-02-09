@@ -29,16 +29,25 @@ docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service
 ### Examples
 Consumer test
 ```bash
-docker-compose -f common.yml -f dev.yml run test php artisan consumer:test testTopic testGroup 
+docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:test testTopic testGroup 
 ```
 
 Producer test
 ```bash
-docker-compose -f common.yml -f dev.yml run test php artisan producer:test testTopic 
+docker-compose -f common.yml -f dev.yml run --rm test php artisan producer:test testTopic 
 ```
 
 ## Dev commands
 Stop all test runs
 ```bash
 docker stop $(docker ps | grep test_run | awk '{print $1}')
+docker stop $(docker ps | grep seed_run | awk '{print $1}')
+```
+
+Insert some data into DB
+```bash
+docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:load_boards 
+docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_update_boards
+docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_boards 
+docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_main_topics
 ```
