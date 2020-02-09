@@ -18,7 +18,7 @@ docker-compose -f common.yml -f dev.yml up
 
 Install the dependencies
 ```bash
-docker exec crypto-scraper_laravel_1 composer update php
+docker exec crypto-scraper_laravel_1 composer install
 ```
 
 ## Run consumer 

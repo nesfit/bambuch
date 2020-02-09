@@ -7,7 +7,7 @@ use App\Kafka\KafkaProducer;
 
 class TestKafkaProducer extends KafkaProducer {
 
-    protected $signature = 'producer:test {outputTopic}';
+    protected $signature = 'producer:test_single {outputTopic}';
     protected $description = 'Testing kafka producer';
 
     public function __construct() {
@@ -17,10 +17,9 @@ class TestKafkaProducer extends KafkaProducer {
     public function handle() {
         parent::handle();
         
-        for ($i = 0; $i < 100; $i++) {
-//            print "producing... \n";
-            $this->produce(strval($i));
-            sleep(1);
-        }
+        $message = "Original message";
+        print $message . "\n";
+        $this->produce($message);
+        return 1;
     }
 }

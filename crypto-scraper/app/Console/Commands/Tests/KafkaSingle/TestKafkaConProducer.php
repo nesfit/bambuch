@@ -9,7 +9,7 @@ use RdKafka\Message;
 
 class TestKafkaConProducer extends KafkaConProducer {
 
-    protected $signature = 'conproducer:test {inputTopic} {groupID} {outputTopic}';
+    protected $signature = 'conproducer:test_single {inputTopic} {groupID} {outputTopic}';
     protected $description = 'Testing kafka consumer/producer';
 
     public function handle() {
