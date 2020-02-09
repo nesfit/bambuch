@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
-use Illuminate\Console\Command;
 use RdKafka\Conf;
 
-abstract class KafkaCommon extends Command {
+trait CommonFeatures {
     private string $broker = "kafka";
     
     private function getConfig(): Conf {
@@ -25,6 +24,4 @@ abstract class KafkaCommon extends Command {
     protected function getProducerConfig(): Conf {
         return $this->getConfig();
     }
-    
-    
 }

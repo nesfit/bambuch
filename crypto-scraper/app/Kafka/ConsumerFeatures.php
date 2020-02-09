@@ -9,10 +9,21 @@ use RdKafka\KafkaConsumer as Consumer;
 use RdKafka\Message;
 
 trait ConsumerFeatures {
+    use CommonFeatures;
+
     private int $timeout = 5000;
 
     protected string $inputTopic;
+    protected string $groupID;
     protected Conf $config;
+    
+    protected function initConsumer() {
+        $this->config = $this->getConsumerConfig($this->groupID);
+
+        print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
+
+        $this->startSubscribe();
+    }
 
     protected function startSubscribe() {
         $consumer = new Consumer($this->config);

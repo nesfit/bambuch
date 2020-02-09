@@ -3,18 +3,16 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
-abstract class KafkaConProducer extends KafkaProducer {
-    use ConsumerFeatures;
+use Illuminate\Console\Command;
+
+abstract class KafkaConProducer extends Command {
+    use ConProducerFeatures;
 
     protected function handle() {
-        parent::handle();
         $this->inputTopic = $this->argument("inputTopic");
-        $groupID = $this->argument("groupID");
-
-        $this->config = $this->getConsumerConfig($groupID);
-
-        print "Going to read from '" . $this->inputTopic . "' in group '" . $groupID . "'\n";
-
-        $this->startSubscribe();
+        $this->outputTopic = $this->argument("outputTopic");
+        $this->groupID = $this->argument("groupID");
+        
+        $this->initConProducer();
     }
 }

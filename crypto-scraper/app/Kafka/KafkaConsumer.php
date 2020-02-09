@@ -3,21 +3,15 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
-abstract class KafkaConsumer extends KafkaCommon {
-    use ConsumerFeatures;
+use Illuminate\Console\Command;
 
-    public function __construct() {
-        parent::__construct();
-    }
+abstract class KafkaConsumer extends Command {
+    use ConsumerFeatures;
 
     protected function handle() {
         $this->inputTopic = $this->argument("inputTopic");
-        $groupID = $this->argument("groupID");
+        $this->groupID = $this->argument("groupID");
         
-        $this->config = $this->getConsumerConfig($groupID);
-
-        print "Going to read from '" . $this->inputTopic . "' in group '" . $groupID . "'\n";
-        
-        $this->startSubscribe();
+        $this->initConsumer();
     }
 }
