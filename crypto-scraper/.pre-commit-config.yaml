@@ -1,0 +1,23 @@
+repos:
+#  - repo: https://github.com/pre-commit/pre-commit-hooks
+#    rev: v2.4.0
+#    hooks:
+#      - id: check-yaml
+#      - id: end-of-file-fixer
+#      - id: trailing-whitespace
+  - repo: https://github.com/digitalpulp/pre-commit-php.git
+    sha: 1.3.0
+    hooks:
+      - id: php-lint
+      - id: php-unit
+#      - id: php-cs
+        files: \.(php)$
+        args: [--standard=PSR1 -p]
+#      - id: php-cbf
+#        files: \.(php)$
+#        args: [--standard=PSR1 -p]
+  - repo: git@github.com:coassemble/php-strict-types-pre-commit-hook.git
+    rev: master
+    hooks:
+      - id: php-strict-types
+        files: \.(php)$

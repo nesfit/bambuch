@@ -1,0 +1,52 @@
+version: "3"
+services:
+  laravel:
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  producer:
+    command: php artisan bitcointalk:board_producer
+    image: crypto_scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+      - kafka
+    depends_on:
+      - db
+      - kafka
+
+  consumer:
+#    command: php artisan bitcointalk:board_consumer
+    command: php artisan consumer:scrape scrapeGroup bitcointalkScrapes 
+    image: crypto_scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+      - kafka
+    depends_on:
+      - db
+      - kafka
+      
+  test:
+    image: crypto_scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+      - kafka
+    depends_on:
+      - db
+      - kafka
+
+  seed:
+    image: crypto_scraper_laravel
+    volumes:
+      - ./:/app
+    links:
+      - db
+    depends_on:
+      - db
+    

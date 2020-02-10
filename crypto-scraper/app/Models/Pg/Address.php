@@ -28,7 +28,10 @@ class Address extends Model
     protected $connection   = 'pgsql';
 
     public static function getByAddress($address) {
-        return self::where("address", $address)->get()->first();
+        return self::query()
+            ->where("address", $address)
+            ->get()
+            ->first();
     }
 
     public function categories()

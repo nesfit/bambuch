@@ -1,0 +1,46 @@
+version: "3"
+services:
+  db:
+    image: "postgres:11"
+    container_name: "crypto_scraper_pg"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: scraper
+      POSTGRES_USER: scraper
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  
+  laravel:
+    tty: true
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: "crypto_scraper_laravel"
+    ports:
+      - 3000:8181
+    volumes:
+      - ./:/app
+    links:
+      - db
+      - kafka
+    depends_on:
+      - db
+      - kafka
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper

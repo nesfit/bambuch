@@ -1,14 +1,14 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Console\Utils;
+use App\Console\Base\Common\Utils;
 
 class ParsedAddress {
     private $owner, $url, $label, $source, $address, $type, $explicitCategory;
     
-    public function __construct(string $owner, string $url, string $label, string $source, string $address, string $type, string $explicitCategory) {
+    public function __construct(string $owner, string $url, string $label, string $source, string $address, int $type, string $explicitCategory) {
         $this->owner = $owner;
         $this->url = $url;
         $this->label = $label;
@@ -26,7 +26,7 @@ class ParsedAddress {
         return [$this->owner, $this->url, $this->label, $this->source, $this->address, $this->type, $this->explicitCategory];
     }
     
-    public function createTSVData() {
+    public function createTSVData(): string {
         $cleanArray = array_reduce(self::getData(),
             function ($acc, $value)  {
                 array_push($acc, Utils::cleanText($value));

@@ -1,0 +1,7 @@
+version: "3"
+services:
+  migrate:
+    image: crypto_scraper_laravel
+    command: php artisan migrate
+    depends_on:
+      - db

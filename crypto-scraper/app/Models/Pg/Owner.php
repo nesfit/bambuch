@@ -19,7 +19,10 @@ class Owner extends Model
     protected $connection = 'pgsql';
 
     public static function getByName($name) {
-        $existing = self::where("name", $name)->get()->first();
+        $existing = self::query()
+            ->where("name", $name)
+            ->get()
+            ->first();
         if ($existing == null) {
             $owner = new Owner();
             $owner->name = $name;
@@ -30,7 +33,7 @@ class Owner extends Model
     }
 
     public static function getAllNames() {
-        return self::get()->reduce(function ($acc, $owner) {
+        return self::query()->get()->reduce(function ($acc, $owner) {
             $acc[$owner->name] = [];
             return $acc;
         }, []);

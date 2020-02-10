@@ -18,11 +18,17 @@ class WalletExplorer extends Model
     protected $connection   = 'pgsql';
 
     public static function getByOwner($owner) {
-        return self::where("owner", $owner)->get()->first();
+        return self::query()
+            ->where("owner", $owner)
+            ->get()
+            ->first();
     }
 
     public static function getByOwnerLike($owner) {
         $dbInput = '%LOWER(' . $owner . ')%';
-        return self::where("owner", 'like', $dbInput)->get()->first();
+        return self::query()
+            ->where("owner", 'like', $dbInput)
+            ->get()
+            ->first();
     }
 }
