@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Loaders;
 
-use App\Console\BitcointalkParser;
+use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\BoardPage;

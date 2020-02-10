@@ -1,8 +1,9 @@
 <?php
 
 
-namespace App\Console;
+namespace App\Console\Base;
 
+use App\Console\Base\CryptoCurrency;
 use Symfony\Component\DomCrawler\Crawler;
 
 interface ParserInterface {

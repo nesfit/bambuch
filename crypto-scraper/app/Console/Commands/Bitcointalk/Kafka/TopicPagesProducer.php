@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\Console\BitcointalkParser;
-use App\Console\Commands\Bitcointalk\KafkaProducer;
+use App\Console\Base\Bitcointalk\KafkaProducer;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
-use RdKafka\Conf;
-use RdKafka\Producer;
 
 //docker-compose -f common.yml -f dev.yml run --rm test php artisan bitcointalk:topic_pages_producer pageUrlTopic
 

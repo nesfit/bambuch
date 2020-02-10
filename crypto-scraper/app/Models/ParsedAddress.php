@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Console\Utils;
+use App\Console\Base\Utils;
 
 class ParsedAddress {
     private $owner, $url, $label, $source, $address, $type, $explicitCategory;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitinfocharts;
 
 use DateTime;
-use App\Console\CryptoParser;
+use App\Console\Base\CryptoParser;
 
 error_reporting(E_ALL ^ E_WARNING);
 

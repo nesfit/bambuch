@@ -4,15 +4,12 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\AddressMatcher;
-use App\Console\BitcointalkParser;
-use App\Console\Commands\Bitcointalk\KafkaConProducer;
-use App\Console\Commands\Bitcointalk\KafkaConsumer;
+use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
-use App\Console\CryptoCurrency;
+use App\Console\Base\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
-use RdKafka;
 use RdKafka\Message;
 use Symfony\Component\DomCrawler\Crawler;
 

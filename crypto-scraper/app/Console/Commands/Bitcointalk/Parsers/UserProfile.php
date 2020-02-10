@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Parsers;
 
-use App\Console\BitcointalkParser;
-use App\Console\CryptoCurrency;
+use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Base\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 

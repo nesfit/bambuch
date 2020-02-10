@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitinfocharts;
 
-use App\Console\CryptoCurrency;
-use App\Console\ParserInterface;
-use App\Console\Utils;
+use App\Console\Base\CryptoCurrency;
+use App\Console\Base\ParserInterface;
+use App\Console\Base\Utils;
 
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
-use App\Console\CryptoParser;
+use App\Console\Base\CryptoParser;
 
 
 class Parse extends CryptoParser implements ParserInterface {

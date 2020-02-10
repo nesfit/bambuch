@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Console\Utils;
+use App\Console\Base\Utils;
 use Tests\TestCase;
 
 class CreateTSVDataTest extends TestCase

@@ -4,8 +4,9 @@
  * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
  */
 
-namespace App\Console;
+namespace App\Console\Base;
 
+use App\Console\Base\CryptoCurrency;
 use DOMDocument;
 use DOMXPath;
 

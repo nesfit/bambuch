@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Console\Base;
 
 use App\Models\ParsedAddress;
 use Illuminate\Console\Command;

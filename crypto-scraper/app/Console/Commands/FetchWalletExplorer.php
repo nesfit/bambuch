@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Console\Utils;
+use App\Console\Base\Utils;
 use App\Models\Pg\Category;
 use App\Models\Pg\WalletExplorer;
 use Illuminate\Console\Command;

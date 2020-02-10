@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Runners;
 
-use App\Console\BitcointalkParser;
+use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
 class UpdateBoards extends BitcointalkParser
