@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -8,7 +8,7 @@ use App\Console\Utils;
 class ParsedAddress {
     private $owner, $url, $label, $source, $address, $type, $explicitCategory;
     
-    public function __construct(string $owner, string $url, string $label, string $source, string $address, string $type, string $explicitCategory) {
+    public function __construct(string $owner, string $url, string $label, string $source, string $address, int $type, string $explicitCategory) {
         $this->owner = $owner;
         $this->url = $url;
         $this->label = $label;

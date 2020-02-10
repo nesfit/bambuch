@@ -1,16 +1,14 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Bitinfocharts;
 
-use DateTime;;
+use DateTime;
+use App\Console\CryptoParser;
 
 error_reporting(E_ALL ^ E_WARNING);
 
-class BitinfochartsLoad extends CryptoParser {
+class Load extends CryptoParser {
 
     private const MAIN_URL = "https://bitinfocharts.com";
     private const PLACEHOLDER = "__placeholder__";
@@ -48,7 +46,7 @@ class BitinfochartsLoad extends CryptoParser {
 
         $start  = new DateTime();
 
-        $this->printVerbose();
+        $this->printVerbosity();
 
         $this->parsePages($pages);
         

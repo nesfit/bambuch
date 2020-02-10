@@ -32,6 +32,7 @@ class Utils {
 
     /**
      * Uses curl to get DOM from a url.
+     * @deprecated 
      *
      * @param string $url
      * @return string
@@ -112,11 +113,6 @@ class Utils {
             }, []
         );
         return implode("\t", $cleanArray);
-    }
-    
-    public static function getFullHost(string $url): string {
-        $parsedUrl = parse_url($url);
-        return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
 
     public static function extractXorCode($address, $position) {
