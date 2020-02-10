@@ -20,7 +20,7 @@ class ScrapeConsumer extends KafkaConsumer {
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Store scraped information into PG DB.';
 
     /**
      * Create a new command instance.

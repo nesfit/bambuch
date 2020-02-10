@@ -6,7 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 use App\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
-use App\Console\Base\CryptoCurrency;
+use App\Console\Constants\CryptoCurrency;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;

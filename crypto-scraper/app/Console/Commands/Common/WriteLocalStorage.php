@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Common;
 
 use Illuminate\Support\Facades\Storage;
-use App\Console\Base\CryptoParser;
+use App\Console\Base\Common\CryptoParser;
 
 class WriteLocalStorage extends CryptoParser
 {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Bitcointalk;
 
-use App\Console\Base\CryptoParser;
+use App\Console\Base\Common\CryptoParser;
 use Symfony\Component\DomCrawler\Crawler;
 
 class BitcointalkParser extends CryptoParser {

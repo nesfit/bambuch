@@ -4,7 +4,7 @@
  * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
  */
 
-namespace App\Console\Base;
+namespace App\Console\Constants;
 
 class CryptoCurrency {
 
