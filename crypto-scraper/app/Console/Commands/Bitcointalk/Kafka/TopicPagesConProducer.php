@@ -7,6 +7,7 @@ use App\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Kafka;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
@@ -23,7 +24,7 @@ class TopicPagesConProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::TOPIC_PAGES_CONSUMER .' {inputTopic} {groupID} {outputTopic} {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -47,6 +48,10 @@ class TopicPagesConProducer extends KafkaConProducer {
      * @return mixed
      */
     public function handle() {
+        $this->inputTopic = Kafka::B_TALK_T_PAGES_TOPIC;
+        $this->outputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
+        $this->groupID = Kafka::B_TALK_T_PAGES_GROUP;
+    
         parent::handle();
         
         return 1;

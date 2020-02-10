@@ -12,7 +12,7 @@ trait ProducerFeatures {
     
     private Producer $producer;
     private ProducerTopic $topic;
-    private string $outputTopic;
+    protected string $outputTopic;
 
     protected function initProducer() {
 

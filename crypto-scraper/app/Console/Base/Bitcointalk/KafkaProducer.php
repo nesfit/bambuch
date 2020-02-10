@@ -10,7 +10,6 @@ abstract class KafkaProducer extends BitcointalkParser {
 
     public function handle() {
         parent::handle();
-        $this->outputTopic = $this->argument("outputTopic");
 
         $this->initProducer();
     }

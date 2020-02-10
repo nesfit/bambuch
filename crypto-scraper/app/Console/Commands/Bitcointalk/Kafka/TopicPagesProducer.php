@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
+use App\Console\Constants\Kafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
-//docker-compose -f common.yml -f dev.yml run --rm test php artisan bitcointalk:topic_pages_producer pageUrlTopic
+//docker-compose -f common.yml -f dev.yml run --rm test php artisan bitcointalk:topic_pages_producer
 
 class TopicPagesProducer extends KafkaProducer
 {
@@ -15,7 +17,7 @@ class TopicPagesProducer extends KafkaProducer
      *
      * @var string
      */
-    protected $signature = self::TOPIC_PAGES_PRODUCER .' {outputTopic} {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::TOPIC_PAGES_PRODUCER .' {verbose=1} {--force} {dateTime?}';
 
 
     /**
@@ -41,6 +43,7 @@ class TopicPagesProducer extends KafkaProducer
      * @return mixed
      */
     public function handle() {
+        $this->outputTopic = Kafka::B_TALK_T_PAGES_TOPIC;
         parent::handle();
 
         if($this->option("force")) {

@@ -13,7 +13,6 @@ abstract class KafkaProducer extends Command {
     
     private Producer $producer;
     private ProducerTopic $topic;
-    private string $outputTopic;
 
     protected function handle() {
         $this->outputTopic = $this->argument("outputTopic");

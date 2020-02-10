@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
 use App\Console\Base\Common\KafkaConsumer;
+use App\Console\Constants\Kafka;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape scrapeTopic scrapeGroup
+//docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape
 
 class ScrapeConsumer extends KafkaConsumer {
     /**
@@ -13,7 +15,7 @@ class ScrapeConsumer extends KafkaConsumer {
      *
      * @var string
      */
-    protected $signature = 'consumer:scrape {inputTopic} {groupID}';
+    protected $signature = 'consumer:scrape';
 
     /**
      * The console command description.
@@ -37,7 +39,10 @@ class ScrapeConsumer extends KafkaConsumer {
      * @return mixed
      */
     public function handle() {
-        parent::handle();
+        $this->inputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
+        $this->groupID = Kafka::SCRAPE_RESULTS_GROUP;
+        
+        $this->initConsumer();
         return 1;
     }
     

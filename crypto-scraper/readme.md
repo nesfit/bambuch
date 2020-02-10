@@ -41,6 +41,10 @@ docker-compose -f common.yml -f dev.yml run --rm test php artisan producer:test 
 Stop all test runs
 ```bash
 docker stop $(docker ps | grep test_run | awk '{print $1}')
+```
+
+Stop seeding
+```bash
 docker stop $(docker ps | grep seed_run | awk '{print $1}')
 ```
 
@@ -50,4 +54,11 @@ docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:lo
 docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_update_boards
 docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_boards 
 docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_main_topics
+```
+
+Broken composer autoload
+```bash
+composer dump-autoload
+composer clear-cache
+php artisan cache:clear
 ```
