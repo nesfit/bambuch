@@ -9,11 +9,7 @@ use Illuminate\Console\Command;
 abstract class KafkaConProducer extends Command {
     use ConProducerFeatures;
 
-    protected function handle() {
-        $this->inputTopic = $this->argument("inputTopic");
-        $this->outputTopic = $this->argument("outputTopic");
-        $this->groupID = $this->argument("groupID");
-        
+    protected function handle() {        
         $this->initConProducer();
     }
 }

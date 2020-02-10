@@ -15,8 +15,6 @@ abstract class KafkaProducer extends Command {
     private ProducerTopic $topic;
 
     protected function handle() {
-        $this->outputTopic = $this->argument("outputTopic");
-
         $this->initProducer();
     }
 }

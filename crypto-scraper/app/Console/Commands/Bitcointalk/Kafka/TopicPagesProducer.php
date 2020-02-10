@@ -44,6 +44,7 @@ class TopicPagesProducer extends KafkaProducer
      */
     public function handle() {
         $this->outputTopic = Kafka::B_TALK_T_PAGES_TOPIC;
+        
         parent::handle();
 
         if($this->option("force")) {

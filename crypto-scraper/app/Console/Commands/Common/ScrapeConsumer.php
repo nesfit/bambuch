@@ -42,7 +42,8 @@ class ScrapeConsumer extends KafkaConsumer {
         $this->inputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = Kafka::SCRAPE_RESULTS_GROUP;
         
-        $this->initConsumer();
+        parent::handle();
+        
         return 1;
     }
     

@@ -10,8 +10,6 @@ abstract class KafkaConsumer extends BitcointalkParser {
 
     public function handle() {
         parent::handle();
-        $this->inputTopic = $this->argument("inputTopic");
-        $this->groupID = $this->argument("groupID");
 
         $this->initConsumer();
     }
