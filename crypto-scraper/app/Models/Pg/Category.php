@@ -59,10 +59,7 @@ class Category extends Model
     public $timestamps = false;
 
     public static function getByName(string $name) {
-        return self::query()
-            ->where("name", $name)
-            ->get()
-            ->first();
+        return self::where("name", $name)->get()->first();
     }
     
     public static function getByPartialMatch(string $text) {

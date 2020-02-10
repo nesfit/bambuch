@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcoinabuse;
+namespace App\Console\Commands;
 
-use App\Console\CryptoParser;
-
-class Load extends CryptoParser {
+class BitcoinabuseLoad extends CryptoParser {
     protected $signature = 'bitcoinabuse:load {verbose=1}';
     protected $description = 'Bitcoinabuse.com parser';
     protected $token = null;
@@ -27,7 +24,7 @@ class Load extends CryptoParser {
         $token = env('BITCOIN_ABUSE_TOKEN', '');
         $dateTime = date("Y-m-d H:i:s");
 
-        $this->printVerbosity();
+        $this->printVerbose();
         
         $mainUrl = self::URL . $token;
         for ($page = 1;; $page++) {
@@ -41,6 +38,7 @@ class Load extends CryptoParser {
             if (!$hasNextPage) {
                 break;
             }
+            sleep(2);
         }
     }
 }

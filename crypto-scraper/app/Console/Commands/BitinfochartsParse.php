@@ -1,7 +1,6 @@
 <?php
-declare(strict_types=1);
 
-namespace App\Console\Commands\Bitinfocharts;
+namespace App\Console\Commands;
 
 use App\Console\CryptoCurrency;
 use App\Console\ParserInterface;
@@ -9,10 +8,9 @@ use App\Console\Utils;
 
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
-use App\Console\CryptoParser;
 
 
-class Parse extends CryptoParser implements ParserInterface {
+class BitinfochartsParse extends CryptoParser implements ParserInterface {
     /**
      * The name and signature of the console command.
      *
@@ -42,35 +40,38 @@ class Parse extends CryptoParser implements ParserInterface {
      * @return mixed
      */
     public function handle() {
-        parent::handle();
+        $this->verbose = $this->argument("verbose");
+        $dateTime = $this->argument("dateTime");
+        $url = $this->argument("url");
 
-        $source = $this->getFullHost();
-        $cryptoSettings = Utils::getCryptoSettings($this->url);
+        $source = Utils::getFullHost($url);
+        $cryptoSettings = Utils::getCryptoSettings($url);
         $cryptoRegex = $cryptoSettings["regex"];
         $cryptoType = $cryptoSettings["code"];
                 
+        $this->printParsingPage($url);
         
-        $body = $this->getDOMBody($this->url);
+        $body = $this->getDOMBody($url);
         
         if (!$body) {
             $this->line("<fg=red>No body found.</>");
             exit();
         }
 
-        $addresses = $this->getAddresses($this->url, $cryptoRegex);
+        $addresses = $this->getAddresses($url, $cryptoRegex);
 
         if (empty($addresses)) {
             $this->line("<fg=red>No addresses found.</>");
             exit();
         }
 
-        $pageCrawler = $this->getPageCrawler($this->url);
+        $pageCrawler = $this->getPageCrawler($url);
 
         $this->printVerbose2("<fg=yellow>Getting addresses from wallet:</>");
         $parsedAddresses = $this->getParsedAddresses($source, $addresses, $pageCrawler, $cryptoRegex, $cryptoType);
         // store wallets data into TSV file 
         $this->printVerbose2("<fg=yellow>Inserting owner:</>");
-        $this->saveParsedData($this->dateTime, ...$parsedAddresses);
+        $this->saveParsedData($dateTime, ...$parsedAddresses);
         return true;
     }
 

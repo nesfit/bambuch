@@ -24,14 +24,11 @@ class Identity extends Model
     protected $connection = 'pgsql';
 
     public static function getIdentitiesByAddress($addr_id) {
-        return self::query()
-            ->where("address_id", $addr_id)
-            ->get();
+        return self::where("address_id", $addr_id)->get();
     }
 
     public static function getIdentity($source, $url, $label, $addr_id) {
-        return self::query()
-            ->where("source", $source)
+        return self::where("source", $source)
             ->where("url", $url)
             ->where("label", $label)
             ->where("address_id", $addr_id)
