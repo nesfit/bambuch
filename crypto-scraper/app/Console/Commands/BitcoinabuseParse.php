@@ -1,16 +1,14 @@
 <?php
-declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcoinabuse;
+namespace App\Console\Commands;
 
 use App\Console\CryptoCurrency;
 use App\Console\ParserInterface;
 use App\Console\Utils;
 use App\Models\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
-use App\Console\CryptoParser;
 
-class Parse extends CryptoParser implements ParserInterface
+class BitcoinabuseParse extends CryptoParser implements ParserInterface
 {
     const REPORT_URL = '/reports/%s';
 
@@ -42,14 +40,18 @@ class Parse extends CryptoParser implements ParserInterface
      * @return mixed
      */
     public function handle() {
-        parent::handle();
+        $this->verbose = $this->argument("verbose");
+        $dateTime = $this->argument("dateTime");
+        $url = $this->argument('url');
 
-        $source = $this->getFullHost();
+        $source = Utils::getFullHost($url);
+
+        $this->printParsingPage($url);
         
-        list($hasNextPage, $addresses) = $this->getAddresses($this->url);
+        list($hasNextPage, $addresses) = $this->getAddresses($url);
         
         $parsedAddresses = $this->getParsedAddresses($source, $addresses);
-        $this->saveParsedData($this->dateTime, ...$parsedAddresses);
+        $this->saveParsedData($dateTime, ...$parsedAddresses);
         // Artisan super-command cannot receive boolean values         
         return $hasNextPage ? 1 : 0;
     }

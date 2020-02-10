@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Tests\Unit;
 
@@ -14,9 +13,9 @@ class ParsedAddressTest extends TestCase {
      */
     public function testOwnerExists() {
         $testArray = [
-            new ParsedAddress('testOwner1', '', '','','',1,''),
-            new ParsedAddress('testOwner2', '', '','','',1,''),
-            new ParsedAddress('testOwner3', '', '','','',1,'')
+            new ParsedAddress('testOwner1', '', '','','','',''),
+            new ParsedAddress('testOwner2', '', '','','','',''),
+            new ParsedAddress('testOwner3', '', '','','','','')
         ];
         
         $exists = ParsedAddress::ownerExists('testOwner2', ...$testArray);

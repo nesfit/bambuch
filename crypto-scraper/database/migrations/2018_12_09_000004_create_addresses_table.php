@@ -26,7 +26,7 @@ class CreateAddressesTable extends Migration
             $table->bigInteger(Address::COL_ADDRID);
             $table->integer(Address::COL_CATID);
 
-            $table->foreign(Address::COL_ADDRID)
+            $table->foreign(Address::COL_ADDRID)s
                 ->references(Address::COL_ID)
                 ->on(Address::TABLE)
                 ->onDelete('cascade');
