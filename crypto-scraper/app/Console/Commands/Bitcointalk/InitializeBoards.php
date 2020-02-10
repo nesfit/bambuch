@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Runners;
+namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-class UpdateBoards extends BitcointalkParser
+class InitializeBoards extends BitcointalkParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::RUN_UPDATE_BOARDS .' {verbose=1} {--force}';
+    protected $signature = self::INITIALIZE_BOARDS .' {verbose=1} {--force}';
 
     /**
      * The console command description.
@@ -43,6 +43,13 @@ class UpdateBoards extends BitcointalkParser
             MainBoard::setParsedToAll(false);
         }
 
+        // always check for new boards in bitcointalk index
+        $this->call(self::LOAD_BOARDS, [
+            "url" => self::BITCOINTALK_URL,
+            "verbose" => $this->verbose
+        ]);
+        
+        // continue with unparsed main boards
         $allMainBoards = MainBoard::getAllUnParsed();
         if (count($allMainBoards)) {
             foreach ($allMainBoards as $mainBoard) {

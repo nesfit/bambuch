@@ -6,7 +6,7 @@ namespace App\Console\Commands\Tests\KafkaContinuous;
 use App\Console\Base\Common\KafkaConsumer;
 use RdKafka\Message;
 
-// docker-compose -f common.yml -f dev.yml run test php artisan consumer:test
+// docker-compose -f common.yml -f dev.yml run --rm test consumer:test
 
 class TestKafkaConsumer extends KafkaConsumer {
 

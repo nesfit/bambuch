@@ -7,7 +7,7 @@ use App\Console\Base\Common\KafkaConsumer;
 use App\Console\Constants\Kafka;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape
+//docker-compose -f common.yml -f dev.yml run --rm test consumer:scrape
 
 class ScrapeConsumer extends KafkaConsumer {
     /**

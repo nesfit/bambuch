@@ -32,6 +32,7 @@ services:
       
   test:
     image: crypto_scraper_laravel
+    entrypoint: php artisan
     volumes:
       - ./:/app
     links:
@@ -43,6 +44,7 @@ services:
 
   seed:
     image: crypto_scraper_laravel
+    entrypoint: php artisan
     volumes:
       - ./:/app
     links:

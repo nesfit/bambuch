@@ -23,18 +23,18 @@ docker exec crypto-scraper_laravel_1 composer install
 
 ## Run consumer 
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <php command>
+docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <artisan command>
 ```
 
 ### Examples
 Consumer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:test testTopic testGroup 
+docker-compose -f common.yml -f dev.yml run --rm test consumer:test 
 ```
 
 Producer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test php artisan producer:test testTopic 
+docker-compose -f common.yml -f dev.yml run --rm test producer:test 
 ```
 
 ## Dev commands
@@ -50,10 +50,9 @@ docker stop $(docker ps | grep seed_run | awk '{print $1}')
 
 Insert some data into DB
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:load_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_update_boards
-docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed php artisan bitcointalk:run_main_topics
+docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:initialize_boards
+docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_boards 
+docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_main_topics
 ```
 
 Broken composer autoload

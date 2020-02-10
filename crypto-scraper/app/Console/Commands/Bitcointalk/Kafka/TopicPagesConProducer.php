@@ -14,7 +14,7 @@ use Illuminate\Support\Arr;
 use RdKafka\Message;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test php artisan bitcointalk:topic_pages_consumer pageUrlTopic bitcointalkTopicGroup scrapeTopic
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_consumer pageUrlTopic bitcointalkTopicGroup scrapeTopic
 
 class TopicPagesConProducer extends KafkaConProducer {
     use UrlValidations;

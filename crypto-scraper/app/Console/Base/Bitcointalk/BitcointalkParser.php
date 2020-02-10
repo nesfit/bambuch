@@ -12,9 +12,9 @@ class BitcointalkParser extends CryptoParser {
      */
     const BITCOINTALK = 'bitcointalk:';
     const BITCOINTALK_URL = 'https://bitcointalk.org';
+    const INITIALIZE_BOARDS = self::BITCOINTALK . 'initialize_boards';
     const RUN_BOARDS = self::BITCOINTALK . 'run_boards';
     const RUN_MAIN_TOPICS = self::BITCOINTALK . 'run_main_topics';
-    const RUN_UPDATE_BOARDS = self::BITCOINTALK . 'run_update_boards';
     const RUN_TOPICS_PAGE = self::BITCOINTALK . 'run_topic_page';
     const RUN_TOPICS_PAGES = self::BITCOINTALK . 'run_topic_pages';
     const RUN_USER_PROFILES = self::BITCOINTALK . 'run_user_profiles';
