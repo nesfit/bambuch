@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Common;
 
 use Illuminate\Support\Facades\Storage;
 use App\Console\Base\CryptoParser;

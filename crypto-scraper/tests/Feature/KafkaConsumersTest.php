@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Kafka\KafkaProducer;
+use App\Console\Base\Common\KafkaProducer;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

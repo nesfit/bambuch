@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Kafka;
+namespace App\Console\Base\Common;
 
+use App\Kafka\ConsumerFeatures;
 use Illuminate\Console\Command;
 
 abstract class KafkaConsumer extends Command {

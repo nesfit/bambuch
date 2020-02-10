@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Common;
 
 use App\Models\Pg\Address;
 use App\Models\Pg\Category;

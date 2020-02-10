@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Common;
 
-use App\Kafka\KafkaConsumer;
+use App\Console\Base\Common\KafkaConsumer;
 use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape scrapeTopic scrapeGroup

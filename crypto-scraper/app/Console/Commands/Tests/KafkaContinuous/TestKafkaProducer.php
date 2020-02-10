@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Tests\KafkaContinuous;
 
-use App\Kafka\KafkaProducer;
+use App\Console\Base\Common\KafkaProducer;
 
 class TestKafkaProducer extends KafkaProducer {
 
