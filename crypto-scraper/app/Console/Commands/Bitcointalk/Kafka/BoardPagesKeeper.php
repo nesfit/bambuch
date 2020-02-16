@@ -9,7 +9,7 @@ use App\Models\Pg\Bitcointalk\BoardPage;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_keeper
 
-class BoardPagesConsumer extends UrlKeeper
+class BoardPagesKeeper extends UrlKeeper
 {
     /**
      * The name and signature of the console command.
@@ -24,7 +24,7 @@ class BoardPagesConsumer extends UrlKeeper
      *
      * @var string
      */
-    protected $description = 'Send topics pages into Kafka';
+    protected $description = 'Store board pages into PG.';
 
     /**
      * Create a new command instance.

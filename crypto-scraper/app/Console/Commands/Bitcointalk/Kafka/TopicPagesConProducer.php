@@ -32,7 +32,7 @@ class TopicPagesConProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Wait for url in kafka and scrape it.';
+    protected $description = 'Load topic page from kafka and scrape it.';
 
     /**
      * Create a new command instance.

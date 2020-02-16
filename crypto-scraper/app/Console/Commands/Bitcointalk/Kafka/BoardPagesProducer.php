@@ -9,9 +9,9 @@ use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_con_producer
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_producer
 
-class BoardPagesConProducer extends KafkaConProducer {
+class BoardPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;
 
@@ -22,14 +22,14 @@ class BoardPagesConProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::BOARD_PAGES_CON_PRODUCER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::BOARD_PAGES_PRODUCER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Wait for url in kafka and scrape it.';
+    protected $description = 'Load board pages from main boards.';
 
     /**
      * Create a new command instance.
