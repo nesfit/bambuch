@@ -7,6 +7,7 @@ use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
+use App\Models\KafkaUrlMessage;
 use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_producer
@@ -59,8 +60,10 @@ class BoardPagesProducer extends KafkaConProducer {
         $mainBoardUrl = $message->payload;
         if (self::mainBoardValid($mainBoardUrl)) {
             $boardPages = $this->loadBoardPages($mainBoardUrl);
-            foreach ($boardPages as $boardPage) {
-                $this->kafkaProduce($boardPage);
+            $pagesCount = count($boardPages);
+            foreach ($boardPages as $num => $boardPage) {
+                $urlMessage = new KafkaUrlMessage($mainBoardUrl, $boardPage, $num === $pagesCount - 1);
+                $this->kafkaProduce($urlMessage->encodeData());
             }
             return 1;
         } else {

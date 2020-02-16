@@ -48,6 +48,11 @@ Stop seeding
 docker stop $(docker ps | grep seed_run | awk '{print $1}')
 ```
 
+Stop everything
+```bash
+docker stop $(docker ps | grep crypto | awk '{print $1}')
+```
+
 Insert some data into DB
 ```bash
 docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:initialize_boards

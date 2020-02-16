@@ -6,6 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 use App\Console\Base\Bitcointalk\Kafka\UrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
+use App\Models\Pg\Bitcointalk\MainBoard;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_keeper
 
@@ -31,9 +32,8 @@ class BoardPagesKeeper extends UrlKeeper
      *
      * @return void
      */
-    public function __construct()
-    {
-        parent::__construct(new BoardPage());
+    public function __construct() {
+        parent::__construct(new BoardPage(), new MainBoard());
     }
 
     /**
