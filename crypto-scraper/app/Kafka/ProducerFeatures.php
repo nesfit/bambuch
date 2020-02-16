@@ -20,16 +20,21 @@ trait ProducerFeatures {
             exit(0);
         }
 
-
         $config = $this->getProducerConfig();
         $this->producer = new Producer($config);
 
         $this->topic = $this->producer->newTopic($this->outputTopic);
 
-        print "Going to write into '" . $this->outputTopic . "' topic \n";
+        if ($this->verbose > 1) {
+            print "Going to write into '" . $this->outputTopic . "' topic \n";
+        }
     }
     
     protected function kafkaProduce(string $message) {
+        if ($this->verbose > 1) {
+            print "Producing message: " . $message . "\n";
+        }
+        
         $this->topic->produce(0, 0, $message);
         $result = $this->producer->flush(10000);
 

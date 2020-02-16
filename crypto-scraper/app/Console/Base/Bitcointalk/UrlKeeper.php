@@ -15,7 +15,9 @@ abstract class UrlKeeper extends KafkaConsumer {
         parent::__construct();
         
         $this->table = $table;
-        print "Gonna store url into table: " . $table->getTableName() . "\n";
+        if ($this->verbose > 1) {
+            print "Gonna store url into table: " . $table->getTableName() . "\n";
+        }
     }
     
     public function handle() {        

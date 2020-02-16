@@ -30,8 +30,9 @@ trait ConsumerFeatures {
         
         $this->config = $this->getConsumerConfig($this->groupID);
 
-        print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
-
+        if ($this->verbose > 1) {
+            print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
+        }
         $this->startSubscribe();
     }
 
@@ -49,6 +50,10 @@ trait ConsumerFeatures {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
+                        if ($this->verbose > 1) {
+                            print "Consumed message: " . $message->payload . "\n";
+                        }
+                        
                         $this->handleKafkaRead($message);
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
