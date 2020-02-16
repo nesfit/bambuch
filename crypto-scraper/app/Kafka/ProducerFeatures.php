@@ -15,6 +15,11 @@ trait ProducerFeatures {
     protected string $outputTopic;
 
     protected function initProducer() {
+        if (!isset($this->outputTopic)) {
+            $this->error("'outputTopic' property is not set!");
+            exit(0);
+        }
+
 
         $config = $this->getProducerConfig();
         $this->producer = new Producer($config);

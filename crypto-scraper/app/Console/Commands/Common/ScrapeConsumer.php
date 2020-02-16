@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Common;
 
 use App\Console\Base\Common\KafkaConsumer;
-use App\Console\Constants\Kafka;
+use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test consumer:scrape
@@ -39,8 +39,8 @@ class ScrapeConsumer extends KafkaConsumer {
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
-        $this->groupID = Kafka::SCRAPE_RESULTS_GROUP;
+        $this->inputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
+        $this->groupID = CommonKafka::SCRAPE_RESULTS_GROUP;
         
         parent::handle();
         

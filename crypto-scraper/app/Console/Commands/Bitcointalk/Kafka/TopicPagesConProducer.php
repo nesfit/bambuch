@@ -6,8 +6,9 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 use App\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkKafka;
 use App\Console\Constants\CryptoCurrency;
-use App\Console\Constants\Kafka;
+use App\Console\Constants\CommonKafka;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
@@ -48,9 +49,9 @@ class TopicPagesConProducer extends KafkaConProducer {
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = Kafka::B_TALK_T_PAGES_TOPIC;
-        $this->outputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
-        $this->groupID = Kafka::B_TALK_T_PAGES_GROUP;
+        $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
+        $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
+        $this->groupID = BitcointalkKafka::TOPIC_PAGES_GROUP;
     
         parent::handle();
         

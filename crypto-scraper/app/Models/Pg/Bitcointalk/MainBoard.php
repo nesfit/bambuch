@@ -7,16 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class MainBoard extends Model implements BitcointalkQueries
 {
-    const COL_ID        = 'id';
-    const COL_URL       = 'url';
-    const COL_PARSED    = 'parsed';
-
-    const COL_CREATEDAT = 'created_at';
-    const COL_UPDATEDAT = 'updated_at';
-
     const TABLE         = 'bitcointalk_main_boards';
     protected $table    = self::TABLE;
     protected $connection = 'pgsql';
+
+    public function getTableName(): string {
+        return self::TABLE;
+    }
     
     public function board_pages() {
         return $this->hasMany(BoardPage::class);

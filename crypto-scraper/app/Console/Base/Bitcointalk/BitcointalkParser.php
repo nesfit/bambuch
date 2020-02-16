@@ -6,7 +6,7 @@ namespace App\Console\Base\Bitcointalk;
 use App\Console\Base\Common\CryptoParser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcointalkParser extends CryptoParser {
+abstract class BitcointalkParser extends CryptoParser {
     /**
      * Commands constants.
      */
@@ -26,6 +26,7 @@ class BitcointalkParser extends CryptoParser {
     const PARSE_TOPIC_MESSAGES = self::BITCOINTALK . 'parse_topic_messages';
     const TOPIC_PAGES_CONSUMER = self::BITCOINTALK . 'topic_pages_consumer';
     const TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'topic_pages_producer';
+    const BOARD_PAGES_KEEPER = self::BITCOINTALK . 'board_pages_keeper';
 
     public function __construct() {
         parent::__construct();

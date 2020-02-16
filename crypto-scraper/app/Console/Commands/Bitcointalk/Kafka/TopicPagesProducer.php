@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
-use App\Console\Constants\Kafka;
+use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
@@ -43,7 +43,7 @@ class TopicPagesProducer extends KafkaProducer
      * @return mixed
      */
     public function handle() {
-        $this->outputTopic = Kafka::B_TALK_T_PAGES_TOPIC;
+        $this->outputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         
         parent::handle();
 

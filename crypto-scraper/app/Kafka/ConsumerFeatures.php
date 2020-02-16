@@ -18,6 +18,16 @@ trait ConsumerFeatures {
     protected Conf $config;
     
     protected function initConsumer() {
+        if (!isset($this->inputTopic)) {
+            $this->error("'inputTopic' property is not set!");
+            exit(0);
+        }
+
+        if (!isset($this->groupID)) {
+            $this->error("'groupID' property is not set!");
+            exit(0);
+        }
+        
         $this->config = $this->getConsumerConfig($this->groupID);
 
         print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
