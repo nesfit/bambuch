@@ -3,21 +3,20 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\Console\Base\Bitcointalk\UrlKeeper;
+use App\Console\Base\Bitcointalk\MainUrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_keeper
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_boards_keeper
 
-class BoardPagesKeeper extends UrlKeeper
+class MainBoardsKeeper extends MainUrlKeeper
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::BOARD_PAGES_KEEPER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::MAIN_BOARDS_KEEPER .' {verbose=1} {--force} {dateTime?}';
 
 
     /**
@@ -25,7 +24,7 @@ class BoardPagesKeeper extends UrlKeeper
      *
      * @var string
      */
-    protected $description = 'Store board pages into PG.';
+    protected $description = 'Store main boards into PG.';
 
     /**
      * Create a new command instance.
@@ -33,7 +32,7 @@ class BoardPagesKeeper extends UrlKeeper
      * @return void
      */
     public function __construct() {
-        parent::__construct(new BoardPage(), new MainBoard());
+        parent::__construct(new MainBoard());
     }
 
     /**
@@ -42,8 +41,8 @@ class BoardPagesKeeper extends UrlKeeper
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
-        $this->groupID = BitcointalkKafka::BOARD_PAGES_STORE_GROUP;
+        $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
+        $this->groupID = BitcointalkKafka::MAIN_BOARDS_STORE_GROUP;
         
         return parent::handle();
     }

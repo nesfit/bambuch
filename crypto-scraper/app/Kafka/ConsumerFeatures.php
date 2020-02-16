@@ -68,8 +68,8 @@ trait ConsumerFeatures {
                 }
             }
         } catch (Exception $e) {
-            print "Something wrong then consuming from: " . $this->inputTopic . "\n";
-            print $e->getMessage();
+            $this->error("Something wrong then consuming from: " . $this->inputTopic);
+            $this->error($e->getMessage());
         }
     }
     

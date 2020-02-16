@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Base\Bitcointalk\Kafka;
+namespace App\Console\Base\Bitcointalk;
 
-use App\Console\Base\Bitcointalk\KafkaConsumer;
 use App\Models\KafkaUrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkQueries;
 use RdKafka\Message;
@@ -31,8 +30,6 @@ abstract class UrlKeeper extends KafkaConsumer {
     
     public function handleKafkaRead(Message $message) {
         $urlMessage = KafkaUrlMessage::decodeData($message->payload);
-        
-        var_dump($urlMessage);
 
         if (!$this->table::exists($urlMessage->url)) {
             $mainEntity = $this->mainTable::getByUrl($urlMessage->mainUrl);
@@ -43,7 +40,7 @@ abstract class UrlKeeper extends KafkaConsumer {
                 
                 $this->table->setAttribute($this->table::COL_URL, $urlMessage->url);
                 $this->table->setAttribute($this->table::COL_PARSED, false);
-                $this->table->setAttribute($this->mainTable, $mainId);
+                $this->table->setAttribute($this->table::COL_PARENT_ID, $mainId);
                 $this->table->setAttribute($this->table::COL_LAST, $urlMessage->last);
                 $this->table->save();
                 

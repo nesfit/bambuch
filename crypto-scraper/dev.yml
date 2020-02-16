@@ -11,11 +11,11 @@ services:
     volumes:
       - ./:/app
     links:
-      - db
       - kafka
+      - db
     depends_on:
-      - db
       - kafka
+      - db
 
   consumer:
 #    command: php artisan bitcointalk:board_consumer
@@ -24,11 +24,11 @@ services:
     volumes:
       - ./:/app
     links:
-      - db
       - kafka
+      - db
     depends_on:
-      - db
       - kafka
+      - db
       
   test:
     image: crypto_scraper_laravel
@@ -36,11 +36,11 @@ services:
     volumes:
       - ./:/app
     links:
-      - db
       - kafka
+      - db
     depends_on:
-      - db
       - kafka
+      - db
 
   seed:
     image: crypto_scraper_laravel

@@ -57,7 +57,9 @@ class BoardPagesProducer extends KafkaConProducer {
     }
 
     protected function handleKafkaRead(Message $message) {
-        $mainBoardUrl = $message->payload;
+        $urlMessage = KafkaUrlMessage::decodeData($message->payload);
+        $mainBoardUrl = $urlMessage->url;
+        
         if (self::mainBoardValid($mainBoardUrl)) {
             $boardPages = $this->loadBoardPages($mainBoardUrl);
             $pagesCount = count($boardPages);
