@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Parsers;
 
-use App\AddressMatcher;
+use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\CryptoCurrency;
