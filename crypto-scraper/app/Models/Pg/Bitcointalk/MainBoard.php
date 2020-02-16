@@ -19,6 +19,10 @@ class MainBoard extends Model implements BitcointalkQueries
         return $this->hasMany(BoardPage::class);
     }
 
+    public static function unsetLast(int $int) {
+        return;
+    }
+
     public static function getByUrl(string $url): ?Model {
         return self::query()
             ->where(self::COL_URL, $url)

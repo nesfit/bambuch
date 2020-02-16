@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TopicPage extends Model implements BitcointalkQueries
 {
-    const COL_MAIN_TOPIC = 'main_topic_id';
-    const TABLE         = 'bitcointalk_topic_pages';
+    const TABLE = 'bitcointalk_topic_pages';
     protected $table = self::TABLE;
     protected $connection = 'pgsql';
 
@@ -20,9 +19,9 @@ class TopicPage extends Model implements BitcointalkQueries
         $this->belongsTo(MainTopic::class);
     }
 
-    public static function unsetLastTopic(int $mainTopicId) {
+    public static function unsetLast(int $mainTopicId) {
         return self::query()
-            ->where(self::COL_MAIN_TOPIC, $mainTopicId)
+            ->where(self::COL_PARENT_ID, $mainTopicId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
     }

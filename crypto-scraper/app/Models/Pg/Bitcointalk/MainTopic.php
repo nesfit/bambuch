@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MainTopic extends Model implements BitcointalkQueries
 {
-    const COL_BOARD_PAGE = 'board_page_id';
-    const TABLE         = 'bitcointalk_main_topics';
-    protected $table    = self::TABLE;
+    const TABLE = 'bitcointalk_main_topics';
+    protected $table = self::TABLE;
     protected $connection = 'pgsql';
 
     public function getTableName(): string {
@@ -20,6 +19,10 @@ class MainTopic extends Model implements BitcointalkQueries
         return $this->hasMany(TopicPage::class);
     }
 
+    public static function unsetLast(int $int) {
+        return;
+    }
+    
     public static function getByUrl(string $url): ?Model {
         return self::query()
             ->where(self::COL_URL, $url)

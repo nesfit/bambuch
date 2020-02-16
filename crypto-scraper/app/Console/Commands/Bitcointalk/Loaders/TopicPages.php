@@ -59,7 +59,7 @@ class TopicPages extends BitcointalkParser {
         $mainTopic = MainTopic::getByUrl($mainUrl);
         if ($mainTopic) {
             $mainTopicId = $mainTopic->getAttribute(MainTopic::COL_ID);
-            TopicPage::unsetLastTopic($mainTopicId);
+            TopicPage::unsetLast($mainTopicId);
 
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
@@ -68,7 +68,7 @@ class TopicPages extends BitcointalkParser {
                     $topicPage = new TopicPage();
                     $topicPage->setAttribute(TopicPage::COL_URL, $page);
                     $topicPage->setAttribute(TopicPage::COL_PARSED, false);
-                    $topicPage->setAttribute(TopicPage::COL_MAIN_TOPIC, $mainTopicId);
+                    $topicPage->setAttribute(TopicPage::COL_PARENT_ID, $mainTopicId);
                     $topicPage->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
                     $topicPage->save();
                 }

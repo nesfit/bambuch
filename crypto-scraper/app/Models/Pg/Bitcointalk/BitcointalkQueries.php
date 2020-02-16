@@ -11,6 +11,7 @@ interface BitcointalkQueries {
     const COL_URL       = 'url';
     const COL_PARSED    = 'parsed';
     const COL_LAST      = 'last';
+    const COL_PARENT_ID = 'parent_id';
     
     const COL_CREATEDAT = 'created_at';
     const COL_UPDATEDAT = 'updated_at';
@@ -19,6 +20,7 @@ interface BitcointalkQueries {
     static function setParsedToAll(bool $value): void;
     static function getByUrl(string $url): ?Model;
     static function exists(string $url): bool;
+    static function unsetLast(int $mainId);
     
     public function getTableName(): string;
 }

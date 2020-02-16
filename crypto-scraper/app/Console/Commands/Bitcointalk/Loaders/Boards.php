@@ -83,7 +83,7 @@ class Boards extends BitcointalkParser {
         if ($mainBoard) {
             $mainBoardId = $mainBoard->getAttribute(MainBoard::COL_ID);
             // TODO BUG FIX: when no new board pages, no row with last=true in DB
-            BoardPage::unsetLastBoard($mainBoardId);
+            BoardPage::unsetLast($mainBoardId);
 
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
@@ -92,7 +92,7 @@ class Boards extends BitcointalkParser {
                     $newBoard = new BoardPage();
                     $newBoard->setAttribute(BoardPage::COL_URL, $page);
                     $newBoard->setAttribute(BoardPage::COL_PARSED, false);
-                    $newBoard->setAttribute(BoardPage::COL_MAIN_BOARD, $mainBoardId);
+                    $newBoard->setAttribute(BoardPage::COL_PARENT_ID, $mainBoardId);
                     $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
                     $newBoard->save();
                 }

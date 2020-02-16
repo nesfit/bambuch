@@ -70,7 +70,7 @@ class MainTopics extends BitcointalkParser {
                     $mainTopic = new MainTopic();
                     $mainTopic->setAttribute(MainTopic::COL_URL, $topic);
                     $mainTopic->setAttribute(MainTopic::COL_PARSED, false);
-                    $mainTopic->setAttribute(MainTopic::COL_BOARD_PAGE, $boardPageId);
+                    $mainTopic->setAttribute(MainTopic::COL_PARENT_ID, $boardPageId);
                     $mainTopic->save();
                 }
                 $progressBar->advance();

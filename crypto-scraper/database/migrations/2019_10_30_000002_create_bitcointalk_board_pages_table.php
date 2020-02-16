@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,10 +21,10 @@ class CreateBitcointalkBoardPagesTable extends Migration
             $table->boolean(BoardPage::COL_PARSED);
             $table->boolean(BoardPage::COL_LAST);
             $table->string(BoardPage::COL_URL, 256);
-            $table->bigInteger(BoardPage::COL_MAIN_BOARD);
+            $table->bigInteger(BoardPage::COL_PARENT_ID);
 
             $table
-                ->foreign(BoardPage::COL_MAIN_BOARD)
+                ->foreign(BoardPage::COL_PARENT_ID)
                 ->references(MainBoard::COL_ID)->on(MainBoard::TABLE)
                 ->onDelete('cascade');
             

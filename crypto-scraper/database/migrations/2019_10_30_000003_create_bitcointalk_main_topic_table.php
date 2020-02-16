@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,10 +20,10 @@ class CreateBitcointalkMainTopicTable extends Migration
             $table->bigIncrements(MainTopic::COL_ID);
             $table->boolean(MainTopic::COL_PARSED);
             $table->string(MainTopic::COL_URL, 256);
-            $table->bigInteger(MainTopic::COL_BOARD_PAGE);
+            $table->bigInteger(MainTopic::COL_PARENT_ID);
 
             $table
-                ->foreign(MainTopic::COL_BOARD_PAGE)
+                ->foreign(MainTopic::COL_PARENT_ID)
                 ->references(BoardPage::COL_ID)->on(BoardPage::TABLE)
                 ->onDelete('cascade');
 

@@ -14,6 +14,10 @@ class UserProfile extends Model implements BitcointalkQueries
     public function getTableName(): string {
         return self::TABLE;
     }
+
+    public static function unsetLast(int $int) {
+        return;
+    }
     
     /**
      * @return UserProfile[]

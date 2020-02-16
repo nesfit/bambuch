@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BoardPage extends Model implements BitcointalkQueries
 {
-    const COL_MAIN_BOARD = 'main_board_id';
-    const TABLE         = 'bitcointalk_board_pages';
+    const TABLE = 'bitcointalk_board_pages';
     protected $table = self::TABLE;
     protected $connection = 'pgsql';
     
@@ -20,9 +19,9 @@ class BoardPage extends Model implements BitcointalkQueries
         $this->belongsTo(MainBoard::class);
     }
 
-    public static function unsetLastBoard(int $mainBoardId) {
+    public static function unsetLast(int $mainBoardId) {
         return self::query()
-            ->where(self::COL_MAIN_BOARD, $mainBoardId)
+            ->where(self::COL_PARENT_ID, $mainBoardId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
     }
