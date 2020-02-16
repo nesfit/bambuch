@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\AddressMatcher;
+use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
@@ -15,7 +15,7 @@ use Illuminate\Support\Arr;
 use RdKafka\Message;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_consumer pageUrlTopic bitcointalkTopicGroup scrapeTopic
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_con_producer
 
 class TopicPagesConProducer extends KafkaConProducer {
     use UrlValidations;
@@ -25,7 +25,7 @@ class TopicPagesConProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::TOPIC_PAGES_CON_PRODUCER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -59,9 +59,9 @@ class TopicPagesConProducer extends KafkaConProducer {
     }
 
     protected function handleKafkaRead(Message $message) {
-        print "Getting message: " . $message->payload . "\n";
-        if (self::topicPageValid($message->payload)) {
-            $parsedAddresses = $this->getAddresses($message->payload);
+        $topicPageUrl = $message->payload;
+        if (self::topicPageValid($topicPageUrl)) {
+            $parsedAddresses = $this->getAddresses($topicPageUrl);
             print "Getting addresses: " . count($parsedAddresses) . "\n"; 
             if (count($parsedAddresses)) {
                 foreach ($parsedAddresses as $item) {
@@ -72,7 +72,7 @@ class TopicPagesConProducer extends KafkaConProducer {
             }
             return 1;
         } else {
-            $this->printRedLine('Invalid main topic url: ' . $message->payload);
+            $this->printRedLine('Invalid main topic url: ' . $topicPageUrl);
             return 0;
         }
     }
