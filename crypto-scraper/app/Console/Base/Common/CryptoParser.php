@@ -7,9 +7,12 @@ use App\Models\ParsedAddress;
 use Illuminate\Console\Command;
 use Goutte;
 use GuzzleHttp;
+use Illuminate\Log\Logger;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\Facades\Log;
+
 
 class CryptoParser extends Command {
     protected $verbose = 1;
@@ -17,7 +20,8 @@ class CryptoParser extends Command {
     protected $dateTime;
     protected $url;
     protected $print = true;
-    
+    protected string $serviceName;
+
     public function __construct() {
         parent::__construct();
         $this->browser = new Goutte\Client();
@@ -139,5 +143,24 @@ class CryptoParser extends Command {
         $parsedUrl = parse_url($this->url);
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
+    
+    private function graylogHelper(): Logger {
+        return Log::channel('gelf');
+    }
 
+    public function infoGraylog(string $message, array $context = []) {
+        $this->graylogHelper()->info($message, array_merge($context, ["serviceName" => $this->serviceName]));
+    }
+    
+    public function errorGraylog(string $message, array $context = []) {
+        $this->graylogHelper()->error($message, array_merge($context, ["serviceName" => $this->serviceName]));
+    }
+    
+    public function debugGraylog(string $message, array $context = []) {
+        $this->graylogHelper()->debug($message, array_merge($context, ["serviceName" => $this->serviceName]));
+    }
+    
+    public function warningGraylog(string $message, array $context = []) {
+        $this->graylogHelper()->warning($message, array_merge($context, ["serviceName" => $this->serviceName]));
+    }
 }

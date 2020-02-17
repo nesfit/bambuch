@@ -58,10 +58,10 @@ trait ConsumerFeatures {
                         $this->handleKafkaRead($message);
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                        Log::info('No more messages; will wait for more.', ["serviceName" => $this->serviceName]);
+                        $this->infoGraylog('No more messages; will wait for more...');
                         break;
                     case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                        Log::info('Timed out!', ["serviceName" => $this->serviceName]);
+                        $this->infoGraylog('Timed out!');
                         break;
                     default:
                         throw new Exception($message->errstr(), $message->err);
