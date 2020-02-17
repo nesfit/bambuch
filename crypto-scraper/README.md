@@ -19,6 +19,11 @@ Serve Laravel app
 ```bash
 docker-compose -f common.yml -f dev.yml up -d serve
 ```
+
+Run Graylog monitoring
+```bash
+docker-compose -f graylog.yml up -d 
+```
              
 ## Composer in Docker
 
@@ -62,6 +67,9 @@ docker stop $(docker ps | grep seed_run | awk '{print $1}')
 Stop everything
 ```bash
 docker stop $(docker ps | grep crypto | awk '{print $1}')
+```
+```bash
+docker-compose -f common.yml -f dev.yml -f graylog.yml stop
 ```
 
 Insert some data into DB

@@ -48,6 +48,7 @@ services:
     depends_on:
       - kafka
       - db
+      - graylog
 
   seed:
     image: crypto_scraper_laravel
