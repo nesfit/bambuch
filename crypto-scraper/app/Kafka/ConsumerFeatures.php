@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Kafka;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
 use RdKafka\Message;
@@ -57,10 +58,10 @@ trait ConsumerFeatures {
                         $this->handleKafkaRead($message);
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                        echo "No more messages; will wait for more\n";
+                        Log::info('No more messages; will wait for more.', ["serviceName" => $this->serviceName]);
                         break;
                     case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                        echo "Timed out\n";
+                        Log::info('Timed out!', ["serviceName" => $this->serviceName]);
                         break;
                     default:
                         throw new Exception($message->errstr(), $message->err);

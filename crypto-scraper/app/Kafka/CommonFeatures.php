@@ -7,6 +7,7 @@ use RdKafka\Conf;
 
 trait CommonFeatures {
     private string $broker = "kafka";
+    protected string $serviceName;
     
     private function getConfig(): Conf {
         $config = new Conf();

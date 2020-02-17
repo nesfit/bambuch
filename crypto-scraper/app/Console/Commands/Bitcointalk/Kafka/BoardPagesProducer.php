@@ -50,6 +50,7 @@ class BoardPagesProducer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
         $this->outputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
         $this->groupID = BitcointalkKafka::MAIN_BOARDS_LOAD_GROUP;
+        $this->serviceName = self::BOARD_PAGES_PRODUCER;
     
         parent::handle();
         
