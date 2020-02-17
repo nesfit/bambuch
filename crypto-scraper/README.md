@@ -9,24 +9,35 @@ Migrate DB tables:
 ```bash
 docker-compose -f common.yml -f migrate.yml up migrate
 ```
-                 
-## Install composer dependencies in Docker
-Run the container
+
+Run the containers
 ```bash
 docker-compose -f common.yml -f dev.yml up
 ``` 
 
+Serve Laravel app
+```bash
+docker-compose -f common.yml -f dev.yml up -d serve
+```
+             
+## Composer in Docker
+
 Install the dependencies
 ```bash
-docker exec crypto-scraper_laravel_1 composer install
+docker-compose -f common.yml -f dev.yml run --rm composer
+```
+
+Install new dependencies
+```bash
+docker-compose -f common.yml -f dev.yml run --rm composer require <package>
 ```
 
 ## Run consumer 
+Common example
 ```bash
 docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <artisan command>
 ```
 
-### Examples
 Consumer test
 ```bash
 docker-compose -f common.yml -f dev.yml run --rm test consumer:test 
@@ -66,3 +77,6 @@ composer dump-autoload
 composer clear-cache
 php artisan cache:clear
 ```
+
+## Additional notes
+OSX docker daemon.json location: `~/.docker/daemon.json`

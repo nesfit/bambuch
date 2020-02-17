@@ -44,3 +44,27 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+        
+  datadog:
+    image: datadog/agent:7
+    container_name: dd-agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+#      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_API_KEY="${DD_API_KEY}"
+      - DD_LOGS_ENABLED=true
+      - DD_AC_EXCLUDE="name:dd-agent"
+      - DOCKER_CONTENT_TRUST=1
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+#    volumes:
+#      - /tmp/prometheus.yml:/etc/prometheus/prometheus.yml

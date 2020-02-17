@@ -30,6 +30,13 @@ services:
       - kafka
       - db
       
+  composer:
+    image: crypto_scraper_laravel
+    entrypoint: composer
+    command: install
+    volumes:
+      - ./:/app
+      
   test:
     image: crypto_scraper_laravel
     entrypoint: php artisan
@@ -51,4 +58,13 @@ services:
       - db
     depends_on:
       - db
+        
+  serve:
+    image: crypto_scraper_laravel
+    working_dir: /app
+    command: "php artisan serve --host=0.0.0.0 --port=8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/app
     
