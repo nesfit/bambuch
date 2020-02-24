@@ -62,7 +62,7 @@ class MainBoardsProducer extends KafkaProducer {
             return 0;
         }
         else {
-            $this->printRedLine('Invalid main board url: ' . $this->url);
+            $this->warningGraylog('Invalid main board url', $this->url);
             return 1;
         }
     }

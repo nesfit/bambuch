@@ -31,7 +31,6 @@ abstract class MainUrlKeeper extends KafkaConsumer {
         $urlMessage = KafkaUrlMessage::decodeData($message->payload);
 
         if (!$this->table::exists($urlMessage->url)) {
-            /* @var $entity BitcointalkQueries */
             $entity = new $this->className();
             $entity->setAttribute(BitcointalkQueries::COL_URL, $urlMessage->url);
             $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
