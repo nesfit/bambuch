@@ -44,7 +44,8 @@ class BoardPagesKeeper extends UrlKeeper
     public function handle() {
         $this->inputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
         $this->groupID = BitcointalkKafka::BOARD_PAGES_STORE_GROUP;
-        
+        $this->serviceName = self::BOARD_PAGES_KEEPER;
+
         return parent::handle();
     }
 }

@@ -52,7 +52,8 @@ class TopicPagesConProducer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_GROUP;
-    
+        $this->serviceName = self::TOPIC_PAGES_CON_PRODUCER;
+
         parent::handle();
         
         return 1;

@@ -43,7 +43,8 @@ class MainBoardsKeeper extends MainUrlKeeper
     public function handle() {
         $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
         $this->groupID = BitcointalkKafka::MAIN_BOARDS_STORE_GROUP;
-        
+        $this->serviceName = self::MAIN_BOARDS_KEEPER;
+
         return parent::handle();
     }
 }

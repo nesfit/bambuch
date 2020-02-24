@@ -44,7 +44,8 @@ class TopicPagesProducer extends KafkaProducer
      */
     public function handle() {
         $this->outputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
-        
+        $this->serviceName = self::TOPIC_PAGES_PRODUCER;
+
         parent::handle();
 
         if($this->option("force")) {

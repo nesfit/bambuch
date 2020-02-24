@@ -49,7 +49,8 @@ class MainBoardsProducer extends KafkaProducer {
      */
     public function handle() {
         $this->outputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
-        
+        $this->serviceName = self::MAIN_BOARDS_PRODUCER;
+
         parent::handle();
 
         if (self::mainBoardValid($this->url)) {
