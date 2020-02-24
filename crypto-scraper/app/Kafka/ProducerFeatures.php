@@ -32,7 +32,7 @@ trait ProducerFeatures {
     
     protected function kafkaProduce(string $message) {
         if ($this->verbose > 1) {
-            print "Producing message: " . $message . "\n";
+            $this->infoGraylog("Producing message", ["message" => $message]);
         }
         
         $this->topic->produce(0, 0, $message);

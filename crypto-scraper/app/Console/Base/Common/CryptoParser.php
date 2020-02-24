@@ -150,17 +150,22 @@ class CryptoParser extends Command {
 
     public function infoGraylog(string $message, array $context = []) {
         $this->graylogHelper()->info($message, array_merge($context, ["serviceName" => $this->serviceName]));
+        $this->info($message);
     }
     
-    public function errorGraylog(string $message, array $context = []) {
-        $this->graylogHelper()->error($message, array_merge($context, ["serviceName" => $this->serviceName]));
+    public function errorGraylog(string $message, \Exception $e ) {
+        $this->graylogHelper()->error($message, ["serviceName" => $this->serviceName]);
+        $this->error($message);
+        $this->error($e->getMessage());
     }
     
     public function debugGraylog(string $message, array $context = []) {
         $this->graylogHelper()->debug($message, array_merge($context, ["serviceName" => $this->serviceName]));
+        $this->info($message);
     }
     
     public function warningGraylog(string $message, array $context = []) {
         $this->graylogHelper()->warning($message, array_merge($context, ["serviceName" => $this->serviceName]));
+        $this->warn($message);
     }
 }

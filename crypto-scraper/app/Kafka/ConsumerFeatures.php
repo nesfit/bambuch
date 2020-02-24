@@ -52,7 +52,7 @@ trait ConsumerFeatures {
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
                         if ($this->verbose > 1) {
-                            print "Consumed message: " . $message->payload . "\n";
+                            $this->infoGraylog("Consumed message", ["messageObj" => $message]);
                         }
                         
                         $this->handleKafkaRead($message);
@@ -69,8 +69,7 @@ trait ConsumerFeatures {
                 }
             }
         } catch (Exception $e) {
-            $this->error("Something wrong then consuming from: " . $this->inputTopic);
-            $this->error($e->getMessage());
+            $this->errorGraylog("Something wrong then consuming from: " . $this->inputTopic, $e);
         }
     }
     
