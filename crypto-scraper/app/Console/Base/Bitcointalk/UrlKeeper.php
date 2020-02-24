@@ -9,20 +9,21 @@ use RdKafka\Message;
 
 
 abstract class UrlKeeper extends KafkaConsumer {
-    protected BitcointalkQueries $table;
-    protected BitcointalkQueries $mainTable;
+    private BitcointalkQueries $table;
+    private BitcointalkQueries $mainTable;
+    private string $className;
     
-    public function __construct(BitcointalkQueries $table, BitcointalkQueries $mainTable) {
+    public function __construct(string $className, string $mainClassName) {
         parent::__construct();
         
-        $this->table = $table;
-        $this->mainTable = $mainTable;
-        if ($this->verbose > 1) {
-            $this->infoGraylog("Gonna store url into table", $table->getTableName());
-        }
+        $this->table = new $className();
+        $this->mainTable = new $mainClassName();
+        $this->className = $className;
     }
     
-    public function handle() {        
+    public function handle() {
+        $this->infoGraylog("Gonna store url into table", $this->table->getTableName());
+
         parent::handle();
         
         return 1;
@@ -38,11 +39,12 @@ abstract class UrlKeeper extends KafkaConsumer {
                 $mainId = $mainEntity->getAttribute(BitcointalkQueries::COL_ID);
                 $this->table::unsetLast($mainId);
                 
-                $this->table->setAttribute($this->table::COL_URL, $urlMessage->url);
-                $this->table->setAttribute($this->table::COL_PARSED, false);
-                $this->table->setAttribute($this->table::COL_PARENT_ID, $mainId);
-                $this->table->setAttribute($this->table::COL_LAST, $urlMessage->last);
-                $this->table->save();
+                $entity = new $this->className();
+                $entity->setAttribute(BitcointalkQueries::COL_URL, $urlMessage->url);
+                $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
+                $entity->setAttribute(BitcointalkQueries::COL_PARENT_ID, $mainId);
+                $entity->setAttribute(BitcointalkQueries::COL_LAST, $urlMessage->last);
+                $entity->save();
                 
                 if ($urlMessage->last) {
                     $mainEntity->setAttribute(BitcointalkQueries::COL_PARSED, true);

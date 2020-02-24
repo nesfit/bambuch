@@ -33,7 +33,7 @@ class BoardPagesKeeper extends UrlKeeper
      * @return void
      */
     public function __construct() {
-        parent::__construct(new BoardPage(), new MainBoard());
+        parent::__construct(BoardPage::class, MainBoard::class);
     }
 
     /**

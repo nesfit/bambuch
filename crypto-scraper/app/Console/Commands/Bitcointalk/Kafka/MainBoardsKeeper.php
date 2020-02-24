@@ -32,7 +32,7 @@ class MainBoardsKeeper extends MainUrlKeeper
      * @return void
      */
     public function __construct() {
-        parent::__construct(new MainBoard());
+        parent::__construct(MainBoard::class);
     }
 
     /**

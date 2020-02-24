@@ -9,18 +9,19 @@ use RdKafka\Message;
 
 
 abstract class MainUrlKeeper extends KafkaConsumer {
-    protected BitcointalkQueries $table;
+    private BitcointalkQueries $table;
+    private string $className;
     
-    public function __construct(BitcointalkQueries $table) {
+    public function __construct(string $className) {
         parent::__construct();
-        
-        $this->table = $table;
-        if ($this->verbose > 1) {
-            print "Gonna store url into table: " . $table->getTableName() . "\n";
-        }
+
+        $this->table = new $className();
+        $this->className = $className;
     }
     
-    public function handle() {        
+    public function handle() {
+        $this->infoGraylog("Gonna store url into table", $this->table->getTableName());
+        
         parent::handle();
         
         return 1;
@@ -28,11 +29,17 @@ abstract class MainUrlKeeper extends KafkaConsumer {
     
     public function handleKafkaRead(Message $message) {
         $urlMessage = KafkaUrlMessage::decodeData($message->payload);
-        
+
         if (!$this->table::exists($urlMessage->url)) {
-            $this->table->setAttribute($this->table::COL_URL, $urlMessage->url);
-            $this->table->setAttribute($this->table::COL_PARSED, false);
-            $this->table->save();
+            /* @var $entity BitcointalkQueries */
+            $entity = new $this->className();
+            $entity->setAttribute(BitcointalkQueries::COL_URL, $urlMessage->url);
+            $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
+            $entity->save();
+
+            $this->infoGraylog("Url stored", $urlMessage->url);
+        } else {
+            $this->debugGraylog("Url already exists", $urlMessage->url);
         }
     }
 }
