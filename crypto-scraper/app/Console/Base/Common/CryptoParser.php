@@ -20,7 +20,7 @@ class CryptoParser extends Command {
     protected $dateTime;
     protected $url;
     protected $print = true;
-    protected string $serviceName;
+    protected string $serviceName = '';
 
     public function __construct() {
         parent::__construct();
@@ -30,6 +30,11 @@ class CryptoParser extends Command {
     }
     
     public function handle() {
+        if ($this->serviceName === '') {
+            $this->error("'serviceName' property is not set!");
+            exit(0);
+        }
+        
         $this->verbose = $this->argument("verbose");
         $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $this->url = $this->hasArgument('url') ? $this->argument('url') : null;
@@ -153,10 +158,12 @@ class CryptoParser extends Command {
         $this->info($message);
     }
     
-    public function errorGraylog(string $message, \Exception $e ) {
+    public function errorGraylog(string $message, \Exception $e = null ) {
         $this->graylogHelper()->error($message, ["serviceName" => $this->serviceName]);
         $this->error($message);
-        $this->error($e->getMessage());
+        if ($e) {
+            $this->error($e->getMessage());
+        }
     }
     
     public function debugGraylog(string $message, array $context = []) {
