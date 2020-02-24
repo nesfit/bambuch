@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Kafka;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
 use RdKafka\Message;
@@ -32,7 +31,7 @@ trait ConsumerFeatures {
         $this->config = $this->getConsumerConfig($this->groupID);
 
         if ($this->verbose > 1) {
-            print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
+            $this->infoGraylog("Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID);
         }
         $this->startSubscribe();
     }
@@ -52,7 +51,7 @@ trait ConsumerFeatures {
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
                         if ($this->verbose > 1) {
-                            $this->infoGraylog("Consumed message", ["messageObj" => $message]);
+                            $this->infoGraylog("Consumed message", $message);
                         }
                         
                         $this->handleKafkaRead($message);

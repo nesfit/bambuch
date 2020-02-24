@@ -31,6 +31,8 @@ abstract class BitcointalkParser extends CryptoParser {
     const BOARD_PAGES_PRODUCER = self::BITCOINTALK . 'board_pages_producer';
     const MAIN_BOARDS_PRODUCER = self::BITCOINTALK . 'main_boards_producer';
     const MAIN_BOARDS_KEEPER = self::BITCOINTALK . 'main_boards_keeper';
+    
+    const STARTUP = self::BITCOINTALK . 'startup';
 
     public function __construct() {
         parent::__construct();

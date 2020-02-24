@@ -22,7 +22,7 @@ class MainBoardsProducer extends KafkaProducer {
      *
      * @var string
      */
-    protected $signature = self::MAIN_BOARDS_PRODUCER .' {url='. self::BITCOINTALK_URL .'} {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::MAIN_BOARDS_PRODUCER .' {verbose=1} {url='. self::BITCOINTALK_URL .'} {--force} {dateTime?}';
 
 
     /**
@@ -59,11 +59,11 @@ class MainBoardsProducer extends KafkaProducer {
                 $urlMessage = new KafkaUrlMessage("empty", $mainBoard, false);
                 $this->kafkaProduce($urlMessage->encodeData());
             }
-            return 1;
+            return 0;
         }
         else {
             $this->printRedLine('Invalid main board url: ' . $this->url);
-            return 0;
+            return 1;
         }
     }
 
