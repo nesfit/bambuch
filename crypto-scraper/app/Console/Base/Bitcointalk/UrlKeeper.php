@@ -18,7 +18,7 @@ abstract class UrlKeeper extends KafkaConsumer {
         $this->table = $table;
         $this->mainTable = $mainTable;
         if ($this->verbose > 1) {
-            print "Gonna store url into table: " . $table->getTableName() . "\n";
+            $this->infoGraylog("Gonna store url into table", $table->getTableName());
         }
     }
     
@@ -48,9 +48,12 @@ abstract class UrlKeeper extends KafkaConsumer {
                     $mainEntity->setAttribute(BitcointalkQueries::COL_PARSED, true);
                     $mainEntity->save();
                 }
+                $this->infoGraylog("Url stored", $urlMessage->url);
             } else {
-                $this->printRedLine('Main board not found: ' . $urlMessage->mainUrl);
+                $this->warningGraylog('Main board not found', $urlMessage);
             }
+        } else {
+            $this->debugGraylog("Url already exists", $urlMessage->url);
         }
     }
 }

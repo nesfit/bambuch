@@ -152,9 +152,13 @@ class CryptoParser extends Command {
     private function graylogChannel(): Logger {
         return Log::channel('gelf');
     }
+    
+    private function getGraylogAttrs($context, $payload): array {
+        return array_merge($context, ["serviceName" => $this->serviceName, "payload" => $payload]);
+    }
 
     public function infoGraylog(string $message, $payload = null, array $context = []) {
-        $attrs = array_merge($context, ["serviceName" => $this->serviceName, "payload" => $payload]);
+        $attrs = $this->getGraylogAttrs($context, $payload);
         $this->graylogChannel()->info($message, $attrs);
         $this->info($message);
     }
@@ -168,14 +172,14 @@ class CryptoParser extends Command {
         }
     }
     
-    public function debugGraylog(string $message, array $context = []) {
-        $attrs = array_merge($context, ["serviceName" => $this->serviceName]);
+    public function debugGraylog(string $message, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $payload);
         $this->graylogChannel()->debug($message, $attrs);
         $this->info($message);
     }
     
-    public function warningGraylog(string $message, array $context = []) {
-        $attrs = array_merge($context, ["serviceName" => $this->serviceName]);
+    public function warningGraylog(string $message, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $payload);
         $this->graylogChannel()->warning($message, $attrs);
         $this->warn($message);
     }

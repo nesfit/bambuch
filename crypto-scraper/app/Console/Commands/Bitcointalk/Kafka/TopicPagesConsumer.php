@@ -15,9 +15,9 @@ use Illuminate\Support\Arr;
 use RdKafka\Message;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_con_producer
+//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:topic_pages_con_producer
 
-class TopicPagesConProducer extends KafkaConProducer {
+class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;
     
     /**
@@ -25,7 +25,7 @@ class TopicPagesConProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::TOPIC_PAGES_CON_PRODUCER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -52,7 +52,7 @@ class TopicPagesConProducer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_GROUP;
-        $this->serviceName = self::TOPIC_PAGES_CON_PRODUCER;
+        $this->serviceName = self::TOPIC_PAGES_CONSUMER;
 
         parent::handle();
         

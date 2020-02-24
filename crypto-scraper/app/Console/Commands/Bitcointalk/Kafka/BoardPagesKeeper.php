@@ -8,7 +8,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_keeper
+//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:board_pages_keeper
 
 class BoardPagesKeeper extends UrlKeeper
 {

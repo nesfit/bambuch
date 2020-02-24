@@ -9,7 +9,7 @@ use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\KafkaUrlMessage;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_boards_producer
+//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_boards_producer
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;

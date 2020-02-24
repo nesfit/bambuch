@@ -29,28 +29,28 @@ docker-compose -f graylog.yml up -d
 
 Install the dependencies
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm composer
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm composer
 ```
 
 Install new dependencies
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm composer require <package>
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm composer require <package>
 ```
 
 ## Run consumer 
 Common example
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <artisan command>
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm --name consumer_<name> <service> <artisan command>
 ```
 
 Consumer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test consumer:test 
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test consumer:test 
 ```
 
 Producer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test producer:test 
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test producer:test 
 ```
 
 ## Dev commands
@@ -74,9 +74,9 @@ docker-compose -f common.yml -f dev.yml -f graylog.yml stop
 
 Insert some data into DB
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:initialize_boards
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_main_topics
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm seed bitcointalk:initialize_boards
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm seed bitcointalk:run_boards 
+docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm seed bitcointalk:run_main_topics
 ```
 
 Broken composer autoload
