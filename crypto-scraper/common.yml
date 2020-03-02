@@ -16,16 +16,8 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     image: "crypto_scraper_laravel"
-    ports:
-      - 3000:8181
     volumes:
       - ./:/app
-    links:
-      - db
-      - kafka
-    depends_on:
-      - db
-      - kafka
 
   zookeeper:
     image: 'bitnami/zookeeper:latest'

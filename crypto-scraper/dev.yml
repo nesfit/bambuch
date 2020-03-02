@@ -1,35 +1,5 @@
 version: "3"
-services:
-  laravel:
-    volumes:
-      - .:/app
-    working_dir: /app
-
-  producer:
-    command: php artisan bitcointalk:board_producer
-    image: crypto_scraper_laravel
-    volumes:
-      - ./:/app
-    links:
-      - kafka
-      - db
-    depends_on:
-      - kafka
-      - db
-
-  consumer:
-#    command: php artisan bitcointalk:board_consumer
-    command: php artisan consumer:scrape scrapeGroup bitcointalkScrapes 
-    image: crypto_scraper_laravel
-    volumes:
-      - ./:/app
-    links:
-      - kafka
-      - db
-    depends_on:
-      - kafka
-      - db
-      
+services:      
   composer:
     image: crypto_scraper_laravel
     entrypoint: composer
@@ -39,7 +9,7 @@ services:
       
   test:
     image: crypto_scraper_laravel
-    entrypoint: php artisan
+    entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
     volumes:
       - ./:/app
     links:
