@@ -5,7 +5,6 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\UrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
 //docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_topics_keeper
@@ -33,7 +32,7 @@ class MainTopicsKeeper extends UrlKeeper
      * @return void
      */
     public function __construct() {
-        parent::__construct(MainTopic::class, BoardPage::class);
+        parent::__construct(MainTopic::class);
     }
 
     /**

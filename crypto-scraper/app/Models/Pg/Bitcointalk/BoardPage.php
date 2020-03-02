@@ -21,7 +21,7 @@ class BoardPage extends Model implements BitcointalkQueries
 
     public static function unsetLast(int $mainBoardId) {
         return self::query()
-            ->where(self::COL_PARENT_ID, $mainBoardId)
+            ->where(self::COL_PARENT_URL, $mainBoardId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
     }

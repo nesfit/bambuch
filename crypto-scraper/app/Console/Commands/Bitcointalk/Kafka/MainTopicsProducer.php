@@ -9,7 +9,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\KafkaUrlMessage;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_topics_producer
+//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_topics_producer 2
 
 class MainTopicsProducer extends KafkaConProducer {
     use UrlValidations;
@@ -46,7 +46,7 @@ class MainTopicsProducer extends KafkaConProducer {
      */
     public function handle() {
         $this->inputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
-        $this->outputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
+        $this->outputTopic = BitcointalkKafka::MAIN_TOPICS_TOPIC;
         $this->groupID = BitcointalkKafka::BOARD_PAGES_LOAD_GROUP;
         $this->serviceName = self::MAIN_TOPICS_PRODUCER;
 

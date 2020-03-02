@@ -92,7 +92,7 @@ class Boards extends BitcointalkParser {
                     $newBoard = new BoardPage();
                     $newBoard->setAttribute(BoardPage::COL_URL, $page);
                     $newBoard->setAttribute(BoardPage::COL_PARSED, false);
-                    $newBoard->setAttribute(BoardPage::COL_PARENT_ID, $mainBoardId);
+                    $newBoard->setAttribute(BoardPage::COL_PARENT_URL, $mainBoardId);
                     $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
                     $newBoard->save();
                 }

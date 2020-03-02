@@ -10,14 +10,12 @@ use RdKafka\Message;
 
 abstract class UrlKeeper extends KafkaConsumer {
     private BitcointalkQueries $table;
-    private BitcointalkQueries $mainTable;
     private string $className;
     
-    public function __construct(string $className, string $mainClassName) {
+    public function __construct(string $className) {
         parent::__construct();
         
         $this->table = new $className();
-        $this->mainTable = new $mainClassName();
         $this->className = $className;
     }
     
@@ -33,27 +31,14 @@ abstract class UrlKeeper extends KafkaConsumer {
         $urlMessage = KafkaUrlMessage::decodeData($message->payload);
 
         if (!$this->table::exists($urlMessage->url)) {
-            $mainEntity = $this->mainTable::getByUrl($urlMessage->mainUrl);
+            $entity = new $this->className();
+            $entity->setAttribute(BitcointalkQueries::COL_URL, $urlMessage->url);
+            $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
+            $entity->setAttribute(BitcointalkQueries::COL_PARENT_URL, $urlMessage->mainUrl);
+            $entity->setAttribute(BitcointalkQueries::COL_LAST, $urlMessage->last);
+            $entity->save();
             
-            if ($mainEntity) {
-                $mainId = $mainEntity->getAttribute(BitcointalkQueries::COL_ID);
-                $this->table::unsetLast($mainId);
-                
-                $entity = new $this->className();
-                $entity->setAttribute(BitcointalkQueries::COL_URL, $urlMessage->url);
-                $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
-                $entity->setAttribute(BitcointalkQueries::COL_PARENT_ID, $mainId);
-                $entity->setAttribute(BitcointalkQueries::COL_LAST, $urlMessage->last);
-                $entity->save();
-                
-                if ($urlMessage->last) {
-                    $mainEntity->setAttribute(BitcointalkQueries::COL_PARSED, true);
-                    $mainEntity->save();
-                }
-                $this->infoGraylog("Url stored", $urlMessage->url);
-            } else {
-                $this->warningGraylog('Main board not found', $urlMessage);
-            }
+            $this->infoGraylog("Url stored", $urlMessage->url);
         } else {
             $this->debugGraylog("Url already exists", $urlMessage->url);
         }

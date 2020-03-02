@@ -20,12 +20,7 @@ class CreateBitcointalkMainTopicTable extends Migration
             $table->bigIncrements(MainTopic::COL_ID);
             $table->boolean(MainTopic::COL_PARSED);
             $table->string(MainTopic::COL_URL, 256);
-            $table->bigInteger(MainTopic::COL_PARENT_ID);
-
-            $table
-                ->foreign(MainTopic::COL_PARENT_ID)
-                ->references(BoardPage::COL_ID)->on(BoardPage::TABLE)
-                ->onDelete('cascade');
+            $table->string(MainTopic::COL_PARENT_URL, 256);
 
             $table->timestamps();
         });

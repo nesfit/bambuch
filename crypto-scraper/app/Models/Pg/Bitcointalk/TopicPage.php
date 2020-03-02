@@ -21,7 +21,7 @@ class TopicPage extends Model implements BitcointalkQueries
 
     public static function unsetLast(int $mainTopicId) {
         return self::query()
-            ->where(self::COL_PARENT_ID, $mainTopicId)
+            ->where(self::COL_PARENT_URL, $mainTopicId)
             ->where(self::COL_LAST, true)
             ->update(array(self::COL_LAST => false));
     }
