@@ -3,15 +3,21 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\Console\Base\Bitcointalk\KafkaProducer;
+use App\Console\Base\Bitcointalk\KafkaConProducer;
+use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
+use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\Pg\Bitcointalk\MainTopic;
-use App\Models\Pg\Bitcointalk\TopicPage;
+use App\Models\KafkaUrlMessage;
+use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:topic_pages_producer
 
-class TopicPagesProducer extends KafkaProducer
-{
+class TopicPagesProducer extends KafkaConProducer {
+    use UrlValidations;
+    use UrlCalculations;
+
+    const ENTITY = 'topic';
+
     /**
      * The name and signature of the console command.
      *
@@ -43,30 +49,58 @@ class TopicPagesProducer extends KafkaProducer
      * @return mixed
      */
     public function handle() {
+        $this->inputTopic = BitcointalkKafka::MAIN_TOPICS_TOPIC;
         $this->outputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
+        $this->groupID = BitcointalkKafka::MAIN_TOPICS_LOAD_GROUP;
         $this->serviceName = self::TOPIC_PAGES_PRODUCER;
 
         parent::handle();
 
-        if($this->option("force")) {
-            $this->printCyanLine("Force update!");
-            TopicPage::setParsedToAll(false);
-        }
-
-//        $mainTopics = array_slice(TopicPage::getAllUnParsed(), 0, 5);
-        $mainTopics = TopicPage::getAllUnParsed();
-        $topicCount = count($mainTopics);
-        if ($topicCount) {
-            foreach ($mainTopics as $mainTopic) {
-                $mainTopicUrl = $mainTopic->getAttribute(MainTopic::COL_URL);
-                print "Sending message: " . $mainTopicUrl . "\n";
-                $this->kafkaProduce($mainTopicUrl);
-                sleep(3);
-            }
-        } else {
-            $this->printRedLine("No unparsed topic pages found!");
-            return 0;
-        }
         return 1;
+    }
+
+    protected function handleKafkaRead(Message $message) {
+        $inUrlMessage = KafkaUrlMessage::decodeData($message->payload);
+        $mainTopicUrl = $inUrlMessage->url;
+
+        if (self::mainTopicValid($mainTopicUrl)) {
+            $topicPages = $this->loadTopicPages($mainTopicUrl);
+            foreach ($topicPages as $topicPage) {
+                $outUrlMessage = new KafkaUrlMessage($mainTopicUrl, $topicPage, false);
+                $this->kafkaProduce($outUrlMessage->encodeData());
+            }
+            return 0;
+        } else {
+            $this->warningGraylog('Invalid main topic url', $mainTopicUrl);
+            return 1;
+        }
+    }
+
+    private function loadTopicPages(string $url): array {
+        $maxTopicPage = $this->getMaxPage($url);
+        if ($maxTopicPage) {
+            $mainTopicId = self::getMainTopicId($url);
+            $fromTopicId = self::getTopicPageId($url);
+            $toTopicId = self::getTopicPageId($maxTopicPage);
+
+            return self::calculateTopicPages($mainTopicId, $fromTopicId, $toTopicId);
+        }
+        return [$url];
+    }
+
+    public static function mainTopicValid(string $url): bool {
+        return self::mainEntityValid(self::ENTITY, $url);
+    }
+
+    public static function getTopicPageId(string $url): ?int {
+        return self::getEntityPageId(self::ENTITY, $url);
+    }
+
+    public static function getMainTopicId(string $url): ?int {
+        return self::getMainEntityId(self::ENTITY, $url);
+    }
+
+    public static function calculateTopicPages(int $topicId, int $from, int $to): array {
+        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
     }
 }

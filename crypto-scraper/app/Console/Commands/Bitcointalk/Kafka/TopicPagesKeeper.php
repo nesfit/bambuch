@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\Console\Base\Bitcointalk\MainUrlKeeper;
+use App\Console\Base\Bitcointalk\UrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\Pg\Bitcointalk\MainTopic;
+use App\Models\Pg\Bitcointalk\TopicPage;
 
-//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_topics_keeper
+//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:topic_pages_keeper
 
-class MainTopicsKeeper extends MainUrlKeeper
+class TopicPagesKeeper extends UrlKeeper
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::MAIN_TOPICS_KEEPER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = self::TOPIC_PAGES_KEEPER .' {verbose=1} {--force} {dateTime?}';
 
 
     /**
@@ -24,7 +24,7 @@ class MainTopicsKeeper extends MainUrlKeeper
      *
      * @var string
      */
-    protected $description = 'Store main topics into PG.';
+    protected $description = 'Store topic pages into PG.';
 
     /**
      * Create a new command instance.
@@ -32,7 +32,7 @@ class MainTopicsKeeper extends MainUrlKeeper
      * @return void
      */
     public function __construct() {
-        parent::__construct(MainTopic::class);
+        parent::__construct(TopicPage::class);
     }
 
     /**
@@ -41,8 +41,8 @@ class MainTopicsKeeper extends MainUrlKeeper
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
-        $this->groupID = BitcointalkKafka::MAIN_TOPICS_STORE_GROUP;
+        $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
+        $this->groupID = BitcointalkKafka::TOPIC_PAGES_STORE_GROUP;
         $this->serviceName = self::MAIN_TOPICS_KEEPER;
 
         return parent::handle();

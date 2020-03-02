@@ -51,7 +51,7 @@ class TopicPagesConsumer extends KafkaConProducer {
     public function handle() {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
-        $this->groupID = BitcointalkKafka::TOPIC_PAGES_GROUP;
+        $this->groupID = BitcointalkKafka::TOPIC_PAGES_LOAD_GROUP;
         $this->serviceName = self::TOPIC_PAGES_CONSUMER;
 
         parent::handle();
