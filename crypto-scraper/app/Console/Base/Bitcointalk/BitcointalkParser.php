@@ -35,7 +35,8 @@ abstract class BitcointalkParser extends CryptoParser {
     const TOPIC_PAGES_KEEPER = self::BITCOINTALK . 'topic_pages_keeper';
     const TOPIC_PAGES_CONSUMER = self::BITCOINTALK . 'topic_pages_consumer';
     
-    const STARTUP = self::BITCOINTALK . 'startup';
+    const START = self::BITCOINTALK . 'start';
+    const STOP = self::BITCOINTALK . 'stop';
 
     public function __construct() {
         parent::__construct();

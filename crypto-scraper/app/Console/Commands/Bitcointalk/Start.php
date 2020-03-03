@@ -6,15 +6,15 @@ namespace App\Console\Commands\Bitcointalk;
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use Symfony\Component\Process\Process;
 
-class Startup extends BitcointalkParser {
-    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "-f", "graylog.yml", "run", "-d"];
+class Start extends BitcointalkParser {
+    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "-f", "graylog.yml", "run", "--rm"];
     
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::STARTUP;
+    protected $signature = self::START;
 
     /**
      * The console command description.
