@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
+use App\Console\Base\Common\Maintenance;
 
-class GraylogStart extends Command {
+class GraylogStart extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'graylog:start';
+    protected $signature = self::GRAYLOG_START;
 
     /**
      * The console command description.
@@ -36,11 +35,7 @@ class GraylogStart extends Command {
      * @return mixed
      */
     public function handle() {
-        $process = new Process(["docker-compose", "-f", "graylog.yml", "up", "-d", "graylog"]);
-        $process->start();
-
-        sleep(3);
-        
+        $this->startModule("graylog");
         return 0;
     }
 }

@@ -7,7 +7,7 @@ use App\Console\Base\Bitcointalk\MainUrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
-//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:main_topics_keeper
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_topics_keeper
 
 class MainTopicsKeeper extends MainUrlKeeper
 {

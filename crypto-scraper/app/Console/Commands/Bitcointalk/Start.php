@@ -7,7 +7,7 @@ use App\Console\Base\Bitcointalk\BitcointalkParser;
 use Symfony\Component\Process\Process;
 
 class Start extends BitcointalkParser {
-    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "-f", "graylog.yml", "run", "--rm"];
+    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "run", "--rm"];
     
     /**
      * The name and signature of the console command.

@@ -3,18 +3,15 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
+use App\Console\Base\Common\Maintenance;
 
-class KafkaStop extends Command {
-    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "stop"];
-    
+class KafkaStop extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'kafka:stop';
+    protected $signature = self::KAFKA_STOP;
 
     /**
      * The console command description.
@@ -38,16 +35,8 @@ class KafkaStop extends Command {
      * @return mixed
      */
     public function handle() {
-        $this->startModule("kafka");
-        $this->startModule("zookeeper");
+        $this->stopModule("kafka");
+        $this->stopModule("zookeeper");
         return 0;
-    }
-
-    private function startModule(string $module) {
-        print "Stopping: " . $module . "\n";
-        $process = new Process(array_merge(self::COMMON_ARGS, [$module]));
-        $process->start();
-
-        sleep(2);
     }
 }

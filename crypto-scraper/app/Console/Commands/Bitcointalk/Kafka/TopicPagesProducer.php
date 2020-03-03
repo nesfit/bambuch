@@ -10,7 +10,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\KafkaUrlMessage;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml -f graylog.yml run --rm test bitcointalk:topic_pages_producer
+//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_producer
 
 class TopicPagesProducer extends KafkaConProducer {
     use UrlValidations;

@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
+use App\Console\Base\Common\Maintenance;
 
-class KafkaStart extends Command {
+class KafkaStart extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'kafka:start';
+    protected $signature = self::KAFKA_START;
 
     /**
      * The console command description.
@@ -36,11 +35,7 @@ class KafkaStart extends Command {
      * @return mixed
      */
     public function handle() {
-        $process = new Process(["docker-compose", "-f", "common.yml", "up", "-d", "kafka"]);
-        $process->start();
-
-        sleep(3);
-        
+        $this->startModule("kafka");
         return 0;
     }
 }

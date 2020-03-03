@@ -19,6 +19,7 @@ services:
     volumes:
       - ./:/app
 
+  # KAFKA
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     ports:
@@ -36,27 +37,42 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
-        
-  datadog:
-    image: datadog/agent:7
-    container_name: dd-agent
+      
+  # GRAYLOG       
+  mongo:
+    image: mongo:3
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc/:/host/proc/:ro
-#      - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - ./graylog/mongo/data/db:/data/db
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
     environment:
-      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
-      - DD_API_KEY="${DD_API_KEY}"
-      - DD_LOGS_ENABLED=true
-      - DD_AC_EXCLUDE="name:dd-agent"
-      - DOCKER_CONTENT_TRUST=1
-      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
-    
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  graylog:
+    image: graylog/graylog:3.1
+    environment:
+      GRAYLOG_PASSWORD_SECRET: "${GRAYLOG_PASSWORD_SECRET}"
+      GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"
+      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+    volumes:
+      - ./graylog/app/data/journal:/usr/share/graylog/data/journal
+    depends_on:
+      - mongo
+      - elasticsearch
     ports:
-      - 9090:9090
-#    volumes:
-#      - /tmp/prometheus.yml:/etc/prometheus/prometheus.yml
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
