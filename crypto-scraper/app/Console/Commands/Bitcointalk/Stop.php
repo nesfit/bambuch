@@ -51,8 +51,8 @@ class Stop extends BitcointalkParser {
     
     private function stopModule(string $module) {
         $dockerName = str_replace(":", "_", $module);
-        print "Stopping module: " . $dockerName . "\n";
-        $process = new Process(array_merge(["docker", "stop", $dockerName]));
+        print "Stopping/removing module: " . $dockerName . "\n";
+        $process = new Process(array_merge(["docker", "rm", "-f", $dockerName]));
         $process->start();
         
         sleep(5);

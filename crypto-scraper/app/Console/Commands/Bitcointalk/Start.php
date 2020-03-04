@@ -6,8 +6,10 @@ namespace App\Console\Commands\Bitcointalk;
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use Symfony\Component\Process\Process;
 
+//docker-compose -f common.yml -f dev.yml run --rm --name bct_main_boards_producer test btc:main_boards_producer 2
+
 class Start extends BitcointalkParser {
-    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "run", "--rm"];
+    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "run"];
     
     /**
      * The name and signature of the console command.

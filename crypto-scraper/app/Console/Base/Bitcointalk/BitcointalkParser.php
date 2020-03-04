@@ -10,7 +10,7 @@ abstract class BitcointalkParser extends CryptoParser {
     /**
      * Commands constants.
      */
-    const BITCOINTALK = 'bitcointalk:';
+    const BITCOINTALK = 'bct:';
     const BITCOINTALK_URL = 'https://bitcointalk.org';
     const INITIALIZE_BOARDS = self::BITCOINTALK . 'initialize_boards';
     const RUN_BOARDS = self::BITCOINTALK . 'run_boards';
