@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
+use App\Console\Base\Common\GraylogTypes;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
 use RuntimeException;
@@ -32,14 +33,16 @@ trait ProducerFeatures {
     
     protected function kafkaProduce(string $message) {
         if ($this->verbose > 1) {
-            $this->infoGraylog("Producing", $message);
+            $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
         }
         
         $this->topic->produce(0, 0, $message);
         $result = $this->producer->flush(10000);
 
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {
-            throw new RuntimeException('Was unable to flush, messages might be lost!');
+            $error = new RuntimeException('Was unable to flush, messages might be lost!');
+            $this->errorGraylog("Producer error", $error, ["failedMessage" => $message]);
+            throw $error;
         }
     } 
 }

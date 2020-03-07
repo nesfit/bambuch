@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
+use App\Console\Base\Common\GraylogTypes;
 use Exception;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
@@ -31,7 +32,7 @@ trait ConsumerFeatures {
         $this->config = $this->getConsumerConfig($this->groupID);
 
         if ($this->verbose > 1) {
-            $this->infoGraylog("Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID);
+            $this->infoGraylog("Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID, GraylogTypes::INFO);
         }
         $this->startSubscribe();
     }
@@ -51,16 +52,16 @@ trait ConsumerFeatures {
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
                         if ($this->verbose > 1) {
-                            $this->infoGraylog("Consuming", $message);
+                            $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
                         }
                         
                         $this->handleKafkaRead($message);
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                        $this->infoGraylog('No more messages; will wait for more...');
+                        $this->infoGraylog('No more messages; will wait for more...', GraylogTypes::NO_DATA);
                         break;
                     case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                        $this->infoGraylog('Timed out!');
+                        $this->infoGraylog('Timed out!', GraylogTypes::WAITING);
                         break;
                     default:
                         throw new Exception($message->errstr(), $message->err);

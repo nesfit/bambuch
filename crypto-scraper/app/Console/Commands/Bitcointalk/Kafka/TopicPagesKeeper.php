@@ -43,7 +43,7 @@ class TopicPagesKeeper extends UrlKeeper
     public function handle() {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_STORE_GROUP;
-        $this->serviceName = self::MAIN_TOPICS_KEEPER;
+        $this->serviceName = self::TOPIC_PAGES_KEEPER;
 
         return parent::handle();
     }

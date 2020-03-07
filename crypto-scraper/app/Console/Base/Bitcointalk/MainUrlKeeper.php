@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Bitcointalk;
 
+use App\Console\Base\Common\GraylogTypes;
 use App\Models\KafkaUrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkQueries;
 use RdKafka\Message;
@@ -20,7 +21,7 @@ abstract class MainUrlKeeper extends KafkaConsumer {
     }
     
     public function handle() {
-        $this->infoGraylog("Gonna store url into table", $this->table->getTableName());
+        $this->infoGraylog("Gonna store url into table", GraylogTypes::INFO, $this->table->getTableName());
         
         parent::handle();
         
@@ -36,9 +37,9 @@ abstract class MainUrlKeeper extends KafkaConsumer {
             $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
             $entity->save();
 
-            $this->infoGraylog("Url stored", $urlMessage->url);
+            $this->infoGraylog("Url stored", GraylogTypes::STORED, $urlMessage->url);
         } else {
-            $this->debugGraylog("Url already exists", $urlMessage->url);
+            $this->debugGraylog("Url already exists", GraylogTypes::INFO, $urlMessage->url);
         }
     }
 }

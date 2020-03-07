@@ -48,6 +48,7 @@ class Start extends BitcointalkParser {
         $this->startModule(self::MAIN_TOPICS_KEEPER);
         $this->startModule(self::TOPIC_PAGES_PRODUCER);
         $this->startModule(self::TOPIC_PAGES_KEEPER);
+        $this->startModule(self::TOPIC_PAGES_CONSUMER);
         
         print "Ending... \n";
         return 0;

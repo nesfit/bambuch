@@ -31,6 +31,8 @@ abstract class Maintenance extends Command {
     protected function callModule(string $module) {
         print "Maintaining module: " . $module . "\n";
         $this->call($module);
+
+        sleep(2);
     }
     
     protected function stopModule(string $module) {

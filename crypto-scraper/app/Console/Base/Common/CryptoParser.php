@@ -14,7 +14,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Facades\Log;
 
 
-class CryptoParser extends Command {
+class CryptoParser extends Command { 
     protected $verbose = 1;
     protected $browser;
     protected $dateTime;
@@ -153,18 +153,18 @@ class CryptoParser extends Command {
         return Log::channel('gelf');
     }
     
-    private function getGraylogAttrs($context, $payload): array {
-        return array_merge($context, ["serviceName" => $this->serviceName, "payload" => $payload]);
+    private function getGraylogAttrs(array $context, string $logType, $payload): array {
+        return array_merge($context, ["serviceName" => $this->serviceName, "logType" => $logType, "payload" => $payload]);
     }
 
-    public function infoGraylog(string $message, $payload = null, array $context = []) {
-        $attrs = $this->getGraylogAttrs($context, $payload);
+    public function infoGraylog(string $message, string $logType, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $logType, $payload);
         $this->graylogChannel()->info($message, $attrs);
         $this->info($message);
     }
     
-    public function errorGraylog(string $message, \Exception $e = null ) {
-        $attrs = ["serviceName" => $this->serviceName];
+    public function errorGraylog(string $message, \Exception $e = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
         $this->graylogChannel()->error($message, $attrs);
         $this->error($message);
         if ($e) {
@@ -172,14 +172,14 @@ class CryptoParser extends Command {
         }
     }
     
-    public function debugGraylog(string $message, $payload = null, array $context = []) {
-        $attrs = $this->getGraylogAttrs($context, $payload);
+    public function debugGraylog(string $message, string $logType, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $logType, $payload);
         $this->graylogChannel()->debug($message, $attrs);
         $this->info($message);
     }
     
     public function warningGraylog(string $message, $payload = null, array $context = []) {
-        $attrs = $this->getGraylogAttrs($context, $payload);
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::WARN, $payload);
         $this->graylogChannel()->warning($message, $attrs);
         $this->warn($message);
     }

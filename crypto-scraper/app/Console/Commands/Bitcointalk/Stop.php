@@ -44,6 +44,7 @@ class Stop extends BitcointalkParser {
         $this->stopModule(self::MAIN_TOPICS_KEEPER);
         $this->stopModule(self::TOPIC_PAGES_PRODUCER);
         $this->stopModule(self::TOPIC_PAGES_KEEPER);
+        $this->stopModule(self::TOPIC_PAGES_CONSUMER);
         
         print "Ending... \n";
         return 0;

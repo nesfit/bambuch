@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
-use App\Console\Base\Bitcointalk\MainUrlKeeper;
+use App\Console\Base\Bitcointalk\UrlKeeper;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_topics_keeper
 
-class MainTopicsKeeper extends MainUrlKeeper
+class MainTopicsKeeper extends UrlKeeper
 {
     /**
      * The name and signature of the console command.
@@ -41,7 +41,7 @@ class MainTopicsKeeper extends MainUrlKeeper
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
+        $this->inputTopic = BitcointalkKafka::MAIN_TOPICS_TOPIC;
         $this->groupID = BitcointalkKafka::MAIN_TOPICS_STORE_GROUP;
         $this->serviceName = self::MAIN_TOPICS_KEEPER;
 

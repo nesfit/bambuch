@@ -67,7 +67,7 @@ class TopicPagesConsumer extends KafkaConProducer {
             if (count($parsedAddresses)) {
                 foreach ($parsedAddresses as $item) {
                     $tsvData = $item->createTSVData();
-                    var_dump($tsvData);
+//                    var_dump($tsvData);
                     $this->kafkaProduce($tsvData);
                 }
             }
