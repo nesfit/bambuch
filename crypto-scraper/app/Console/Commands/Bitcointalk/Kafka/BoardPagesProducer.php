@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
+use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\KafkaUrlMessage;
+use App\Models\Pg\Bitcointalk\BoardPage;
 use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_producer
@@ -15,6 +17,7 @@ use RdKafka\Message;
 class BoardPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;
+    use StoreCrawledUrl;
 
     const ENTITY = 'board';
 
@@ -51,6 +54,7 @@ class BoardPagesProducer extends KafkaConProducer {
         $this->outputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
         $this->groupID = BitcointalkKafka::MAIN_BOARDS_LOAD_GROUP;
         $this->serviceName = self::BOARD_PAGES_PRODUCER;
+        $this->tableName = BoardPage::class;
     
         parent::handle();
         
@@ -66,6 +70,7 @@ class BoardPagesProducer extends KafkaConProducer {
             $pagesCount = count($boardPages);
             foreach ($boardPages as $num => $boardPage) {
                 $urlMessage = new KafkaUrlMessage($mainBoardUrl, $boardPage, $num === $pagesCount - 1);
+                $this->storeChildUrl($urlMessage);
                 $this->kafkaProduce($urlMessage->encodeData());
             }
             return 1;

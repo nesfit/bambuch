@@ -37,13 +37,9 @@ class Stop extends BitcointalkParser {
      */
     public function handle() {
         $this->stopModule(self::MAIN_BOARDS_PRODUCER);
-        $this->stopModule(self::MAIN_BOARDS_KEEPER);
         $this->stopModule(self::BOARD_PAGES_PRODUCER);
-        $this->stopModule(self::BOARD_PAGES_KEEPER);
         $this->stopModule(self::MAIN_TOPICS_PRODUCER);
-        $this->stopModule(self::MAIN_TOPICS_KEEPER);
         $this->stopModule(self::TOPIC_PAGES_PRODUCER);
-        $this->stopModule(self::TOPIC_PAGES_KEEPER);
         $this->stopModule(self::TOPIC_PAGES_CONSUMER);
         
         print "Ending... \n";

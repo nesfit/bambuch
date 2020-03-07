@@ -26,13 +26,9 @@ abstract class BitcointalkParser extends CryptoParser {
     const PARSE_TOPIC_MESSAGES = self::BITCOINTALK . 'parse_topic_messages';
     
     const MAIN_BOARDS_PRODUCER = self::BITCOINTALK . 'main_boards_producer';
-    const MAIN_BOARDS_KEEPER = self::BITCOINTALK . 'main_boards_keeper';
     const BOARD_PAGES_PRODUCER = self::BITCOINTALK . 'board_pages_producer';
-    const BOARD_PAGES_KEEPER = self::BITCOINTALK . 'board_pages_keeper';
     const MAIN_TOPICS_PRODUCER = self::BITCOINTALK . 'main_topics_producer';
-    const MAIN_TOPICS_KEEPER = self::BITCOINTALK . 'main_topics_keeper';
     const TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'topic_pages_producer';
-    const TOPIC_PAGES_KEEPER = self::BITCOINTALK . 'topic_pages_keeper';
     const TOPIC_PAGES_CONSUMER = self::BITCOINTALK . 'topic_pages_consumer';
     
     const START = self::BITCOINTALK . 'start';

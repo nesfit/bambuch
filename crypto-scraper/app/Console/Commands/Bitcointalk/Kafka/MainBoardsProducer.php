@@ -4,16 +4,19 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
+use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\KafkaUrlMessage;
+use App\Models\Pg\Bitcointalk\MainBoard;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_boards_producer
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;
     use UrlCalculations;
+    use StoreCrawledUrl;
 
     const ENTITY = 'board';
 
@@ -50,6 +53,7 @@ class MainBoardsProducer extends KafkaProducer {
     public function handle() {
         $this->outputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
         $this->serviceName = self::MAIN_BOARDS_PRODUCER;
+        $this->tableName = MainBoard::class;
 
         parent::handle();
 
@@ -57,6 +61,7 @@ class MainBoardsProducer extends KafkaProducer {
             $mainBoards = $this->loadMainBoards($this->url);
             foreach ($mainBoards as $mainBoard) {
                 $urlMessage = new KafkaUrlMessage("empty", $mainBoard, false);
+                $this->storeMainUrl($urlMessage);
                 $this->kafkaProduce($urlMessage->encodeData());
             }
             return 0;
