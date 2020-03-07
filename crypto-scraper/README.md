@@ -10,23 +10,28 @@ Migrate DB tables:
 docker-compose -f common.yml -f migrate.yml up migrate
 ```
 
-Run the containers
+Run/stop common containers (Kafka, Zookeeper, Graylog, Postgres)
 ```bash
-docker-compose -f common.yml -f dev.yml up
-``` 
+php artisan [start|stop]
+```
+
+Run/stop specific container
+```bash
+php artisan [kafka|graylog|postgres]:[start|stop]
+```
 
 Serve Laravel app
 ```bash
 docker-compose -f common.yml -f dev.yml up -d serve
 ```
 
-Run Graylog monitoring
+## Bitcointalk commands
+Run/stop modules
 ```bash
-docker-compose -f common.yml up -d graylog 
+php artisan bct:start/stop
 ```
              
 ## Composer in Docker
-
 Install the dependencies
 ```bash
 docker-compose -f common.yml -f dev.yml run --rm composer

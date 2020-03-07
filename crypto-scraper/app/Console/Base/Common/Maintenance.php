@@ -20,7 +20,6 @@ abstract class Maintenance extends Command {
     const START_ARGS = ["docker-compose", "-f", "common.yml", "up", "-d"];
 
     
-//    docker-compose -f common.yml up -d
     private function maintainModule(array $args, string $module) {
         $process = new Process(array_merge($args, [$module]));
         $process->start();
