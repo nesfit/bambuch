@@ -4,18 +4,14 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
-use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\KafkaUrlMessage;
 use App\Models\Pg\Bitcointalk\MainTopic;
-use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_topics_producer 2
 
 class MainTopicsProducer extends KafkaConProducer {
     use UrlValidations;
-    use StoreCrawledUrl;
 
     const ENTITY = 'topic';
 
@@ -59,34 +55,17 @@ class MainTopicsProducer extends KafkaConProducer {
         return 1;
     }
 
-    protected function handleKafkaRead(Message $message) {
-        $inUrlMessage = KafkaUrlMessage::decodeData($message->payload);
-        $boardPageUrl = $inUrlMessage->url;
-
-        if (self::boardPageValid($boardPageUrl)) {
-            $mainTopics = $this->loadMainTopics($boardPageUrl);
-            foreach ($mainTopics as $mainTopic) {
-                $outUrlMessage = new KafkaUrlMessage($boardPageUrl, $mainTopic, false);
-                $this->storeChildUrl($outUrlMessage);
-                $this->kafkaProduce($outUrlMessage->encodeData());
-            }
-            return 0;
-        } else {
-            $this->warningGraylog('Invalid board page url', $boardPageUrl);
-            return 1;
-        }
-    }
-
-    private function loadMainTopics(string $url): array {
+    protected function loadDataFromUrl(string $url): array {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         return self::getMainTopics($allBoards);
+    }
+
+    protected function validateInputUrl(string $url): bool {
+        return self::pageEntityValid('board', $url);
     }
 
     public static function getMainTopics(array $allTopics): array {
         return self::getMainEntity(self::ENTITY, $allTopics);
     }
 
-    public static function boardPageValid(string $url): bool {
-        return self::pageEntityValid('board', $url);
-    }
 }

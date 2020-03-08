@@ -4,20 +4,16 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
-use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\KafkaUrlMessage;
 use App\Models\Pg\Bitcointalk\TopicPage;
-use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_producer
 
 class TopicPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;
-    use StoreCrawledUrl;
 
     const ENTITY = 'topic';
 
@@ -63,25 +59,7 @@ class TopicPagesProducer extends KafkaConProducer {
         return 1;
     }
 
-    protected function handleKafkaRead(Message $message) {
-        $inUrlMessage = KafkaUrlMessage::decodeData($message->payload);
-        $mainTopicUrl = $inUrlMessage->url;
-
-        if (self::mainTopicValid($mainTopicUrl)) {
-            $topicPages = $this->loadTopicPages($mainTopicUrl);
-            foreach ($topicPages as $topicPage) {
-                $outUrlMessage = new KafkaUrlMessage($mainTopicUrl, $topicPage, false);
-                $this->storeChildUrl($outUrlMessage);
-                $this->kafkaProduce($outUrlMessage->encodeData());
-            }
-            return 0;
-        } else {
-            $this->warningGraylog('Invalid main topic url', $mainTopicUrl);
-            return 1;
-        }
-    }
-
-    private function loadTopicPages(string $url): array {
+    protected function loadDataFromUrl(string $url): array {
         $maxTopicPage = $this->getMaxPage($url);
         if ($maxTopicPage) {
             $mainTopicId = self::getMainTopicId($url);
@@ -93,19 +71,19 @@ class TopicPagesProducer extends KafkaConProducer {
         return [$url];
     }
 
-    public static function mainTopicValid(string $url): bool {
+    protected function validateInputUrl(string $url): bool {
         return self::mainEntityValid(self::ENTITY, $url);
     }
 
-    public static function getTopicPageId(string $url): ?int {
+    private static function getTopicPageId(string $url): ?int {
         return self::getEntityPageId(self::ENTITY, $url);
     }
 
-    public static function getMainTopicId(string $url): ?int {
+    private static function getMainTopicId(string $url): ?int {
         return self::getMainEntityId(self::ENTITY, $url);
     }
 
-    public static function calculateTopicPages(int $topicId, int $from, int $to): array {
+    private static function calculateTopicPages(int $topicId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
     }
 }

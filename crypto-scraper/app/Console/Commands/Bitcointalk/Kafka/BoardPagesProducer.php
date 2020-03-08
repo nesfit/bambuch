@@ -4,20 +4,16 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
-use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\KafkaUrlMessage;
 use App\Models\Pg\Bitcointalk\BoardPage;
-use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:board_pages_producer
 
 class BoardPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;
-    use StoreCrawledUrl;
 
     const ENTITY = 'board';
 
@@ -61,26 +57,7 @@ class BoardPagesProducer extends KafkaConProducer {
         return 1;
     }
 
-    protected function handleKafkaRead(Message $message) {
-        $urlMessage = KafkaUrlMessage::decodeData($message->payload);
-        $mainBoardUrl = $urlMessage->url;
-        
-        if (self::mainBoardValid($mainBoardUrl)) {
-            $boardPages = $this->loadBoardPages($mainBoardUrl);
-            $pagesCount = count($boardPages);
-            foreach ($boardPages as $num => $boardPage) {
-                $urlMessage = new KafkaUrlMessage($mainBoardUrl, $boardPage, $num === $pagesCount - 1);
-                $this->storeChildUrl($urlMessage);
-                $this->kafkaProduce($urlMessage->encodeData());
-            }
-            return 1;
-        } else {
-            $this->printRedLine('Invalid main board url: ' . $mainBoardUrl);
-            return 0;
-        }
-    }
-
-    private function loadBoardPages(string $url): array {
+    protected function loadDataFromUrl(string $url): array {
         $maxBoardPage = $this->getMaxPage($url);
         if ($maxBoardPage) {
             $mainBoardId = self::getMainBoardId($url);
@@ -92,27 +69,19 @@ class BoardPagesProducer extends KafkaConProducer {
         return [$url];
     }
 
-    public static function getMainBoards(array $allBoards): array {
-        return self::getMainEntity(self::ENTITY, $allBoards);
-    }
-
-    public static function mainBoardValid(string $url): bool {
+    protected function validateInputUrl(string $url): bool {
         return self::mainEntityValid(self::ENTITY, $url);
     }
 
-    public static function getBoardPages(array $allBoards): array {
-        return self::getEntityPages(self::ENTITY, $allBoards);
-    }
-
-    public static function getBoardPageId(string $url): ?int {
+    private static function getBoardPageId(string $url): ?int {
         return self::getEntityPageId(self::ENTITY, $url);
     }
 
-    public static function getMainBoardId(string $url): ?int {
+    private static function getMainBoardId(string $url): ?int {
         return self::getMainEntityId(self::ENTITY, $url);
     }
 
-    public static function calculateBoardPages(int $boardId, int $from, int $to): array {
+    private static function calculateBoardPages(int $boardId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
     }
 }

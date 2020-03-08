@@ -12,14 +12,15 @@ use App\Console\Constants\CommonKafka;
 use App\Models\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
-use RdKafka\Message;
 use Symfony\Component\DomCrawler\Crawler;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_con_producer
 
 class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;
-    
+
+    const ENTITY = 'topic';
+
     /**
      * The name and signature of the console command.
      *
@@ -59,30 +60,22 @@ class TopicPagesConsumer extends KafkaConProducer {
         return 1;
     }
 
-    protected function handleKafkaRead(Message $message) {
-        $topicPageUrl = $message->payload;
-        if (self::topicPageValid($topicPageUrl)) {
-            $parsedAddresses = $this->getAddresses($topicPageUrl);
-            print "Getting addresses: " . count($parsedAddresses) . "\n"; 
-            if (count($parsedAddresses)) {
-                foreach ($parsedAddresses as $item) {
-                    $tsvData = $item->createTSVData();
-//                    var_dump($tsvData);
-                    $this->kafkaProduce($tsvData);
-                }
+    protected function processInputUrl(string $mainUrl) {
+        $parsedAddresses = $this->loadDataFromUrl($mainUrl);
+        if (count($parsedAddresses)) {
+            foreach ($parsedAddresses as $item) {
+                $tsvData = $item->createTSVData();
+                $this->kafkaProduce($tsvData);
             }
-            return 1;
-        } else {
-            $this->printRedLine('Invalid main topic url: ' . $topicPageUrl);
-            return 0;
         }
+        return 1;
     }
 
     /**
      * @param string $url
      * @return ParsedAddress[]
      */
-    private function getAddresses(string $url): array {
+    protected function loadDataFromUrl(string $url): array {
         $crawler = $this->getPageCrawler($url);
         $title = $crawler->filter('title')->text();
         $results = $crawler->filter('.td_headerandpost')->each(function (Crawler $node) use($title, $url) {
@@ -112,7 +105,7 @@ class TopicPagesConsumer extends KafkaConProducer {
         return array_filter(Arr::flatten($results, 2));
     }
 
-    private static function topicPageValid(string $url): bool {
-        return self::pageEntityValid('topic', $url);
+    protected function validateInputUrl(string $url): bool {
+        return self::pageEntityValid(self::ENTITY, $url);
     }
 }
