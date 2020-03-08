@@ -126,7 +126,7 @@ class CryptoParser extends Command {
                         ->getBody();
 
         } catch (GuzzleHttp\Exception\GuzzleException $exception) {
-            $this->error($exception);
+            $this->errorGraylog("Failed to get DOMBody", $exception, ["url" => $url]);
             return null;
         }
     }
@@ -140,6 +140,7 @@ class CryptoParser extends Command {
         $status = $this->browser->getResponse()->getStatus();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
+            $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
         }
         return $response;
     }
@@ -171,16 +172,16 @@ class CryptoParser extends Command {
             $this->error($e->getMessage());
         }
     }
+
+    public function warningGraylog(string $message, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::WARN, $payload);
+        $this->graylogChannel()->warning($message, $attrs);
+        $this->warn($message);
+    }
     
     public function debugGraylog(string $message, string $logType, $payload = null, array $context = []) {
         $attrs = $this->getGraylogAttrs($context, $logType, $payload);
         $this->graylogChannel()->debug($message, $attrs);
         $this->info($message);
-    }
-    
-    public function warningGraylog(string $message, $payload = null, array $context = []) {
-        $attrs = $this->getGraylogAttrs($context, GraylogTypes::WARN, $payload);
-        $this->graylogChannel()->warning($message, $attrs);
-        $this->warn($message);
     }
 }

@@ -79,7 +79,7 @@ class TopicPagesConsumer extends KafkaConProducer {
         $crawler = $this->getPageCrawler($url);
         $title = $crawler->filter('title')->text();
         $results = $crawler->filter('.td_headerandpost')->each(function (Crawler $node) use($title, $url) {
-            $addresses = AddressMatcher::matchAddresses($node->html());
+            $addresses = array_keys(AddressMatcher::matchAddresses($node->html()));
             $userInfo = $node->previousAll()->first();
             $userName = $userInfo->filter('a')->first()->text();
             $msgURL = $node->filter('a')->first()->attr('href');
