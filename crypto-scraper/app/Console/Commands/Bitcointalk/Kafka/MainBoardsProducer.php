@@ -11,7 +11,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_boards_producer
+//docker-compose -f common.yml -f dev.yml run --rm test bct:main_boards_producer
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;
@@ -56,20 +56,55 @@ class MainBoardsProducer extends KafkaProducer {
         $this->tableName = MainBoard::class;
 
         parent::handle();
-
-        if (self::mainBoardValid($this->url)) {
-            $mainBoards = $this->loadMainBoards($this->url);
+        
+        /**
+         * get unparsed from DB
+         * get all from url
+         * subtract the arrays
+         * insert the result
+         */
+        $this->loadMainBoardsFromUrl($this->url);
+        $this->loadChildMainBoards();
+        
+        return 0;
+    }
+    
+    private function loadMainBoardsFromUrl(string $url) {
+        if (self::mainBoardValid($url)) {
+            $mainBoards = $this->getNewMainBoards($url);
             foreach ($mainBoards as $mainBoard) {
                 $urlMessage = new UrlMessage("empty", $mainBoard, false);
                 $this->storeMainUrl($urlMessage);
                 $this->kafkaProduce($urlMessage->encodeData());
             }
+            
             return 0;
         }
         else {
-            $this->warningGraylog('Invalid main board url', $this->url);
+            $this->warningGraylog('Invalid main board url', $url);
             return 1;
         }
+    }
+    
+    private function loadChildMainBoards() {
+        $firstUnparsed = MainBoard::getFirstUnparsed();
+        if (count($firstUnparsed)) {
+            $unparsedUrl = $firstUnparsed->getAttribute(MainBoard::COL_URL);
+            $this->loadMainBoardsFromUrl($unparsedUrl);
+
+            $firstUnparsed->setAttribute(MainBoard::COL_PARSED, true);
+            $firstUnparsed->save();
+            
+            $this->loadChildMainBoards();
+        }
+    }
+    
+    private function getNewMainBoards(string $url): array {
+        $dbData = MainBoard::getAll();
+        $all = array_map(function ($val) { return $val[MainBoard::COL_URL]; }, $dbData);
+        $fromUrl = $this->loadMainBoards($url);
+                
+        return array_diff($fromUrl, $all);
     }
 
     private function loadMainBoards(string $url): array {

@@ -34,14 +34,24 @@ class MainBoard extends Model implements BitcointalkQueries
         return self::getByUrl($url) !== null;
     }
 
-    /**
-     * @return MainBoard[]
-     */
     public static function getAllUnParsed(): array {
         return self::query()
             ->where(self::COL_PARSED, false)
             ->get(self::COL_URL)
-            ->all();
+            ->toArray();
+    }
+    
+    public static function getFirstUnparsed(): MainBoard {
+        return self::query()
+            ->where(self::COL_PARSED, false)
+            ->get()
+            ->first();
+    }
+    
+    public static function getAll(): array {
+        return self::query()
+            ->get(self::COL_URL)
+            ->toArray();
     }
     
     public static function setParsedToAll(bool $value): void {
