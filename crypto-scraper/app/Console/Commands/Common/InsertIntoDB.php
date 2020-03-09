@@ -59,7 +59,7 @@ class InsertIntoDB extends Command {
         $category = $categoryFromText->name != Category::CAT_1 ? $categoryFromText : $this->getCategoryFromOwner($ownerName);
         $existingAddress = Address::getByAddress($address);
         
-        if ($existingAddress == null) { // no address in the database
+        if ($existingAddress === null) { // no address in the database
             $identity = $this->getNewIdentity($source, $url, $label);
 
             $ownerAddr = new Address();
