@@ -5,7 +5,7 @@ namespace App\Console\Base\Bitcointalk;
 
 use App\Console\Base\Common\StoreCrawledUrl;
 use App\Kafka\ConProducerFeatures;
-use App\Models\UrlMessage;
+use App\Models\Kafka\UrlMessage;
 use RdKafka\Message;
 
 abstract class KafkaConProducer extends BitcointalkParser {

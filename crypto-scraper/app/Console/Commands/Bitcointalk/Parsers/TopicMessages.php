@@ -7,7 +7,7 @@ use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\CryptoCurrency;
-use App\Models\ParsedAddress;
+use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;

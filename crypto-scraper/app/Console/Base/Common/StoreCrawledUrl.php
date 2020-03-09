@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Models\UrlMessage;
+use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkQueries;
 
 trait StoreCrawledUrl {

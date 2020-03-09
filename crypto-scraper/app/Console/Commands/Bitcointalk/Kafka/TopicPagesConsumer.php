@@ -9,7 +9,7 @@ use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
 use App\Console\Constants\CryptoCurrency;
 use App\Console\Constants\CommonKafka;
-use App\Models\ParsedAddress;
+use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;

@@ -8,7 +8,7 @@ use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkKafka;
-use App\Models\UrlMessage;
+use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_boards_producer

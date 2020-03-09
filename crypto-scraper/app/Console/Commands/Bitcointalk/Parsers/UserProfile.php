@@ -5,7 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Parsers;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Constants\CryptoCurrency;
-use App\Models\ParsedAddress;
+use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Category;
 
 class UserProfile extends BitcointalkParser
