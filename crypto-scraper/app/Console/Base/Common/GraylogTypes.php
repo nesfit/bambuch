@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
@@ -12,4 +13,5 @@ abstract class GraylogTypes {
     const NO_DATA = "no_data";
     const ERROR = "error";
     const WARN = "warning";
+    const EXISTS = "exists";
 }

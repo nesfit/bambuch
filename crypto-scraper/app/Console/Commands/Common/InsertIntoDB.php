@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
+use App\Console\Base\Common\ReturnCodes;
 use App\Models\Pg\Address;
 use App\Models\Pg\Category;
 use App\Models\Pg\Identity;
@@ -10,6 +12,7 @@ use App\Models\Pg\WalletExplorer;
 use Illuminate\Console\Command;
 
 class InsertIntoDB extends Command {
+    use ReturnCodes;
     /**
      * The name and signature of the console command.
      *
@@ -49,7 +52,7 @@ class InsertIntoDB extends Command {
         
         if (!isset($categoryFromText)) {
             $this->error("'categoryFromText' is not set! - check Category DB table");
-            exit(0);
+            return $this->RETURN_FAILED;
         }
 
         $owner = Owner::getByName($ownerName);
@@ -68,13 +71,15 @@ class InsertIntoDB extends Command {
             $ownerAddr->categories()->attach($category->id);
 
             $owner->addresses()->save($ownerAddr);
-            return 1;
+            return $this->RETURN_NEW_ADDRESS;
         } else if ($this->newIdentity($existingAddress->id, $source)) {
             // no identity for the address in the database
             $identity = $this->getNewIdentity($source, $url, $label);
             $existingAddress->identities()->save($identity);
+            return $this->RETURN_NEW_IDENTITY;
         }
-        return 0;
+        
+        return $this->RETURN_ALREADY_EXISTS;
     }
     
     /**

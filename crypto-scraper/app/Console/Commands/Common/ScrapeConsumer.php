@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\KafkaConsumer;
+use App\Console\Base\Common\ReturnCodes;
 use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
 //docker-compose -f common.yml -f dev.yml run --rm test scraped_results_consumer
 
 class ScrapeConsumer extends KafkaConsumer {
+    use ReturnCodes;
     /**
      * The name and signature of the console command.
      *
@@ -50,9 +53,8 @@ class ScrapeConsumer extends KafkaConsumer {
     
     protected function handleKafkaRead(Message $message) {
         list($owner, $url, $label, $source, $address, $cryptoType, $category) = explode("\t", $message->payload); 
-        print "Inserting: " . $url . "\n";
-        
-        $this->call('insert:db', [
+                
+        $success = $this->call('insert:db', [
             'owner name' => $owner,
             'url' => $url,
             'label' => $label,
@@ -61,5 +63,20 @@ class ScrapeConsumer extends KafkaConsumer {
             'crypto type' => $cryptoType,
             'category' => $category
         ]);
+        
+        switch ($success) {
+            case $this->RETURN_ALREADY_EXISTS:
+                $this->infoGraylog("Already exists", GraylogTypes::EXISTS, $url);
+                break;
+            case $this->RETURN_FAILED:
+                $this->errorGraylog("Insert failed");
+                break;
+            case $this->RETURN_NEW_IDENTITY:
+                $this->infoGraylog("New identity", GraylogTypes::STORED, $url);
+                break;
+            case $this->RETURN_NEW_ADDRESS:
+                $this->infoGraylog("New address", GraylogTypes::STORED, $url);
+                break;            
+        }
     }
 }
