@@ -7,7 +7,7 @@ use App\Console\Base\Common\KafkaConsumer;
 use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml run --rm test consumer:scrape
+//docker-compose -f common.yml -f dev.yml run --rm test scraped_results_consumer
 
 class ScrapeConsumer extends KafkaConsumer {
     /**
@@ -15,7 +15,7 @@ class ScrapeConsumer extends KafkaConsumer {
      *
      * @var string
      */
-    protected $signature = 'consumer:scrape';
+    protected $signature = self::SCRAPED_RESULTS_CONSUMER . '{verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -41,6 +41,7 @@ class ScrapeConsumer extends KafkaConsumer {
     public function handle() {
         $this->inputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = CommonKafka::SCRAPE_RESULTS_GROUP;
+        $this->serviceName = self::SCRAPED_RESULTS_CONSUMER;
         
         parent::handle();
         

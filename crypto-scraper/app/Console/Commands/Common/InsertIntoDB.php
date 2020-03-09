@@ -46,6 +46,11 @@ class InsertIntoDB extends Command {
         $address = $this->argument('address');
         $cryptoType = $this->argument('crypto type');
         $categoryFromText = $this->getCategoryFromText($this->argument('category'));
+        
+        if (!isset($categoryFromText)) {
+            $this->error("'categoryFromText' is not set! - check Category DB table");
+            exit(0);
+        }
 
         $owner = Owner::getByName($ownerName);
         $category = $categoryFromText->name != Category::CAT_1 ? $categoryFromText : $this->getCategoryFromOwner($ownerName);

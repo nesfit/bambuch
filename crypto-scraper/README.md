@@ -10,6 +10,11 @@ Migrate DB tables:
 docker-compose -f common.yml -f migrate.yml up migrate
 ```
 
+Seed DB tables:
+```bash
+docker-compose -f common.yml -f migrate.yml up seed
+```
+
 Run/stop common containers (Kafka, Zookeeper, Graylog, Postgres)
 ```bash
 php artisan [start|stop]

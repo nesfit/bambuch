@@ -43,7 +43,7 @@ trait ConsumerFeatures {
         try {
             $consumer->subscribe([$this->inputTopic]);
         } catch (Exception $e) {
-            print "Something wrong with consumer subscription: " . $e->getMessage();
+            $this->errorGraylog("Something wrong with consumer subscription", $e, ["inputTopic" => $this->inputTopic]);
         }
 
         try {

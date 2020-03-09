@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace App\Console\Base\Common;
 
 use App\Kafka\ConsumerFeatures;
-use Illuminate\Console\Command;
 
-abstract class KafkaConsumer extends Command {
+abstract class KafkaConsumer extends CryptoParser {
     use ConsumerFeatures;
 
-    protected function handle() {
+    public function handle() {
         $this->initConsumer();
     }
 }

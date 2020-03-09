@@ -14,7 +14,13 @@ use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Facades\Log;
 
 
-class CryptoParser extends Command { 
+class CryptoParser extends Command {
+    /**
+     * Common command constants 
+     */
+    const SCRAPED_RESULTS_CONSUMER = "scraped_results_consumer";
+    const FETCH_WALLET_EXPLORER = "fetch_wallet_explorer";
+    
     protected $verbose = 1;
     protected $browser;
     protected $dateTime;

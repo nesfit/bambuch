@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Common;
+namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
 use Symfony\Component\Process\Process;

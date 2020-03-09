@@ -5,7 +5,7 @@ namespace App\Models;
 
 use Serializable;
 
-class KafkaUrlMessage implements Serializable {
+class UrlMessage implements Serializable {
     public string $mainUrl;
     public string $url;
     public bool $last;
@@ -36,7 +36,7 @@ class KafkaUrlMessage implements Serializable {
         return serialize($this);
     } 
     
-    public static function decodeData($encoded): KafkaUrlMessage {
+    public static function decodeData($encoded): UrlMessage {
         return unserialize($encoded);
     }
 }

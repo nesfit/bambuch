@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk;
+namespace App\Console\Commands\Bitcointalk\Docker;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use Symfony\Component\Process\Process;
@@ -45,6 +45,7 @@ class Start extends BitcointalkParser {
         $this->startModule(self::MAIN_TOPICS_PRODUCER);
         $this->startModule(self::TOPIC_PAGES_PRODUCER);
         $this->startModule(self::TOPIC_PAGES_CONSUMER);
+        $this->startModule(self::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";
         return 0;

@@ -39,3 +39,13 @@ services:
     volumes:
       - ./:/app
     
+  wallet-explorer:
+    image: crypto_scraper_laravel
+    entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+    command: fetch_wallet_explorer
+    volumes:
+      - ./:/app
+    links:
+      - db
+    depends_on:
+      - db

@@ -1,25 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Common;
+namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
-use Symfony\Component\Process\Process;
 
-class PGStart extends Maintenance {
+class WalletExplorer extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::POSTGRES_START;
+    protected $signature = self::FETCH_WALLET_EXPLORER;
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Start DB';
+    protected $description = 'Fetch WE';
     
     /**
      * Create a new command instance.
@@ -36,7 +35,7 @@ class PGStart extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->startModule("db");
+        $this->startModule("wallet-explorer");
         return 0;
     }
 }

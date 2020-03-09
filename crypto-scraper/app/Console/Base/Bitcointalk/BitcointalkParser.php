@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class BitcointalkParser extends CryptoParser {
     /**
-     * Commands constants.
+     * Command constants
      */
     const BITCOINTALK = 'bct:';
     const BITCOINTALK_URL = 'https://bitcointalk.org';

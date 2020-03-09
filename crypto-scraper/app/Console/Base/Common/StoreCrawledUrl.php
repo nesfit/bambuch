@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Models\KafkaUrlMessage;
+use App\Models\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkQueries;
 
 trait StoreCrawledUrl {
@@ -16,7 +16,7 @@ trait StoreCrawledUrl {
         }        
     }
     
-    protected function storeMainUrl(KafkaUrlMessage $message) {
+    protected function storeMainUrl(UrlMessage $message) {
         $this->checkTable();
 
         $entity = new $this->tableName();
@@ -27,7 +27,7 @@ trait StoreCrawledUrl {
         $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
     }
     
-    protected function storeChildUrl(KafkaUrlMessage $message) {
+    protected function storeChildUrl(UrlMessage $message) {
         $this->checkTable();
 
         $entity = new $this->tableName();

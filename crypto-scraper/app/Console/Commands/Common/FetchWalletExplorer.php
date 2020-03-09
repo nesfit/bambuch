@@ -2,19 +2,20 @@
 
 namespace App\Console\Commands\Common;
 
+use App\Console\Base\Common\CryptoParser;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\Utils;
 use App\Models\Pg\Category;
 use App\Models\Pg\WalletExplorer;
-use Illuminate\Console\Command;
 
-class FetchWalletExplorer extends Command
+class FetchWalletExplorer extends CryptoParser
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'wallet-explorer';
+    protected $signature = self::FETCH_WALLET_EXPLORER . '{verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -37,15 +38,17 @@ class FetchWalletExplorer extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
+        $this->serviceName = self::FETCH_WALLET_EXPLORER;
+        
         $walletEContent = Utils::getContentFromURL("https://www.walletexplorer.com");;
         $walletExplorerXPath = Utils::getDOMXPath($walletEContent);
         if ($walletExplorerXPath == "") {
-            $this->error("WalletExplorer fetching failed...ending.");
+            $this->errorGraylog("WalletExplorer fetching failed...ending.");
             exit();
         }
         
+        $this->infoGraylog("Going to insert categories", GraylogTypes::INFO);
         $this->insertCategories($walletExplorerXPath,"Exchanges", Category::CAT_3);
         $this->insertCategories($walletExplorerXPath,"Pools", Category::CAT_6);
         $this->insertCategories($walletExplorerXPath,"Services/others", Category::CAT_1);
@@ -63,8 +66,7 @@ class FetchWalletExplorer extends Command
                 $lowerCaseOwner = strtolower($match[0]);
                 $this->insertCategory($category, $lowerCaseOwner);
             } else {
-                $this->alert("Unknown category");
-                print_r($match);
+                $this->warningGraylog("Unknown category", $category, ["match" => $match]);
             }
         }
     }
@@ -75,6 +77,10 @@ class FetchWalletExplorer extends Command
             $walletItem->category = $category;
             $walletItem->owner = $owner;
             $walletItem->save();
+            
+            $this->infoGraylog("Category inserted", GraylogTypes::SUCCESS);
+        } else {
+            $this->debugGraylog("Category already exists", GraylogTypes::INFO);
         }
     }
 }

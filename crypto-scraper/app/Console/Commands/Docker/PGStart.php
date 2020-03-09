@@ -1,24 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Common;
+namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
+use Symfony\Component\Process\Process;
 
-class GraylogStart extends Maintenance {
+class PGStart extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::GRAYLOG_START;
+    protected $signature = self::POSTGRES_START;
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run graylog';
+    protected $description = 'Start DB';
     
     /**
      * Create a new command instance.
@@ -35,7 +36,7 @@ class GraylogStart extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->startModule("graylog");
+        $this->startModule("db");
         return 0;
     }
 }

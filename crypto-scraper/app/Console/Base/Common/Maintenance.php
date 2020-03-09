@@ -15,9 +15,10 @@ abstract class Maintenance extends Command {
     const GRAYLOG_STOP = "graylog:stop";
     const POSTGRES_START = "postgres:start";
     const POSTGRES_STOP = "postgres:stop";
+    const FETCH_WALLET_EXPLORER = "fetch:wallet_explorer";
 
-    const STOP_ARGS = ["docker-compose", "-f", "common.yml", "stop"];
-    const START_ARGS = ["docker-compose", "-f", "common.yml", "up", "-d"];
+    const STOP_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "stop"];
+    const START_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "up", "-d"];
 
     
     private function maintainModule(array $args, string $module) {

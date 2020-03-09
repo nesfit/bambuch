@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Common;
+namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
 
-class Start extends Maintenance {
+class GraylogStart extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::START;
+    protected $signature = self::GRAYLOG_START;
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Start Kafka and Graylog';
+    protected $description = 'Run graylog';
     
     /**
      * Create a new command instance.
@@ -35,9 +35,7 @@ class Start extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->callModule(self::KAFKA_START);
-        $this->callModule(self::GRAYLOG_START);
-        $this->callModule(self::POSTGRES_START);
+        $this->startModule("graylog");
         return 0;
     }
 }

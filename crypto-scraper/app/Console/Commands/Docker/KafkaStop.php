@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Common;
+namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
 
-class KafkaStart extends Maintenance {
+class KafkaStop extends Maintenance {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::KAFKA_START;
+    protected $signature = self::KAFKA_STOP;
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run kafka';
+    protected $description = 'Stop kafka';
     
     /**
      * Create a new command instance.
@@ -35,7 +35,8 @@ class KafkaStart extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->startModule("kafka");
+        $this->stopModule("kafka");
+        $this->stopModule("zookeeper");
         return 0;
     }
 }
