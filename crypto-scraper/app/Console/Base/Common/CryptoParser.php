@@ -12,15 +12,9 @@ use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
-
-class CryptoParser extends Command {
-    /**
-     * Common command constants 
-     */
-    const SCRAPED_RESULTS_CONSUMER = "scraped_results_consumer";
-    const FETCH_WALLET_EXPLORER = "fetch_wallet_explorer";
-    
+class CryptoParser extends Command {    
     protected $verbose = 1;
     protected $browser;
     protected $dateTime;
@@ -170,7 +164,7 @@ class CryptoParser extends Command {
         $this->info($message);
     }
     
-    public function errorGraylog(string $message, \Exception $e = null, array $context = []) {
+    public function errorGraylog(string $message, Exception $e = null, array $context = []) {
         $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
         $this->graylogChannel()->error($message, $attrs);
         $this->error($message);

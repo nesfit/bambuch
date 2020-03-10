@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Parsers;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\CryptoCurrency;
 use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Category;
@@ -15,7 +16,7 @@ class UserProfile extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = self::PARSE_USER_PROFILE .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::PARSE_USER_PROFILE .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -80,5 +81,9 @@ class UserProfile extends BitcointalkParser
 
     private static function profilePageValid(string $url): bool {
         return preg_match('/https:\/\/bitcointalk.org\/index.php\?action=profile;u=\d+$/', $url, $matches) === 1;
+    }
+    
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

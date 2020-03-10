@@ -6,6 +6,7 @@ namespace App\Console\Commands\Common;
 use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\KafkaConsumer;
 use App\Console\Base\Common\ReturnCodes;
+use App\Console\Constants\CommonCommands;
 use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
@@ -18,7 +19,7 @@ class ScrapeConsumer extends KafkaConsumer {
      *
      * @var string
      */
-    protected $signature = self::SCRAPED_RESULTS_CONSUMER . '{verbose=1} {--force} {dateTime?}';
+    protected $signature = CommonCommands::SCRAPED_RESULTS_CONSUMER . '{verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -44,7 +45,7 @@ class ScrapeConsumer extends KafkaConsumer {
     public function handle() {
         $this->inputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = CommonKafka::SCRAPE_RESULTS_GROUP;
-        $this->serviceName = self::SCRAPED_RESULTS_CONSUMER;
+        $this->serviceName = CommonCommands::SCRAPED_RESULTS_CONSUMER;
         
         parent::handle();
         

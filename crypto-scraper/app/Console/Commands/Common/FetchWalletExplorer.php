@@ -5,6 +5,7 @@ namespace App\Console\Commands\Common;
 use App\Console\Base\Common\CryptoParser;
 use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\Utils;
+use App\Console\Constants\CommonCommands;
 use App\Models\Pg\Category;
 use App\Models\Pg\WalletExplorer;
 
@@ -15,7 +16,7 @@ class FetchWalletExplorer extends CryptoParser
      *
      * @var string
      */
-    protected $signature = self::FETCH_WALLET_EXPLORER . '{verbose=1} {--force} {dateTime?}';
+    protected $signature = CommonCommands::FETCH_WALLET_EXPLORER . '{verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -39,7 +40,7 @@ class FetchWalletExplorer extends CryptoParser
      * @return mixed
      */
     public function handle() {
-        $this->serviceName = self::FETCH_WALLET_EXPLORER;
+        $this->serviceName = CommonCommands::FETCH_WALLET_EXPLORER;
         
         $walletEContent = Utils::getContentFromURL("https://www.walletexplorer.com");;
         $walletExplorerXPath = Utils::getDOMXPath($walletEContent);

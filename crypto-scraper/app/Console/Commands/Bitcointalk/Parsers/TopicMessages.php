@@ -6,6 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Parsers;
 use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\CryptoCurrency;
 use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Category;
@@ -20,7 +21,7 @@ class TopicMessages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::PARSE_TOPIC_MESSAGES .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::PARSE_TOPIC_MESSAGES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -91,5 +92,9 @@ class TopicMessages extends BitcointalkParser {
     
     private static function topicPageValid(string $url): bool {
         return self::pageEntityValid('topic', $url);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

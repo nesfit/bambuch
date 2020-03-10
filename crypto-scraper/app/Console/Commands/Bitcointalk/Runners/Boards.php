@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
 class Boards extends BitcointalkParser {
@@ -12,14 +13,14 @@ class Boards extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::RUN_BOARDS .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::RUN_BOARDS .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs '. self::LOAD_MAIN_TOPICS .' on every unparsed board page.';
+    protected $description = 'Runs '. BitcointalkCommands::LOAD_MAIN_TOPICS .' on every unparsed board page.';
 
     /**
      * Create a new command instance.
@@ -46,7 +47,7 @@ class Boards extends BitcointalkParser {
         $boardPages = BoardPage::getAllUnParsed();
         if (count($boardPages)) {
             foreach ($boardPages as $boardPage) {
-                $parsed = $this->call(self::LOAD_MAIN_TOPICS, [
+                $parsed = $this->call(BitcointalkCommands::LOAD_MAIN_TOPICS, [
                     "url" => $boardPage->getAttribute(BoardPage::COL_URL),
                     "verbose" => $this->verbose
                 ]);
@@ -61,5 +62,9 @@ class Boards extends BitcointalkParser {
             $this->printRedLine("No unparsed boards found!");
             return 0;
         }
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

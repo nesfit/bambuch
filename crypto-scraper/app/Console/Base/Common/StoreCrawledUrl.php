@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Base\Common;
 
 use App\Models\Kafka\UrlMessage;
-use App\Models\Pg\Bitcointalk\BitcointalkQueries;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 
 trait StoreCrawledUrl {
     protected string $tableName;
@@ -20,8 +20,8 @@ trait StoreCrawledUrl {
         $this->checkTable();
 
         $entity = new $this->tableName();
-        $entity->setAttribute(BitcointalkQueries::COL_URL, $message->url);
-        $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
+        $entity->setAttribute(BitcointalkModel::COL_URL, $message->url);
+        $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
         $entity->save();
 
         $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
@@ -31,10 +31,10 @@ trait StoreCrawledUrl {
         $this->checkTable();
 
         $entity = new $this->tableName();
-        $entity->setAttribute(BitcointalkQueries::COL_URL, $message->url);
-        $entity->setAttribute(BitcointalkQueries::COL_PARSED, false);
-        $entity->setAttribute(BitcointalkQueries::COL_PARENT_URL, $message->mainUrl);
-        $entity->setAttribute(BitcointalkQueries::COL_LAST, $message->last);
+        $entity->setAttribute(BitcointalkModel::COL_URL, $message->url);
+        $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
+        $entity->setAttribute(BitcointalkModel::COL_PARENT_URL, $message->mainUrl);
+        $entity->setAttribute(BitcointalkModel::COL_LAST, $message->last);
         $entity->save();
 
         $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);

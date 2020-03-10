@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
@@ -19,7 +20,7 @@ class TopicPages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::LOAD_TOPICS_PAGES .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::LOAD_TOPICS_PAGES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -110,5 +111,9 @@ class TopicPages extends BitcointalkParser {
 
     public static function calculateTopicPages(int $topicId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

@@ -3,16 +3,18 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Docker;
 
-use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
+use App\Console\Constants\CommonCommands;
+use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class Stop extends BitcointalkParser {
+class Stop extends Command {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::STOP;
+    protected $signature = BitcointalkCommands::STOP;
 
     /**
      * The console command description.
@@ -36,12 +38,12 @@ class Stop extends BitcointalkParser {
      * @return mixed
      */
     public function handle() {
-        $this->stopModule(self::MAIN_BOARDS_PRODUCER);
-        $this->stopModule(self::BOARD_PAGES_PRODUCER);
-        $this->stopModule(self::MAIN_TOPICS_PRODUCER);
-        $this->stopModule(self::TOPIC_PAGES_PRODUCER);
-        $this->stopModule(self::TOPIC_PAGES_CONSUMER);
-        $this->stopModule(self::SCRAPED_RESULTS_CONSUMER);
+        $this->stopModule(BitcointalkCommands::MAIN_BOARDS_PRODUCER);
+        $this->stopModule(BitcointalkCommands::BOARD_PAGES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::MAIN_TOPICS_PRODUCER);
+        $this->stopModule(BitcointalkCommands::TOPIC_PAGES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
+        $this->stopModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";
         return 0;

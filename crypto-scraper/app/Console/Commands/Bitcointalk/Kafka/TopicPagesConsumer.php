@@ -6,6 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Console\Constants\CryptoCurrency;
 use App\Console\Constants\CommonKafka;
@@ -26,7 +27,7 @@ class TopicPagesConsumer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -53,7 +54,7 @@ class TopicPagesConsumer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_LOAD_GROUP;
-        $this->serviceName = self::TOPIC_PAGES_CONSUMER;
+        $this->serviceName = BitcointalkCommands::TOPIC_PAGES_CONSUMER;
 
         parent::handle();
         

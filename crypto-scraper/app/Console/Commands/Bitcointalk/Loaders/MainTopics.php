@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
@@ -18,7 +19,7 @@ class MainTopics extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::LOAD_MAIN_TOPICS .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::LOAD_MAIN_TOPICS .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -91,5 +92,9 @@ class MainTopics extends BitcointalkParser {
 
     public static function boardPageValid(string $url): bool {
         return self::pageEntityValid('board', $url);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

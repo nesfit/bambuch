@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\UserProfile;
 
 class UserProfiles extends BitcointalkParser
@@ -13,14 +14,14 @@ class UserProfiles extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = self::RUN_USER_PROFILES .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::RUN_USER_PROFILES .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs '. self::PARSE_USER_PROFILE .' on every unparsed user profile.';
+    protected $description = 'Runs '. BitcointalkCommands::PARSE_USER_PROFILE .' on every unparsed user profile.';
 
     /**
      * Create a new command instance.
@@ -47,7 +48,7 @@ class UserProfiles extends BitcointalkParser
         $userProfiles = UserProfile::getAllUnParsed();
         if (count($userProfiles)) {
             foreach ($userProfiles as $userProfile) {
-                $parsed = $this->call(self::PARSE_USER_PROFILE, [
+                $parsed = $this->call(BitcointalkCommands::PARSE_USER_PROFILE, [
                     "url" => $userProfile->getAttribute(UserProfile::COL_URL),
                     "verbose" => $this->verbose,
                     "dateTime" => $this->dateTime
@@ -63,5 +64,9 @@ class UserProfiles extends BitcointalkParser
             $this->printRedLine("No unparsed user profiles found!");
             return 0;
         }
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

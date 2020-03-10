@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
 class InitializeBoards extends BitcointalkParser
@@ -13,14 +14,14 @@ class InitializeBoards extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = self::INITIALIZE_BOARDS .' {verbose=1} {--force}';
+    protected $signature = BitcointalkCommands::INITIALIZE_BOARDS .' {verbose=1} {--force}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs '. self::LOAD_BOARDS .' on every unparsed main board.';
+    protected $description = 'Runs '. BitcointalkCommands::LOAD_BOARDS .' on every unparsed main board.';
 
     /**
      * Create a new command instance.
@@ -44,8 +45,8 @@ class InitializeBoards extends BitcointalkParser
         }
 
         // always check for new boards in bitcointalk index
-        $this->call(self::LOAD_BOARDS, [
-            "url" => self::BITCOINTALK_URL,
+        $this->call(BitcointalkCommands::LOAD_BOARDS, [
+            "url" => BitcointalkCommands::BITCOINTALK_URL,
             "verbose" => $this->verbose
         ]);
         
@@ -53,7 +54,7 @@ class InitializeBoards extends BitcointalkParser
         $allMainBoards = MainBoard::getAllUnParsed();
         if (count($allMainBoards)) {
             foreach ($allMainBoards as $mainBoard) {
-                $this->call(self::LOAD_BOARDS, [
+                $this->call(BitcointalkCommands::LOAD_BOARDS, [
                     "url" => $mainBoard->getAttribute(MainBoard::COL_URL),
                     "verbose" => $this->verbose
                 ]);
@@ -63,5 +64,9 @@ class InitializeBoards extends BitcointalkParser
             $this->printRedLine("No unparsed main boards!");
             return 0;
         }
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Docker;
 
-use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
+use App\Console\Constants\CommonCommands;
+use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
 //docker-compose -f common.yml -f dev.yml run --rm --name bct_main_boards_producer test btc:main_boards_producer 2
 
-class Start extends BitcointalkParser {
+class Start extends Command {
     const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "run"];
     
     /**
@@ -16,7 +18,7 @@ class Start extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::START;
+    protected $signature = BitcointalkCommands::START;
 
     /**
      * The console command description.
@@ -40,12 +42,12 @@ class Start extends BitcointalkParser {
      * @return mixed
      */
     public function handle() {
-//        $this->startModule(self::MAIN_BOARDS_PRODUCER);
-//        $this->startModule(self::BOARD_PAGES_PRODUCER);
-//        $this->startModule(self::MAIN_TOPICS_PRODUCER);
-//        $this->startModule(self::TOPIC_PAGES_PRODUCER);
-//        $this->startModule(self::TOPIC_PAGES_CONSUMER);
-        $this->startModule(self::SCRAPED_RESULTS_CONSUMER);
+        $this->startModule(BitcointalkCommands::MAIN_BOARDS_PRODUCER);
+        $this->startModule(BitcointalkCommands::BOARD_PAGES_PRODUCER);
+        $this->startModule(BitcointalkCommands::MAIN_TOPICS_PRODUCER);
+        $this->startModule(BitcointalkCommands::TOPIC_PAGES_PRODUCER);
+        $this->startModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
+        $this->startModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";
         return 0;

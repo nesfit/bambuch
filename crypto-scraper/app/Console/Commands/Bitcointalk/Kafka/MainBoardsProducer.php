@@ -7,6 +7,7 @@ use App\Console\Base\Bitcointalk\KafkaProducer;
 use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\MainBoard;
@@ -25,7 +26,7 @@ class MainBoardsProducer extends KafkaProducer {
      *
      * @var string
      */
-    protected $signature = self::MAIN_BOARDS_PRODUCER .' {verbose=1} {url='. self::BITCOINTALK_URL .'} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::MAIN_BOARDS_PRODUCER .' {verbose=1} {url='. BitcointalkCommands::BITCOINTALK_URL .'} {--force} {dateTime?}';
 
 
     /**
@@ -52,7 +53,7 @@ class MainBoardsProducer extends KafkaProducer {
      */
     public function handle() {
         $this->outputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
-        $this->serviceName = self::MAIN_BOARDS_PRODUCER;
+        $this->serviceName = BitcointalkCommands::MAIN_BOARDS_PRODUCER;
         $this->tableName = MainBoard::class;
 
         parent::handle();
@@ -71,7 +72,7 @@ class MainBoardsProducer extends KafkaProducer {
     
     private function loadMainBoardsFromUrl(string $url) {
         if (self::mainBoardValid($url)) {
-            $mainBoards = $this->getNewMainBoards($url);
+            $mainBoards = $this->getNewData($url);
             foreach ($mainBoards as $mainBoard) {
                 $urlMessage = new UrlMessage("empty", $mainBoard, false);
                 $this->storeMainUrl($urlMessage);
@@ -88,7 +89,7 @@ class MainBoardsProducer extends KafkaProducer {
     
     private function loadChildMainBoards() {
         $firstUnparsed = MainBoard::getFirstUnparsed();
-        if (count($firstUnparsed)) {
+        if ($firstUnparsed) {
             $unparsedUrl = $firstUnparsed->getAttribute(MainBoard::COL_URL);
             $this->loadMainBoardsFromUrl($unparsedUrl);
 
@@ -98,16 +99,8 @@ class MainBoardsProducer extends KafkaProducer {
             $this->loadChildMainBoards();
         }
     }
-    
-    private function getNewMainBoards(string $url): array {
-        $dbData = MainBoard::getAll();
-        $all = array_map(function ($val) { return $val[MainBoard::COL_URL]; }, $dbData);
-        $fromUrl = $this->loadMainBoards($url);
-                
-        return array_diff($fromUrl, $all);
-    }
 
-    private function loadMainBoards(string $url): array {
+    protected function loadDataFromUrl(string $url): array {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         return self::getMainBoards($allBoards);
     }

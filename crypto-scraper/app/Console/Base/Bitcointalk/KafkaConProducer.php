@@ -3,15 +3,13 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Bitcointalk;
 
-use App\Console\Base\Common\StoreCrawledUrl;
 use App\Kafka\ConProducerFeatures;
 use App\Models\Kafka\UrlMessage;
 use RdKafka\Message;
 
 abstract class KafkaConProducer extends BitcointalkParser {
     use ConProducerFeatures;
-    use StoreCrawledUrl;
-
+        
     public function handle() {
         parent::handle();
 
@@ -19,7 +17,7 @@ abstract class KafkaConProducer extends BitcointalkParser {
     }
 
     protected function processInputUrl(string $mainUrl) {
-        $urls = $this->loadDataFromUrl($mainUrl);
+        $urls = $this->getNewData($mainUrl);
         $count = count($urls);
         foreach ($urls as $num => $url) {
             $outUrlMessage = new UrlMessage($mainUrl, $url, $num === $count - 1);
@@ -42,5 +40,4 @@ abstract class KafkaConProducer extends BitcointalkParser {
     }
     
     abstract protected function validateInputUrl(string $url);
-    abstract protected function loadDataFromUrl(string $url): array;
 }

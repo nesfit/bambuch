@@ -6,6 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
@@ -22,7 +23,7 @@ class BoardPagesProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::BOARD_PAGES_PRODUCER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::BOARD_PAGES_PRODUCER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -49,7 +50,7 @@ class BoardPagesProducer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::MAIN_BOARDS_TOPIC;
         $this->outputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
         $this->groupID = BitcointalkKafka::MAIN_BOARDS_LOAD_GROUP;
-        $this->serviceName = self::BOARD_PAGES_PRODUCER;
+        $this->serviceName = BitcointalkCommands::BOARD_PAGES_PRODUCER;
         $this->tableName = BoardPage::class;
     
         parent::handle();

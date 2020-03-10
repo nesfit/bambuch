@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 
 class TopicPage extends BitcointalkParser {
     /**
@@ -11,14 +12,14 @@ class TopicPage extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::RUN_TOPICS_PAGE .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::RUN_TOPICS_PAGE .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs '. self::LOAD_USER_PROFILES .' and '. self::PARSE_TOPIC_MESSAGES .' on a url.';
+    protected $description = 'Runs '. BitcointalkCommands::LOAD_USER_PROFILES .' and '. BitcointalkCommands::PARSE_TOPIC_MESSAGES .' on a url.';
 
     /**
      * Create a new command instance.
@@ -38,17 +39,21 @@ class TopicPage extends BitcointalkParser {
         $this->print = false;
         parent::handle();
 
-        $this->call(self::LOAD_USER_PROFILES, [
+        $this->call(BitcointalkCommands::LOAD_USER_PROFILES, [
             "url" => $this->url,
             "verbose" => $this->verbose,
             "dateTime" => $this->dateTime
         ]);
 
-        $this->call(self::PARSE_TOPIC_MESSAGES, [
+        $this->call(BitcointalkCommands::PARSE_TOPIC_MESSAGES, [
             "url" => $this->url,
             "verbose" => $this->verbose,
             "dateTime" => $this->dateTime
         ]);
         return 1;
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

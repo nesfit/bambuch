@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
@@ -20,7 +21,7 @@ class MainTopicsProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = self::MAIN_TOPICS_PRODUCER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::MAIN_TOPICS_PRODUCER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -47,7 +48,7 @@ class MainTopicsProducer extends KafkaConProducer {
         $this->inputTopic = BitcointalkKafka::BOARD_PAGES_TOPIC;
         $this->outputTopic = BitcointalkKafka::MAIN_TOPICS_TOPIC;
         $this->groupID = BitcointalkKafka::BOARD_PAGES_LOAD_GROUP;
-        $this->serviceName = self::MAIN_TOPICS_PRODUCER;
+        $this->serviceName = BitcointalkCommands::MAIN_TOPICS_PRODUCER;
         $this->tableName = MainTopic::class;
 
         parent::handle();
