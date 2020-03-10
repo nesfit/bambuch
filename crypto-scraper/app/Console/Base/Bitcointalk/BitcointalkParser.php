@@ -19,6 +19,7 @@ abstract class BitcointalkParser extends CryptoParser {
     
     public function handle() {
         parent::handle();
+
         $this->table = new $this->tableName();
     }
     
@@ -62,8 +63,8 @@ abstract class BitcointalkParser extends CryptoParser {
     }
     
     protected function getNewData(string $url) {
-        /** @var BitcointalkModel $table */
         $table = $this->table;
+        /** @var BitcointalkModel $table */
         $dbData = $table::getAll();
         $all = array_map(function ($val) { return $val[BitcointalkModel::COL_URL]; }, $dbData);
         $fromUrl = $this->loadDataFromUrl($url);

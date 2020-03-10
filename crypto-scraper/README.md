@@ -84,9 +84,9 @@ docker-compose -f common.yml -f dev.yml stop
 
 Insert some data into DB
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:initialize_boards
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed bitcointalk:run_main_topics
+docker-compose -f common.yml -f dev.yml run --rm seed bct:initialize_boards
+docker-compose -f common.yml -f dev.yml run --rm seed bct:run_boards 
+docker-compose -f common.yml -f dev.yml run --rm seed bct:run_main_topics
 ```
 
 Broken composer autoload

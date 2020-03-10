@@ -9,7 +9,7 @@ use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:main_topics_producer 2
+//docker-compose -f common.yml -f dev.yml run --rm test bct:main_topics_producer 2
 
 class MainTopicsProducer extends KafkaConProducer {
     use UrlValidations;

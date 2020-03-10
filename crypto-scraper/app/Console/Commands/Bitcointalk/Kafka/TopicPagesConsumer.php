@@ -15,7 +15,7 @@ use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bitcointalk:topic_pages_con_producer
+//docker-compose -f common.yml -f dev.yml run --rm test bct:topic_pages_con_producer
 
 class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;
