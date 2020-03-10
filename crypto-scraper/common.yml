@@ -47,7 +47,7 @@ services:
       
   # GRAYLOG       
   mongo:
-    image: mongo:3
+    image: 'mongo:latest'
     volumes:
       - ./docker/graylog/mongo/data/db:/data/db
   elasticsearch:
@@ -62,7 +62,7 @@ services:
         soft: -1
         hard: -1
   graylog:
-    image: graylog/graylog:3.2
+    image: 'graylog/graylog:3.2'
     environment:
       GRAYLOG_PASSWORD_SECRET: "${GRAYLOG_PASSWORD_SECRET}"
       GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"

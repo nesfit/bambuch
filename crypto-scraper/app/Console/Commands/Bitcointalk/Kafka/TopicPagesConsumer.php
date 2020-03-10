@@ -11,11 +11,12 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Console\Constants\CryptoCurrency;
 use App\Console\Constants\CommonKafka;
 use App\Models\Kafka\ParsedAddress;
+use App\Models\Pg\Bitcointalk\TopicPage;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bct:topic_pages_con_producer
+//docker-compose -f common.yml -f dev.yml run --rm test bct:topic_pages_consumer
 
 class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;
@@ -55,6 +56,7 @@ class TopicPagesConsumer extends KafkaConProducer {
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_LOAD_GROUP;
         $this->serviceName = BitcointalkCommands::TOPIC_PAGES_CONSUMER;
+        $this->tableName = TopicPage::class;
 
         parent::handle();
         
@@ -69,6 +71,12 @@ class TopicPagesConsumer extends KafkaConProducer {
                 $this->kafkaProduce($tsvData);
             }
         }
+
+        if(!TopicPage::setParsedByUrl($mainUrl)) {
+           $this->warningGraylog("Couldn't find url in DB", $mainUrl); 
+        
+        }
+
         return 1;
     }
 

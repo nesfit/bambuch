@@ -59,5 +59,11 @@ abstract class BitcointalkModel extends Model {
             ->toArray();
     }
     
+    public static function setParsedByUrl(string $url): bool {
+        return boolval(self::query()
+            ->where(self::COL_URL, $url)
+            ->update(array(self::COL_PARSED => true)));
+    }
+    
     abstract public function getTableName(): string;
 }

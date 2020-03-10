@@ -32,9 +32,7 @@ trait ProducerFeatures {
     }
     
     protected function kafkaProduce(string $message) {
-        if ($this->verbose > 1) {
-            $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
-        }
+        $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
         
         $this->topic->produce(0, 0, $message);
         $result = $this->producer->flush(10000);

@@ -8,6 +8,7 @@ use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
+use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bct:topic_pages_producer
@@ -69,6 +70,11 @@ class TopicPagesProducer extends KafkaConProducer {
 
             return self::calculateTopicPages($mainTopicId, $fromTopicId, $toTopicId);
         }
+
+        if(!MainTopic::setParsedByUrl($url)) {
+            $this->warningGraylog("Couldn't find url in DB", $url);
+        }
+
         return [$url];
     }
 

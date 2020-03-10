@@ -7,6 +7,7 @@ use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Commands\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
+use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
 //docker-compose -f common.yml -f dev.yml run --rm test bct:main_topics_producer 2
@@ -58,6 +59,11 @@ class MainTopicsProducer extends KafkaConProducer {
 
     protected function loadDataFromUrl(string $url): array {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
+        
+        if(!BoardPage::setParsedByUrl($url)) {
+            $this->warningGraylog("Couldn't find url in DB", $url);
+        }
+        
         return self::getMainTopics($allBoards);
     }
 
