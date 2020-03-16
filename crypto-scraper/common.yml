@@ -44,6 +44,25 @@ services:
       - ./docker/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
+    
+  lenses:
+    image: lensesio/lenses
+    environment:
+      LENSES_PORT: "9991"
+      LENSES_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
+      LENSES_SECURITY_USER: "${LENSES_SECURITY_USER}"
+      LENSES_SECURITY_PASSWORD: "${LENSES_SECURITY_PASSWORD}"
+      LENSES_ZOOKEEPER_HOSTS: |
+        [
+          {url:"zookeeper:2181"}
+        ]
+    ports:
+      - 9991:9991
+      - 9102:9102
+    volumes:
+      - ./license.json:/license.json
+    depends_on:
+      - kafka      
       
   # GRAYLOG       
   mongo:

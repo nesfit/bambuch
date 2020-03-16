@@ -13,6 +13,8 @@ abstract class Maintenance extends Command {
     const KAFKA_STOP = "kafka:stop";
     const GRAYLOG_START = "graylog:start";
     const GRAYLOG_STOP = "graylog:stop";
+    const LENSES_START = "lenses:start";
+    const LENSES_STOP = "lenses:stop";
     const POSTGRES_START = "postgres:start";
     const POSTGRES_STOP = "postgres:stop";
     const FETCH_WALLET_EXPLORER = "fetch:wallet_explorer";
