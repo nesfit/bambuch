@@ -11,5 +11,9 @@ abstract class BitcointalkKafka {
     public const MAIN_TOPICS_TOPIC = "btalkMainTopics";
     public const MAIN_TOPICS_LOAD_GROUP = "btalkMainTopicsGroupLoad";
     public const TOPIC_PAGES_TOPIC = "btalkTopicUrl";
-    public const TOPIC_PAGES_LOAD_GROUP = "btalkTopicUrlGroupLoad";
+    public const TOPIC_PAGES_ADDR_GROUP = "btalkTopicUrlGroupAddress";
+    public const TOPIC_PAGES_PROFILE_GROUP = "btalkTopicUrlGroupProfile";
+    public const USER_PROFILES_TOPIC = "btalkUserProfiles";
+    public const USER_PROFILES_LOAD_GROUP = "btalkUserProfilesGroup";
+    
 }
