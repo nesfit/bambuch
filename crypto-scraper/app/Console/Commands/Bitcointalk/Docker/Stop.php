@@ -43,6 +43,8 @@ class Stop extends Command {
         $this->stopModule(BitcointalkCommands::MAIN_TOPICS_PRODUCER);
         $this->stopModule(BitcointalkCommands::TOPIC_PAGES_PRODUCER);
         $this->stopModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
+        $this->stopModule(BitcointalkCommands::USER_PROFILES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::USER_PROFILES_CONSUMER);
         $this->stopModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";

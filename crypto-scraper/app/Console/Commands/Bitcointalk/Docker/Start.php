@@ -47,6 +47,8 @@ class Start extends Command {
         $this->startModule(BitcointalkCommands::MAIN_TOPICS_PRODUCER);
         $this->startModule(BitcointalkCommands::TOPIC_PAGES_PRODUCER);
         $this->startModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
+        $this->startModule(BitcointalkCommands::USER_PROFILES_PRODUCER);
+        $this->startModule(BitcointalkCommands::USER_PROFILES_CONSUMER);
         $this->startModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";
