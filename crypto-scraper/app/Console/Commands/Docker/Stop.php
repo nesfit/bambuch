@@ -35,10 +35,10 @@ class Stop extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->callModule(self::KAFKA_STOP);
         $this->callModule(self::GRAYLOG_STOP);
-        $this->callModule(self::POSTGRES_STOP);
         $this->callModule(self::LENSES_STOP);
+        $this->callModule(self::KAFKA_STOP);
+        $this->callModule(self::POSTGRES_STOP);
         return 0;
     }
 }

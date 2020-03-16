@@ -38,8 +38,8 @@ class Start extends Maintenance {
         $this->callModule(self::KAFKA_START);
         $this->callModule(self::GRAYLOG_START);
         $this->callModule(self::POSTGRES_START);
-        $this->callModule(self::FETCH_WALLET_EXPLORER);
         $this->callModule(self::LENSES_START);
+        $this->callModule(self::FETCH_WALLET_EXPLORER);
         return 0;
     }
 }
