@@ -12,13 +12,14 @@ use App\Console\Constants\CryptoCurrency;
 use App\Console\Constants\CommonKafka;
 use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Bitcointalk\TopicPage;
+use App\Models\Pg\Bitcointalk\UserProfile;
 use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bct:topic_pages_consumer
+//docker-compose -f common.yml -f dev.yml run --rm test bct:user_profiles_consumer 2
 
-class TopicPagesConsumer extends KafkaConProducer {
+class UserProfilesConsumer extends KafkaConProducer {
     use UrlValidations;
 
     const ENTITY = 'topic';
@@ -28,7 +29,7 @@ class TopicPagesConsumer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $signature = BitcointalkCommands::TOPIC_PAGES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::USER_PROFILES_CONSUMER .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -52,12 +53,11 @@ class TopicPagesConsumer extends KafkaConProducer {
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
+        $this->inputTopic = BitcointalkKafka::USER_PROFILES_TOPIC;
         $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
-        $this->groupID = BitcointalkKafka::TOPIC_PAGES_ADDR_GROUP;
-        $this->serviceName = BitcointalkCommands::TOPIC_PAGES_CONSUMER;
-        // TODO getNewData() will always return whole array so the function (neither this property) is not necessary at all
-        $this->tableName = TopicPage::class;  
+        $this->groupID = BitcointalkKafka::USER_PROFILES_LOAD_GROUP;
+        $this->serviceName = BitcointalkCommands::USER_PROFILES_CONSUMER;
+        $this->tableName = UserProfile::class;
 
         parent::handle();
         
@@ -73,7 +73,7 @@ class TopicPagesConsumer extends KafkaConProducer {
             }
         }
 
-        if(!TopicPage::setParsedByUrl($mainUrl)) {
+        if(!UserProfile::setParsedByUrl($mainUrl)) {
            $this->warningGraylog("Couldn't find url in DB", $mainUrl); 
         
         }
@@ -86,36 +86,36 @@ class TopicPagesConsumer extends KafkaConProducer {
      * @return ParsedAddress[]
      */
     protected function loadDataFromUrl(string $url): array {
-        $crawler = $this->getPageCrawler($url);
-        $title = $crawler->filter('title')->text();
-        $results = $crawler->filter('.td_headerandpost')->each(function (Crawler $node) use($title, $url) {
-            $addresses = array_keys(AddressMatcher::matchAddresses($node->html()));
-            $userInfo = $node->previousAll()->first();
-            $userName = $userInfo->filter('a')->first()->text();
-            $msgURL = $node->filter('a')->first()->attr('href');
-
-            if(count($addresses)) {
-                return array_reduce($addresses, function ($acc, $address) use ($userName, $msgURL, $title, $url) {
-                    array_push($acc,
-                        new ParsedAddress(
-                            $userName,
-                            $msgURL,
-                            $title,
-                            $url,
-                            $address,
-                            CryptoCurrency::BTC["code"],
-                            Category::CAT_1
-                        )
-                    );
-                    return $acc;
-                }, []);
-            }
-            return null;
-        });
-        return array_filter(Arr::flatten($results, 2));
+        $source = $this->getFullHost($url);
+        list($name, $address) = $this->parseProfile($url);
+        if ($name) {
+            return [
+                new ParsedAddress(
+                    $name,
+                    $url,
+                    '',
+                    $source,
+                    $address,
+                    CryptoCurrency::BTC["code"],
+                    Category::CAT_2
+                )
+            ];
+        }
+        return [];
     }
 
     protected function validateInputUrl(string $url): bool {
-        return self::pageEntityValid(self::ENTITY, $url);
+        return preg_match('/https:\/\/bitcointalk.org\/index.php\?action=profile;u=\d+$/', $url, $matches) === 1;
+    }
+
+    private function parseProfile(string $url): array {
+        $crawler = $this->getPageCrawler($url);
+        $addressNode = $crawler->filterXPath('//text()[contains(.,"Bitcoin address: ")]/../../../td[last()]')->getNode(0);
+        if ($addressNode) {
+            $name = $crawler->filterXPath('//text()[contains(.,"Name")]/../../../td[last()]')->text();
+            $address = $addressNode->nodeValue;
+            return [$name,$address];
+        }
+        return [null,null];
     }
 }

@@ -69,6 +69,7 @@ class UserProfilesProducer extends KafkaConProducer {
         return $this->getLinksFromPage($url, 'action=profile');
     }
 
+    // TODO merge with StoreCrawledUrl
     protected function storeChildUrl(UrlMessage $message) {
         $topicPage = new UserProfile();
         $topicPage->setAttribute(UserProfile::COL_URL, $message->url);

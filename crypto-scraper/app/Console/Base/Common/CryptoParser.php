@@ -145,8 +145,8 @@ class CryptoParser extends Command {
         return $response;
     }
     
-    protected function getFullHost(): string {
-        $parsedUrl = parse_url($this->url);
+    protected function getFullHost(string $url = null): string {
+        $parsedUrl = parse_url($url ?? $this->url);
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
     
