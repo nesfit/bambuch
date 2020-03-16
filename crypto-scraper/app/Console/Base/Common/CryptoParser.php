@@ -3,21 +3,25 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Models\ParsedAddress;
+use App\Models\Kafka\ParsedAddress;
 use Illuminate\Console\Command;
 use Goutte;
 use GuzzleHttp;
+use Illuminate\Log\Logger;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
-class CryptoParser extends Command {
+class CryptoParser extends Command {    
     protected $verbose = 1;
     protected $browser;
     protected $dateTime;
     protected $url;
     protected $print = true;
-    
+    protected string $serviceName = '';
+
     public function __construct() {
         parent::__construct();
         $this->browser = new Goutte\Client();
@@ -26,6 +30,11 @@ class CryptoParser extends Command {
     }
     
     public function handle() {
+        if ($this->serviceName === '') {
+            $this->error("'serviceName' property is not set!");
+            exit(0);
+        }
+        
         $this->verbose = $this->argument("verbose");
         $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $this->url = $this->hasArgument('url') ? $this->argument('url') : null;
@@ -117,7 +126,7 @@ class CryptoParser extends Command {
                         ->getBody();
 
         } catch (GuzzleHttp\Exception\GuzzleException $exception) {
-            $this->error($exception);
+            $this->errorGraylog("Failed to get DOMBody", $exception, ["url" => $url]);
             return null;
         }
     }
@@ -131,13 +140,48 @@ class CryptoParser extends Command {
         $status = $this->browser->getResponse()->getStatus();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
+            $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
         }
         return $response;
     }
     
-    protected function getFullHost(): string {
-        $parsedUrl = parse_url($this->url);
+    protected function getFullHost(string $url = null): string {
+        $parsedUrl = parse_url($url ?? $this->url);
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
+    
+    private function graylogChannel(): Logger {
+        return Log::channel('gelf');
+    }
+    
+    private function getGraylogAttrs(array $context, string $logType, $payload): array {
+        return array_merge($context, ["serviceName" => $this->serviceName, "logType" => $logType, "payload" => $payload]);
+    }
 
+    public function infoGraylog(string $message, string $logType, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $logType, $payload);
+        $this->graylogChannel()->info($message, $attrs);
+        $this->info($message);
+    }
+    
+    public function errorGraylog(string $message, Exception $e = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
+        $this->graylogChannel()->error($message, $attrs);
+        $this->error($message);
+        if ($e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    public function warningGraylog(string $message, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::WARN, $payload);
+        $this->graylogChannel()->warning($message, $attrs);
+        $this->warn($message);
+    }
+    
+    public function debugGraylog(string $message, string $logType, $payload = null, array $context = []) {
+        $attrs = $this->getGraylogAttrs($context, $logType, $payload);
+        $this->graylogChannel()->debug($message, $attrs);
+        $this->info($message);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\BoardPage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
@@ -19,14 +20,14 @@ class Boards extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::LOAD_BOARDS .' {url='. self::BITCOINTALK_URL .'} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::LOAD_BOARDS .' {url='. BitcointalkCommands::BITCOINTALK_URL .'} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads main boards and board pages from a url (or from '. self::BITCOINTALK_URL .').';
+    protected $description = 'Loads main boards and board pages from a url (or from '. BitcointalkCommands::BITCOINTALK_URL .').';
 
     /**
      * Create a new command instance.
@@ -83,7 +84,7 @@ class Boards extends BitcointalkParser {
         if ($mainBoard) {
             $mainBoardId = $mainBoard->getAttribute(MainBoard::COL_ID);
             // TODO BUG FIX: when no new board pages, no row with last=true in DB
-            BoardPage::unsetLastBoard($mainBoardId);
+            BoardPage::unsetLast($mainBoardId);
 
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
@@ -92,7 +93,7 @@ class Boards extends BitcointalkParser {
                     $newBoard = new BoardPage();
                     $newBoard->setAttribute(BoardPage::COL_URL, $page);
                     $newBoard->setAttribute(BoardPage::COL_PARSED, false);
-                    $newBoard->setAttribute(BoardPage::COL_MAIN_BOARD, $mainBoardId);
+                    $newBoard->setAttribute(BoardPage::COL_PARENT_URL, $mainBoardId);
                     $newBoard->setAttribute(BoardPage::COL_LAST, $key === $pagesCount - 1);
                     $newBoard->save();
                 }
@@ -103,7 +104,7 @@ class Boards extends BitcointalkParser {
 
             $progressBar->finish();
             print("\n");
-        } else if ($mainUrl === self::BITCOINTALK_URL) {
+        } else if ($mainUrl === BitcointalkCommands::BITCOINTALK_URL) {
             $this->printCyanLine('Peacefully ending...');
         } else {
             $this->printRedLine('Main board not found: ' . $mainUrl);
@@ -144,5 +145,9 @@ class Boards extends BitcointalkParser {
 
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

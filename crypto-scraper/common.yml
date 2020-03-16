@@ -16,31 +16,89 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     image: "crypto_scraper_laravel"
-    ports:
-      - 3000:8181
     volumes:
       - ./:/app
-    links:
-      - db
-      - kafka
-    depends_on:
-      - db
-      - kafka
 
+  # KAFKA
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     ports:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - ./docker/zookeeper:/bitnami/zookeeper
 
   kafka:
     image: 'bitnami/kafka:latest'
     ports:
       - '9092:9092'
+      - '29092:29092'
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+    volumes:
+      - ./docker/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
+    
+  lenses:
+    image: lensesio/lenses
+    environment:
+      LENSES_PORT: "9991"
+      LENSES_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
+      LENSES_SECURITY_USER: "${LENSES_SECURITY_USER}"
+      LENSES_SECURITY_PASSWORD: "${LENSES_SECURITY_PASSWORD}"
+      LENSES_ZOOKEEPER_HOSTS: |
+        [
+          {url:"zookeeper:2181"}
+        ]
+    ports:
+      - 9991:9991
+      - 9102:9102
+    volumes:
+      - ./license.json:/license.json
+    depends_on:
+      - kafka      
+      
+  # GRAYLOG       
+  mongo:
+    image: 'mongo:latest'
+    volumes:
+      - ./docker/graylog/mongo/data/db:/data/db
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  graylog:
+    image: 'graylog/graylog:3.2'
+    environment:
+      GRAYLOG_PASSWORD_SECRET: "${GRAYLOG_PASSWORD_SECRET}"
+      GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"
+      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+    volumes:
+      - ./docker/graylog/app/data/journal:/usr/share/graylog/data/journal
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp

@@ -6,8 +6,7 @@
 
 namespace App\Console\Constants;
 
-class CryptoCurrency {
-
+abstract class CryptoCurrency {
     const BTC   = ['name' => 'bitcoin', 'code' => 1, 'regex' => '/([13][a-km-zA-HJ-NP-Z1-9]{25,34})/'];
     const LTC   = ['name' => 'litecoin', 'code' => 2, 'regex' => '/([LM3][a-km-zA-HJ-NP-Z1-9]{25,34})/'];
     const DASH  = ['name' => 'dash', 'code' => 3, 'regex' => '/(X[1-9A-HJ-NP-Za-km-z]{33})/'];

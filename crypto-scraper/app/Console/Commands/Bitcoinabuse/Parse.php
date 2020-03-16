@@ -6,7 +6,7 @@ namespace App\Console\Commands\Bitcoinabuse;
 use App\Console\Constants\CryptoCurrency;
 use App\Console\Base\Common\ParserInterface;
 use App\Console\Base\Common\Utils;
-use App\Models\ParsedAddress;
+use App\Models\Kafka\ParsedAddress;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Console\Base\Common\CryptoParser;
 

@@ -4,28 +4,14 @@ declare(strict_types=1);
 namespace App\Console\Base\Bitcointalk;
 
 use App\Console\Base\Common\CryptoParser;
+use App\Console\Base\Common\StoreCrawledUrl;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BitcointalkParser extends CryptoParser {
-    /**
-     * Commands constants.
-     */
-    const BITCOINTALK = 'bitcointalk:';
-    const BITCOINTALK_URL = 'https://bitcointalk.org';
-    const RUN_BOARDS = self::BITCOINTALK . 'run_boards';
-    const RUN_MAIN_TOPICS = self::BITCOINTALK . 'run_main_topics';
-    const RUN_UPDATE_BOARDS = self::BITCOINTALK . 'run_update_boards';
-    const RUN_TOPICS_PAGE = self::BITCOINTALK . 'run_topic_page';
-    const RUN_TOPICS_PAGES = self::BITCOINTALK . 'run_topic_pages';
-    const RUN_USER_PROFILES = self::BITCOINTALK . 'run_user_profiles';
-    const LOAD_BOARDS = self::BITCOINTALK . 'load_boards';
-    const LOAD_MAIN_TOPICS = self::BITCOINTALK . 'load_main_topics';
-    const LOAD_TOPICS_PAGES = self::BITCOINTALK . 'load_topic_pages';
-    const LOAD_USER_PROFILES = self::BITCOINTALK . 'load_user_profiles';
-    const PARSE_USER_PROFILE = self::BITCOINTALK . 'parse_user_profile';
-    const PARSE_TOPIC_MESSAGES = self::BITCOINTALK . 'parse_topic_messages';
-    const TOPIC_PAGES_CONSUMER = self::BITCOINTALK . 'topic_pages_consumer';
-    const TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'topic_pages_producer';
+abstract class BitcointalkParser extends CryptoParser { 
+    use StoreCrawledUrl;
+
+    private BitcointalkModel $table;
 
     public function __construct() {
         parent::__construct();
@@ -33,6 +19,8 @@ class BitcointalkParser extends CryptoParser {
     
     public function handle() {
         parent::handle();
+
+        $this->table = new $this->tableName();
     }
     
     /**
@@ -73,4 +61,16 @@ class BitcointalkParser extends CryptoParser {
 
         return null;
     }
+    
+    protected function getNewData(string $url) {
+        $table = $this->table;
+        /** @var BitcointalkModel $table */
+        $dbData = $table::getAll();
+        $all = array_map(function ($val) { return $val[BitcointalkModel::COL_URL]; }, $dbData);
+        $fromUrl = $this->loadDataFromUrl($url);
+
+        return array_diff($fromUrl, $all);
+    }
+
+    abstract protected function loadDataFromUrl(string $url): array;
 }

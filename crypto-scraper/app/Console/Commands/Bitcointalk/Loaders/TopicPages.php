@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
@@ -19,7 +20,7 @@ class TopicPages extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::LOAD_TOPICS_PAGES .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::LOAD_TOPICS_PAGES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -59,7 +60,7 @@ class TopicPages extends BitcointalkParser {
         $mainTopic = MainTopic::getByUrl($mainUrl);
         if ($mainTopic) {
             $mainTopicId = $mainTopic->getAttribute(MainTopic::COL_ID);
-            TopicPage::unsetLastTopic($mainTopicId);
+            TopicPage::unsetLast($mainTopicId);
 
             $pagesCount = count($boardPages);
             $progressBar = $this->output->createProgressBar($pagesCount);
@@ -68,7 +69,7 @@ class TopicPages extends BitcointalkParser {
                     $topicPage = new TopicPage();
                     $topicPage->setAttribute(TopicPage::COL_URL, $page);
                     $topicPage->setAttribute(TopicPage::COL_PARSED, false);
-                    $topicPage->setAttribute(TopicPage::COL_MAIN_TOPIC, $mainTopicId);
+                    $topicPage->setAttribute(TopicPage::COL_PARENT_URL, $mainTopicId);
                     $topicPage->setAttribute(TopicPage::COL_LAST, $key === $pagesCount - 1);
                     $topicPage->save();
                 }
@@ -110,5 +111,9 @@ class TopicPages extends BitcointalkParser {
 
     public static function calculateTopicPages(int $topicId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

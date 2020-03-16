@@ -1,52 +1,51 @@
 version: "3"
-services:
-  laravel:
-    volumes:
-      - .:/app
-    working_dir: /app
-
-  producer:
-    command: php artisan bitcointalk:board_producer
+services:      
+  composer:
     image: crypto_scraper_laravel
+    entrypoint: composer
+    command: install
     volumes:
       - ./:/app
-    links:
-      - db
-      - kafka
-    depends_on:
-      - db
-      - kafka
-
-  consumer:
-#    command: php artisan bitcointalk:board_consumer
-    command: php artisan consumer:scrape scrapeGroup bitcointalkScrapes 
-    image: crypto_scraper_laravel
-    volumes:
-      - ./:/app
-    links:
-      - db
-      - kafka
-    depends_on:
-      - db
-      - kafka
       
   test:
     image: crypto_scraper_laravel
+    entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
     volumes:
       - ./:/app
     links:
-      - db
       - kafka
+      - db
     depends_on:
-      - db
       - kafka
+      - db
+      - graylog
 
   seed:
     image: crypto_scraper_laravel
+    entrypoint: php artisan
     volumes:
       - ./:/app
     links:
       - db
     depends_on:
       - db
+        
+  serve:
+    image: crypto_scraper_laravel
+    working_dir: /app
+    command: "php artisan serve --host=0.0.0.0 --port=8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/app
     
+  wallet-explorer:
+    image: crypto_scraper_laravel
+    entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+    command: fetch_wallet_explorer
+    volumes:
+      - ./:/app
+    links:
+      - db
+    depends_on:
+      - db

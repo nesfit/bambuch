@@ -3,5 +3,15 @@ services:
   migrate:
     image: crypto_scraper_laravel
     command: php artisan migrate
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+
+  seed:
+    image: crypto_scraper_laravel
+    command: php artisan db:seed
+    volumes:
+      - ./:/app
     depends_on:
       - db

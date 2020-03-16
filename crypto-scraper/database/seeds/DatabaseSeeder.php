@@ -6,6 +6,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\Pg\Category;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {

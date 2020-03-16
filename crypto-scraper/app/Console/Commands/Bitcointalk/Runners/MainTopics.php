@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Runners;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
 class MainTopics extends BitcointalkParser
@@ -13,14 +14,14 @@ class MainTopics extends BitcointalkParser
      *
      * @var string
      */
-    protected $signature = self::RUN_MAIN_TOPICS .' {verbose=1} {--force} {dateTime?}';
+    protected $signature = BitcointalkCommands::RUN_MAIN_TOPICS .' {verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs '. self::LOAD_TOPICS_PAGES .' on every unparsed main topic.';
+    protected $description = 'Runs '. BitcointalkCommands::LOAD_TOPICS_PAGES .' on every unparsed main topic.';
 
     /**
      * Create a new command instance.
@@ -47,7 +48,7 @@ class MainTopics extends BitcointalkParser
         $mainTopics = MainTopic::getAllUnParsed();
         if (count($mainTopics)) {
             foreach ($mainTopics as $mainTopic) {
-                $parsed = $this->call(self::LOAD_TOPICS_PAGES, [
+                $parsed = $this->call(BitcointalkCommands::LOAD_TOPICS_PAGES, [
                     "url" => $mainTopic->getAttribute(MainTopic::COL_URL),
                     "verbose" => $this->verbose
                 ]);
@@ -62,5 +63,9 @@ class MainTopics extends BitcointalkParser
             $this->printRedLine("No unparsed main topics found!");
             return 0;
         }
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

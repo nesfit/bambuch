@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\Models\Pg\Bitcointalk\MainTopic;
-use App\Models\Pg\Bitcointalk\BoardPage;
 
 class CreateBitcointalkMainTopicTable extends Migration
 {
@@ -18,13 +18,9 @@ class CreateBitcointalkMainTopicTable extends Migration
         Schema::create(MainTopic::TABLE, function (Blueprint $table) {
             $table->bigIncrements(MainTopic::COL_ID);
             $table->boolean(MainTopic::COL_PARSED);
+            $table->boolean(MainTopic::COL_LAST);
             $table->string(MainTopic::COL_URL, 256);
-            $table->bigInteger(MainTopic::COL_BOARD_PAGE);
-
-            $table
-                ->foreign(MainTopic::COL_BOARD_PAGE)
-                ->references(BoardPage::COL_ID)->on(BoardPage::TABLE)
-                ->onDelete('cascade');
+            $table->string(MainTopic::COL_PARENT_URL, 256);
 
             $table->timestamps();
         });

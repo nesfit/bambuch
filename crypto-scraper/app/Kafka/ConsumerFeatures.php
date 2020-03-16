@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Kafka;
 
+use App\Console\Base\Common\GraylogTypes;
 use Exception;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
@@ -18,10 +19,21 @@ trait ConsumerFeatures {
     protected Conf $config;
     
     protected function initConsumer() {
+        if (!isset($this->inputTopic)) {
+            $this->error("'inputTopic' property is not set!");
+            exit(0);
+        }
+
+        if (!isset($this->groupID)) {
+            $this->error("'groupID' property is not set!");
+            exit(0);
+        }
+        
         $this->config = $this->getConsumerConfig($this->groupID);
 
-        print "Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID . "'\n";
-
+        if ($this->verbose > 1) {
+            $this->infoGraylog("Going to read from '" . $this->inputTopic . "' in group '" . $this->groupID, GraylogTypes::INFO);
+        }
         $this->startSubscribe();
     }
 
@@ -31,7 +43,7 @@ trait ConsumerFeatures {
         try {
             $consumer->subscribe([$this->inputTopic]);
         } catch (Exception $e) {
-            print "Something wrong with consumer subscription: " . $e->getMessage();
+            $this->errorGraylog("Something wrong with consumer subscription", $e, ["inputTopic" => $this->inputTopic]);
         }
 
         try {
@@ -39,13 +51,15 @@ trait ConsumerFeatures {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
+                        $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
+                        
                         $this->handleKafkaRead($message);
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                        echo "No more messages; will wait for more\n";
+                        $this->infoGraylog('No more messages; will wait for more...', GraylogTypes::NO_DATA);
                         break;
                     case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                        echo "Timed out\n";
+                        $this->infoGraylog('Timed out!', GraylogTypes::WAITING);
                         break;
                     default:
                         throw new Exception($message->errstr(), $message->err);
@@ -53,8 +67,7 @@ trait ConsumerFeatures {
                 }
             }
         } catch (Exception $e) {
-            print "Something wrong then consuming from: " . $this->inputTopic . "\n";
-            print $e->getMessage();
+            $this->errorGraylog("Something wrong when consuming from: " . $this->inputTopic, $e);
         }
     }
     

@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\Models\Pg\Bitcointalk\BoardPage;
-use App\Models\Pg\Bitcointalk\MainBoard;
 
 class CreateBitcointalkBoardPagesTable extends Migration
 {
@@ -20,12 +20,7 @@ class CreateBitcointalkBoardPagesTable extends Migration
             $table->boolean(BoardPage::COL_PARSED);
             $table->boolean(BoardPage::COL_LAST);
             $table->string(BoardPage::COL_URL, 256);
-            $table->bigInteger(BoardPage::COL_MAIN_BOARD);
-
-            $table
-                ->foreign(BoardPage::COL_MAIN_BOARD)
-                ->references(MainBoard::COL_ID)->on(MainBoard::TABLE)
-                ->onDelete('cascade');
+            $table->string(BoardPage::COL_PARENT_URL, 256);
             
             $table->timestamps();
 

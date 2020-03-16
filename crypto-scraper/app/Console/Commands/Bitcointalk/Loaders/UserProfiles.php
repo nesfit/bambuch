@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Loaders;
 
 use App\Console\Base\Bitcointalk\BitcointalkParser;
 use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Constants\BitcointalkCommands;
 use App\Models\Pg\Bitcointalk\UserProfile;
 
 class UserProfiles extends BitcointalkParser {
@@ -15,7 +16,7 @@ class UserProfiles extends BitcointalkParser {
      *
      * @var string
      */
-    protected $signature = self::LOAD_USER_PROFILES .' {url} {verbose=1} {dateTime?}';
+    protected $signature = BitcointalkCommands::LOAD_USER_PROFILES .' {url} {verbose=1} {dateTime?}';
 
     /**
      * The console command description.
@@ -73,5 +74,9 @@ class UserProfiles extends BitcointalkParser {
 
     private static function topicPageValid(string $url): bool {
         return self::pageEntityValid('topic', $url);
+    }
+
+    protected function loadDataFromUrl(string $url): array {
+        return [];
     }
 }

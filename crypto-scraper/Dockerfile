@@ -10,7 +10,7 @@
 ##RUN ["composer", "install"]
 #
 #
-#CMD [ "php", "artisan", "bitcointalk:load_boards" ]
+#CMD [ "php", "artisan", "bct:load_boards" ]
 
 FROM php:7.4.2
 

@@ -3,19 +3,23 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\KafkaConsumer;
-use App\Console\Constants\Kafka;
+use App\Console\Base\Common\ReturnCodes;
+use App\Console\Constants\CommonCommands;
+use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
-//docker-compose -f common.yml -f dev.yml run --rm test php artisan consumer:scrape
+//docker-compose -f common.yml -f dev.yml run --rm test scraped_results_consumer
 
 class ScrapeConsumer extends KafkaConsumer {
+    use ReturnCodes;
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'consumer:scrape';
+    protected $signature = CommonCommands::SCRAPED_RESULTS_CONSUMER . '{verbose=1} {--force} {dateTime?}';
 
     /**
      * The console command description.
@@ -39,8 +43,9 @@ class ScrapeConsumer extends KafkaConsumer {
      * @return mixed
      */
     public function handle() {
-        $this->inputTopic = Kafka::SCRAPE_RESULTS_TOPIC;
-        $this->groupID = Kafka::SCRAPE_RESULTS_GROUP;
+        $this->inputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
+        $this->groupID = CommonKafka::SCRAPE_RESULTS_GROUP;
+        $this->serviceName = CommonCommands::SCRAPED_RESULTS_CONSUMER;
         
         parent::handle();
         
@@ -49,9 +54,8 @@ class ScrapeConsumer extends KafkaConsumer {
     
     protected function handleKafkaRead(Message $message) {
         list($owner, $url, $label, $source, $address, $cryptoType, $category) = explode("\t", $message->payload); 
-        print "Inserting: " . $url . "\n";
-        
-        $this->call('insert:db', [
+                
+        $success = $this->call('insert:db', [
             'owner name' => $owner,
             'url' => $url,
             'label' => $label,
@@ -60,5 +64,20 @@ class ScrapeConsumer extends KafkaConsumer {
             'crypto type' => $cryptoType,
             'category' => $category
         ]);
+        
+        switch ($success) {
+            case $this->RETURN_ALREADY_EXISTS:
+                $this->infoGraylog("Already exists", GraylogTypes::EXISTS, $url);
+                break;
+            case $this->RETURN_FAILED:
+                $this->errorGraylog("Insert failed");
+                break;
+            case $this->RETURN_NEW_IDENTITY:
+                $this->infoGraylog("New identity", GraylogTypes::STORED, $url);
+                break;
+            case $this->RETURN_NEW_ADDRESS:
+                $this->infoGraylog("New address", GraylogTypes::STORED, $url);
+                break;            
+        }
     }
 }
