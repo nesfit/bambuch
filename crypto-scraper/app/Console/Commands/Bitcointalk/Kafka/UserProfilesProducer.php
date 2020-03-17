@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
-use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
-use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Base\Bitcointalk\UrlCalculations;
+use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;

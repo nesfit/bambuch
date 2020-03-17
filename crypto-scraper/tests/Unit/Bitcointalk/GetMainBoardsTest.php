@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\Loaders\Boards as LoadBoards;
+use App\Console\Commands\Bitcointalk\Kafka\MainBoardsProducer;
 use Tests\TestCase;
 
 class GetMainBoardsTest extends TestCase
@@ -19,7 +19,7 @@ class GetMainBoardsTest extends TestCase
             'https://bitcointalk.org/index.php?board=22.0',
             'https://bitcointalk.org/index.php?board=22222.0'
         ];
-        $output = LoadBoards::getMainBoards($input);
+        $output = MainBoardsProducer::getMainBoards($input);
         $this->assertEquals($input, $output);
     }
     
@@ -35,14 +35,14 @@ class GetMainBoardsTest extends TestCase
             'https://bitcointalk.org/index.php?board=22.0',
             'https://bitcointalk.org/index.php?board=22222.0'
         ];
-        $output = LoadBoards::getMainBoards($input);
+        $output = MainBoardsProducer::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
     
     public function testEmptyBoards() {
         $input = [];
         $expected = [];
-        $output = LoadBoards::getMainBoards($input);
+        $output = MainBoardsProducer::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
     
@@ -54,7 +54,7 @@ class GetMainBoardsTest extends TestCase
         $expected = [
             'https://bitcointalk.org/index.php?board=2.0'
         ];
-        $output = LoadBoards::getMainBoards($input);
+        $output = MainBoardsProducer::getMainBoards($input);
         $this->assertEquals($expected, $output);
     }
 }
