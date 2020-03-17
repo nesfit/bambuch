@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\Loaders\Boards as LoadBoards;
+use App\Console\Commands\Bitcointalk\Kafka\BoardPagesProducer;
 use Tests\TestCase;
 
 class CalculateBoardPagesTest extends TestCase
@@ -14,7 +14,7 @@ class CalculateBoardPagesTest extends TestCase
      * @return void
      */
     public function testCorrectValues() {
-        $output = LoadBoards::calculateBoardPages(1, 0, 80);
+        $output = BoardPagesProducer::calculateBoardPages(1, 0, 80);
         $expected = [
           'https://bitcointalk.org/index.php?board=1.0',
           'https://bitcointalk.org/index.php?board=1.20',
@@ -26,7 +26,7 @@ class CalculateBoardPagesTest extends TestCase
     }
 
     public function testWrongBoundaries() {
-        $output = LoadBoards::calculateBoardPages(1, 0, 90);
+        $output = BoardPagesProducer::calculateBoardPages(1, 0, 90);
         $expected = [
           'https://bitcointalk.org/index.php?board=1.0',
           'https://bitcointalk.org/index.php?board=1.20',
@@ -38,7 +38,7 @@ class CalculateBoardPagesTest extends TestCase
     }
 
     public function testTheSameBoundaries() {
-        $output = LoadBoards::calculateBoardPages(1, 40, 40);
+        $output = BoardPagesProducer::calculateBoardPages(1, 40, 40);
         $expected = [
             'https://bitcointalk.org/index.php?board=1.40'
         ];
