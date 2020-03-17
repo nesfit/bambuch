@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
-use App\Console\Commands\Bitcointalk\Loaders\UrlCalculations;
-use App\Console\Commands\Bitcointalk\UrlValidations;
+use App\Console\Base\Bitcointalk\UrlCalculations;
+use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
@@ -74,15 +74,15 @@ class BoardPagesProducer extends KafkaConProducer {
         return self::mainEntityValid(self::ENTITY, $url);
     }
 
-    private static function getBoardPageId(string $url): ?int {
+    public static function getBoardPageId(string $url): ?int {
         return self::getEntityPageId(self::ENTITY, $url);
     }
 
-    private static function getMainBoardId(string $url): ?int {
+    public static function getMainBoardId(string $url): ?int {
         return self::getMainEntityId(self::ENTITY, $url);
     }
 
-    private static function calculateBoardPages(int $boardId, int $from, int $to): array {
+    public static function calculateBoardPages(int $boardId, int $from, int $to): array {
         return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
     }
 }
