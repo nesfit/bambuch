@@ -17,6 +17,8 @@ abstract class Maintenance extends Command {
     const LENSES_STOP = "lenses:stop";
     const POSTGRES_START = "postgres:start";
     const POSTGRES_STOP = "postgres:stop";
+    const PROXY_START = "proxy:start";
+    const PROXY_STOP = "proxy:stop";
     const FETCH_WALLET_EXPLORER = "fetch:wallet_explorer";
 
     const STOP_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "stop"];

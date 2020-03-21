@@ -19,6 +19,12 @@ services:
     volumes:
       - ./:/app
 
+  proxy:
+    image: devel.netsearch.cz:5000/selenium-proxy:latest
+    ports:
+      - "4444:4444"
+      - "8080:8080"
+
   # KAFKA
   zookeeper:
     image: 'bitnami/zookeeper:latest'
