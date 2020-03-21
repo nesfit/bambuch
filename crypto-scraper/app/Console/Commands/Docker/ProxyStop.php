@@ -4,21 +4,23 @@ declare(strict_types=1);
 namespace App\Console\Commands\Docker;
 
 use App\Console\Base\Common\Maintenance;
+use Symfony\Component\Process\Process;
 
-class Stop extends Maintenance {
+class ProxyStop extends Maintenance {
+    
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = self::STOP;
+    protected $signature = self::PROXY_STOP;
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Stop Kafka and Graylog';
+    protected $description = 'Stop proxy';
     
     /**
      * Create a new command instance.
@@ -35,11 +37,7 @@ class Stop extends Maintenance {
      * @return mixed
      */
     public function handle() {
-        $this->callModule(self::GRAYLOG_STOP);
-        $this->callModule(self::LENSES_STOP);
-        $this->callModule(self::KAFKA_STOP);
-        $this->callModule(self::POSTGRES_STOP);
-        $this->callModule(self::PROXY_STOP);
+        $this->stopModule("proxy");
         return 0;
     }
 }
