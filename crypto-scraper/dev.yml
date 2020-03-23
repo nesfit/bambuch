@@ -10,8 +10,6 @@ services:
   test:
     image: crypto_scraper_laravel
     entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
-    environment:
-      - HTTP_PROXY=proxy:8080
     volumes:
       - ./:/app
     links:

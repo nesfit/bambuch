@@ -39,7 +39,6 @@ class Stop extends Maintenance {
         $this->callModule(self::LENSES_STOP);
         $this->callModule(self::KAFKA_STOP);
         $this->callModule(self::POSTGRES_STOP);
-        $this->callModule(self::PROXY_STOP);
         return 0;
     }
 }

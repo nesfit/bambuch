@@ -135,11 +135,8 @@ class CryptoParser extends Command {
         // delete history to prevent running out of memory
         $this->browser->restart();
         // to prevent traffic overloading
-        sleep(2);
+        sleep(5);
         $response = $this->browser->request('GET', $url);
-//        $request = $this->browser->getRequest();
-//        $resp = $this->browser->getResponse()->getHeaders();
-//        var_dump($resp);
         $status = $this->browser->getResponse()->getStatus();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
