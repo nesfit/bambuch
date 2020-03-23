@@ -1,14 +1,7 @@
-
 @extends('layouts.main')
 
-@section('title', 'Page Title')
+@section('title', '')
 
-@section('sidebar')
-    @parent
-
-    <p>This is appended to the master sidebar.</p>
-@endsection
-
-@section('content')
-    <p>This is my body conten.</p>
+@section('resultTable')
+    <p>There will be result of a search.</p>
 @endsection

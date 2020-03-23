@@ -1,0 +1,6 @@
+.corvid-grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 70px 1.5fr 0.5fr 3.5fr 70px;
+}
