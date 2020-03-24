@@ -20,6 +20,14 @@
                     <span class="d-table text-secondary">Category</span>
                     <span id="category">{{ $address->category }}</span>
                 </td>
+                <td>
+                    <span class="d-table text-secondary">Created</span>
+                    <span id="created">{{ $address->created }}</span>
+                </td>
+                <td>
+                    <span class="d-table text-secondary">Updated</span>
+                    <span id="updated">{{ $address->updated }}</span>
+                </td>
             </tr>
         </tbody> 
     </table>

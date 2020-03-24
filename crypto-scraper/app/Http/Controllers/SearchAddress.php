@@ -52,6 +52,8 @@ class AddressView {
     public string $owner;
     public string $currency;
     public string $category;
+    public string $created;
+    public string $updated;
     
     public function __construct(Address $address) {
         $owner = $address->owner()->first();
@@ -61,5 +63,7 @@ class AddressView {
         $this->owner = $owner->getAttribute(Owner::COL_NAME);
         $this->currency = $currency;
         $this->category = $category;
+        $this->created = $address->getAttribute(Address::COL_CREATEDAT);
+        $this->updated = $address->getAttribute(Address::COL_UPDATEDAT);
     }
 }

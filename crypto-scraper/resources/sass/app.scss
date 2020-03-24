@@ -5,8 +5,8 @@
 @import 'variables';
 
 $theme-colors: (
-  "primary": #89a0bf,
-  "secondary": #c5c6c3
+  "primary": $primary,
+  "secondary": $secondary
 );
 
 // Bootstrap
