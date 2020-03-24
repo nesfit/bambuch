@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Address')
-@section('searchRoute', 'address')
+@section('searchRoute', $searchRoute)
 @section('searchValue', $searchValue)
 
 @section('info')

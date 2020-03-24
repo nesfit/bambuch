@@ -24,6 +24,7 @@ RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 WORKDIR /app
 COPY . /app
+RUN composer global require hirak/prestissimo
 RUN composer install
 
 #CMD php artisan serve --host=0.0.0.0 --port=8181

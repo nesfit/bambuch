@@ -10,7 +10,12 @@
             <tr>
                 <td>
                     <span class="d-table text-secondary">Owner</span>
-                    <span id="owner">{{ $address->owner }}</span>
+                    <span id="owner">
+                        @include('components.clickable', [
+                            'linkValue' => $address->owner,
+                            'linkRoute' => 'owner' 
+                        ])
+                    </span>
                 </td>
                 <td>
                     <span class="d-table text-secondary">Currency</span>

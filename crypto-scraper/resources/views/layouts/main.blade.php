@@ -25,7 +25,7 @@
             {{-- search bar --}}
             <div class="container d-flex">
                 <div class="col-12 align-self-center">
-                    <form class="form-inline" action="/search/@yield('searchRoute')">
+                    <form class="form-inline" action="/search/@yield('searchRoute', '')">
                         <input 
                             class="form-control w-100 text-center search-input" 
                             type="search" 

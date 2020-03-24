@@ -13,23 +13,18 @@ class Owner extends Model
     const COL_ID          = 'id';
     const COL_NAME        = 'name';
     const COL_PLACEHOLDER = 'placeholder';
+    const COL_CREATEDAT   = 'created_at';
+    const COL_UPDATEDAT   = 'updated_at';
 
     const TABLE           = 'owners';
     protected $table      = self::TABLE;
     protected $connection = 'pgsql';
 
     public static function getByName($name) {
-        $existing = self::query()
+        return self::query()
             ->where("name", $name)
             ->get()
             ->first();
-        if ($existing == null) {
-            $owner = new Owner();
-            $owner->name = $name;
-            $owner->save();
-            return $owner;
-        }
-        return $existing;
     }
 
     public static function getAllNames() {

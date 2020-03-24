@@ -55,7 +55,7 @@ class InsertIntoDB extends Command {
             return $this->RETURN_FAILED;
         }
 
-        $owner = Owner::getByName($ownerName);
+        $owner = Owner::getByName($ownerName); // TODO doesn't create if doesn't exists anymore!
         $category = $categoryFromText->name != Category::CAT_1 ? $categoryFromText : $this->getCategoryFromOwner($ownerName);
         $existingAddress = Address::getByAddress($address);
         
