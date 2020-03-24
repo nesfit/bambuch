@@ -2,10 +2,10 @@
   display: grid;
   height: 100vh;
   grid-template-columns: 1fr;
-  grid-template-rows: 70px 1.5fr 0.5fr 3.5fr 70px;
+  grid-template-rows: 70px 2.5fr 1fr 3.5fr 70px;
 }
 
-.result-table {
+.hidden-overflow-table {
   table-layout: fixed;
   width: 100%;
   white-space: nowrap;
@@ -16,21 +16,28 @@
     text-overflow: ellipsis;
   }
 
-  .result-timestamp {
+  .col-timestamp {
     width: 160px;
   }
 
-  .result-small {
+  .col-small {
     max-width: 80px;
     width: 15%;
   }
 
-  .result-medium {
+  .col-medium {
     width: 25%;
   }
 
-  .result-large {
+  .col-large {
     width: 40%;
   }
 }
 
+.search-input {
+  font-size: 2em !important;
+}
+
+.btn-circle {
+  border-radius: 30px;
+}

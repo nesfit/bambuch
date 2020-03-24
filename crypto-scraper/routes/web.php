@@ -17,4 +17,4 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/search/address/{address}', 'SearchAddress@get');
+Route::get('/search/address', 'SearchAddress@get');

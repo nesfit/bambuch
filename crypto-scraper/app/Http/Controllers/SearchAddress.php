@@ -6,19 +6,29 @@ use App\Models\Pg\Address;
 use App\Models\Pg\Category;
 use App\Models\Pg\Identity;
 use App\Models\Pg\Owner;
+use Illuminate\Support\Facades\Request;
 
 class SearchAddress extends Controller {
     
     
-    public function get(string $address) {
-        
+    public function get() {
+        $address = Request::input('search');
         $addressInfo = Address::getByAddress($address);
-        $identities = $addressInfo->identities()->get()->all();
         
-        $addressData = new AddressView($addressInfo);
-        $identityData = array_map(function ($item) { return new IdentityView($item); }, $identities);
-        
-        return view('address', ['identities' => $identityData, 'address' => $addressData]);
+        if ($addressInfo) {
+            $identities = $addressInfo->identities()->get()->all();
+
+            $addressData = new AddressView($addressInfo);
+            $identityData = array_map(function ($item) { return new IdentityView($item); }, $identities);
+
+            return view('address',
+                [
+                    'identities' => $identityData,
+                    'address' => $addressData,
+                    'searchValue' => $address
+                ]);
+        }
+        return view('nothing-found', ['searchValue' => $address]);
     }
 }
 
