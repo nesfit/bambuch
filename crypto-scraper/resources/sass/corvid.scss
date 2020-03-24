@@ -4,3 +4,33 @@
   grid-template-columns: 1fr;
   grid-template-rows: 70px 1.5fr 0.5fr 3.5fr 70px;
 }
+
+.result-table {
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+  
+  td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .result-timestamp {
+    width: 160px;
+  }
+
+  .result-small {
+    max-width: 80px;
+    width: 15%;
+  }
+
+  .result-medium {
+    width: 25%;
+  }
+
+  .result-large {
+    width: 40%;
+  }
+}
+

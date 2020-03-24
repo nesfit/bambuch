@@ -24,24 +24,24 @@
 @endsection
 
 @section('resultTable')
-    <table class="table table-light">
+    <table class="table table-light result-table">
         <thead>
         <tr>
-            <th scope="col">Source</th>
-            <th scope="col">URL</th>
-            <th scope="col">Label</th>
-            <th scope="col">Created</th>
-            <th scope="col">Updated</th>
+            <th class="result-small" scope="col">Source</th>
+            <th class="result-medium" scope="col">URL</th>
+            <th class="result-medium" scope="col">Label</th>
+            <th class="result-timestamp" scope="col">Created</th>
+            <th class="result-timestamp" scope="col">Updated</th>
         </tr>
         </thead>
         <tbody>
             @foreach ($identities as $item)
-                <tr class="over">
-                    <th scope="row">{{ $item->source }}</th>
-                    <td><a href="{{ $item->url }}" target="_blank">{{ $item->url }}</a></td>
-                    <td>{{ $item->label }}</td>
-                    <td>{{ $item->created }}</td>
-                    <td>{{ $item->updated }}</td>
+                <tr>
+                    <th class="result-small" scope="row">{{ $item->source }}</th>
+                    <td class="result-medium"><a href="{{ $item->url }}" target="_blank">{{ $item->url }}</a></td>
+                    <td class="result-medium">{{ $item->label }}</td>
+                    <td class="result-timestamp">{{ $item->created }}</td>
+                    <td class="result-timestamp">{{ $item->updated }}</td>
                 </tr>
             @endforeach
         </tbody>
