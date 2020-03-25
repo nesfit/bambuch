@@ -11,25 +11,35 @@ use Illuminate\Support\Facades\Request;
 class SearchOwner extends Controller {
     
     public function get() {
+        
         $ownerName = Request::input('search');
-        
-        $ownerInfo = Owner::getByName($ownerName);
-        
-        if ($ownerInfo) {
-            $addresses = $ownerInfo->addresses()->limit(20)->get()->all();
+        if (!$ownerName) {
+            $owners = Owner::query()->limit(30)->get()->all();
+            $ownersData = array_map(function ($item) { return new OwnerView($item); }, $owners);
 
-            $addressData = array_map(function ($item) { return new AddressView($item); }, $addresses);
-            $ownerData = new OwnerView($ownerInfo);
-            
-            return view('owner', [
-                'addresses' => $addressData,
-                'owner' => $ownerData,
-                'searchValue' => $ownerName
+            return view('owner-intro', [
+                'searchType' => 'owners',
+                'owners' => $ownersData
             ]);
         }
-        return view('nothing-found', [
-            'searchValue' => $ownerName,
-            'searchRoute' => 'owner'
+        
+        $ownerInfo = Owner::getByName($ownerName);
+        if (!$ownerInfo) {
+            return view('nothing-found', [
+                'searchValue' => $ownerName,
+                'searchRoute' => 'owner'
+            ]);
+            
+        }
+
+        $addresses = $ownerInfo->addresses()->limit(20)->get()->all();
+        $addressData = array_map(function ($item) { return new AddressView($item); }, $addresses);
+        $ownerData = new OwnerView($ownerInfo);
+
+        return view('owner', [
+            'addresses' => $addressData,
+            'owner' => $ownerData,
+            'searchValue' => $ownerName
         ]);
     }
 }

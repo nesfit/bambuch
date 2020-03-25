@@ -11,7 +11,15 @@
             {{-- navbar --}}
             <div class="navbar bg-primary">
                 <div class="col-3 text-left">
-                    <button class="btn-lg btn-primary"><i class="fas fa-bars"></i></button>
+                    <div class="dropdown">
+                        <button class="btn-lg btn-primary" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <a class="dropdown-item" href="/search/address">Search address</a>
+                            <a class="dropdown-item" href="/search/owner">Search owner</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-6 text-center">
                     <h1>Crypto Corvid</h1>
@@ -25,7 +33,7 @@
             {{-- search bar --}}
             <div class="container d-flex">
                 <div class="col-12 align-self-center">
-                    <form class="form-inline" action="/search/@yield('searchRoute', '')">
+                    <form class="form-inline" action="/search/@yield('searchRoute', 'unknown')">
                         <input 
                             class="form-control w-100 text-center search-input" 
                             type="search" 

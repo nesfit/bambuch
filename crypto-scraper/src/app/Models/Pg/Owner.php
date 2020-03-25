@@ -31,6 +31,13 @@ class Owner extends Model
         }, []);
     }
 
+    /**
+     * @return Owner[]
+     */
+    public static function getAll() {
+        return self::query()->get()->all();
+    }
+    
     public function addresses()
     {
         return $this->hasMany(Address::class);
