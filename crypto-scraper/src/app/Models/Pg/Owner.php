@@ -1,8 +1,5 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
 namespace App\Models\Pg;
 
@@ -20,7 +17,7 @@ class Owner extends Model
     protected $table      = self::TABLE;
     protected $connection = 'pgsql';
 
-    public static function getByName($name) {
+    public static function getByName($name): ?Owner {
         return self::query()
             ->where("name", $name)
             ->get()

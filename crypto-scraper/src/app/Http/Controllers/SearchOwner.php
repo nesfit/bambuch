@@ -16,8 +16,8 @@ class SearchOwner extends Controller {
         $ownerInfo = Owner::getByName($ownerName);
         
         if ($ownerInfo) {
-            $addresses = $ownerInfo->addresses()->get()->all();
-            
+            $addresses = $ownerInfo->addresses()->limit(20)->get()->all();
+
             $addressData = array_map(function ($item) { return new AddressView($item); }, $addresses);
             $ownerData = new OwnerView($ownerInfo);
             
