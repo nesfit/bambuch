@@ -1,4 +1,8 @@
 version: "3"
+networks:
+  default:
+    external:
+      name: crypto-scraper_default
 services:      
   composer:
     image: crypto_scraper_laravel
@@ -31,13 +35,16 @@ services:
       - db
         
   serve:
-    image: crypto_scraper_laravel
-    working_dir: /app
+    build:
+      context: ../../src/
+      dockerfile: ../docker/dev/Dockerfile
+    image: crypto_corvid_laravel
+    working_dir: /crypto-app
     command: "php artisan serve --host=0.0.0.0 --port=8000"
     ports:
       - 8000:8000
     volumes:
-      - ./:/app
+      - ../../src:/crypto-app
     
   wallet-explorer:
     image: crypto_scraper_laravel

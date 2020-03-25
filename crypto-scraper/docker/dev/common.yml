@@ -13,8 +13,8 @@ services:
   laravel:
     tty: true
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ../..
+      dockerfile: ../../Dockerfile
     image: "crypto_scraper_laravel"
     volumes:
       - ./:/app
@@ -27,7 +27,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
-      - ./docker/zookeeper:/bitnami/zookeeper
+      - ../persistent/zookeeper:/bitnami/zookeeper
 
   kafka:
     image: 'bitnami/kafka:latest'
@@ -41,7 +41,7 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
-      - ./docker/kafka:/bitnami/kafka
+      - ../persistent/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
     
@@ -68,7 +68,7 @@ services:
   mongo:
     image: 'mongo:latest'
     volumes:
-      - ./docker/graylog/mongo/data/db:/data/db
+      - ../persistent/graylog/mongo/data/db:/data/db
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
     environment:
@@ -87,7 +87,7 @@ services:
       GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"
       GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
     volumes:
-      - ./docker/graylog/app/data/journal:/usr/share/graylog/data/journal
+      - ../persistent/graylog/app/data/journal:/usr/share/graylog/data/journal
     depends_on:
       - mongo
       - elasticsearch
