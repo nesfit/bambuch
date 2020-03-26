@@ -10,7 +10,7 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
-    require('crypto-scraper/src/resources/js/bootstrap');
+    require('bootstrap');
 } catch (e) {}
 
 /**
