@@ -1,0 +1,35 @@
+version: "3"
+services:
+  migrate:
+    image: crypto_corvid_laravel
+    env_file:
+      - ../../src/.env
+    command: php artisan migrate
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ../../src:/crypto-app
+    depends_on:
+      - db
+
+  seed:
+    image: crypto_corvid_laravel
+    env_file:
+      - ../../src/.env
+    command: php artisan db:seed
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ../../src:/crypto-app
+    depends_on:
+      - db
+        
+  composer:
+    image: crypto_corvid_laravel
+    env_file:
+      - ../../src/.env
+    entrypoint: composer
+    command: install
+    volumes:
+      - ../../src:/crypto-app
+

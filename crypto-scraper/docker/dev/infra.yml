@@ -3,28 +3,9 @@ networks:
   default:
     external:
       name: crypto-scraper_default
-
-services:
-  db:
-    image: "postgres:11"
-    container_name: "crypto_scraper_pg"
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: scraper
-      POSTGRES_USER: scraper
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-  
-  laravel:
-    tty: true
-    build:
-      context: ../..
-      dockerfile: ../../Dockerfile
-    image: "crypto_scraper_laravel"
-    volumes:
-      - ./:/app
-
-  # KAFKA
+      
+services:  
+  # KAFKA  
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     ports:
@@ -49,9 +30,11 @@ services:
       - ../persistent/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
-    
+
   lenses:
     image: lensesio/lenses
+    env_file:
+      - ../../src/.env
     environment:
       LENSES_PORT: "9991"
       LENSES_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
@@ -68,12 +51,25 @@ services:
       - ./license.json:/license.json
     depends_on:
       - kafka      
-      
+
+  #  DATABASE
+  db:
+    image: "postgres:11"
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../../src/.env
+    environment:
+      POSTGRES_DB: scraper
+      POSTGRES_USER: scraper
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
   # GRAYLOG       
   mongo:
     image: 'mongo:latest'
     volumes:
       - ../persistent/graylog/mongo/data/db:/data/db
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
     environment:
@@ -85,8 +81,11 @@ services:
       memlock:
         soft: -1
         hard: -1
+
   graylog:
     image: 'graylog/graylog:3.2.3'
+    env_file:
+      - ../../src/.env
     environment:
       GRAYLOG_PASSWORD_SECRET: "${GRAYLOG_PASSWORD_SECRET}"
       GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"
