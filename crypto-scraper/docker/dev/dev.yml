@@ -1,8 +1,4 @@
 version: "3"
-networks:
-  default:
-    external:
-      name: crypto-scraper_default
 services:      
   composer:
     image: crypto_scraper_laravel
@@ -14,6 +10,8 @@ services:
   test:
     image: crypto_scraper_laravel
     entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+    environment:
+      - DB_HOST=db
     volumes:
       - ./:/app
     links:

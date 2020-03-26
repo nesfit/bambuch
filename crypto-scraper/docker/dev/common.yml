@@ -1,4 +1,9 @@
 version: "3"
+networks:
+  default:
+    external:
+      name: crypto-scraper_default
+
 services:
   db:
     image: "postgres:11"

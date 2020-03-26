@@ -30,9 +30,9 @@ Run/stop specific container
 php artisan [kafka|graylog|postgres]:[start|stop]
 ```
 
-Serve Laravel app
+Serve Laravel app - not using Docker for FE
 ```bash
-docker-compose -f common.yml -f dev.yml up -d serve
+php artisan serve --host=0.0.0.0 --port=8000
 ```
 
 ## Bitcointalk commands
