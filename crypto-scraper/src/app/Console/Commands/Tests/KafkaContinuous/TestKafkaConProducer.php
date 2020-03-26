@@ -6,7 +6,7 @@ namespace App\Console\Commands\Tests\KafkaContinuous;
 use App\Console\Base\Common\KafkaConProducer;
 use RdKafka\Message;
 
-// docker-compose -f common.yml -f dev.yml run --rm test conproducer:test
+// docker-compose -f infra.yml -f backend.yml run --rm test conproducer:test
 
 class TestKafkaConProducer extends KafkaConProducer {
 

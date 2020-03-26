@@ -12,12 +12,12 @@ docker build . -t crypto_scraper_laravel:latest
 ## Run the project
 Migrate DB tables:
 ```bash
-docker-compose -f common.yml -f migrate.yml up migrate
+docker-compose -f infra.yml -f maintenance.yml up migrate
 ```
 
 Seed DB tables:
 ```bash
-docker-compose -f common.yml -f migrate.yml up seed
+docker-compose -f infra.yml -f maintenance.yml up seed
 ```
 
 Run/stop common containers (Kafka, Zookeeper, Graylog, Postgres)
@@ -44,28 +44,28 @@ php artisan bct:start/stop
 ## Composer in Docker
 Install the dependencies
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm composer
+docker-compose -f infra.yml -f maintenance.yml run --rm composer
 ```
 
 Install new dependencies
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm composer require <package>
+docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
 ```
 
 ## Run a consumer 
 Common example
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <artisan command>
+docker-compose -f infra.yml -f backend.yml run --rm --name consumer_<name> <service> <artisan command>
 ```
 
 Consumer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test consumer:test 
+docker-compose -f infra.yml -f backend.yml run --rm test consumer:test 
 ```
 
 Producer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test producer:test 
+docker-compose -f infra.yml -f backend.yml run --rm test producer:test 
 ```
 
 ## Dev commands
@@ -84,14 +84,7 @@ Stop everything
 docker stop $(docker ps | grep crypto | awk '{print $1}')
 ```
 ```bash
-docker-compose -f common.yml -f dev.yml stop
-```
-
-Insert some data into DB
-```bash
-docker-compose -f common.yml -f dev.yml run --rm seed bct:initialize_boards
-docker-compose -f common.yml -f dev.yml run --rm seed bct:run_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed bct:run_main_topics
+docker-compose -f infra.yml -f backend.yml stop
 ```
 
 Broken composer autoload

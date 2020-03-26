@@ -12,7 +12,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f common.yml -f dev.yml run --rm test bct:main_boards_producer
+//docker-compose -f infra.yml -f backend.yml run --rm test bct:main_boards_producer
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;

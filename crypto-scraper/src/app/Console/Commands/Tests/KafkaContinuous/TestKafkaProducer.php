@@ -5,7 +5,7 @@ namespace App\Console\Commands\Tests\KafkaContinuous;
 
 use App\Console\Base\Common\KafkaProducer;
 
-// docker-compose -f common.yml -f dev.yml run --rm test producer:test
+// docker-compose -f infra.yml -f backend.yml run --rm test producer:test
 
 class TestKafkaProducer extends KafkaProducer {
 

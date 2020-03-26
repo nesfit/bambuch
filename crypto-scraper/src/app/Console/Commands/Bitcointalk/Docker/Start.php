@@ -8,10 +8,10 @@ use App\Console\Constants\CommonCommands;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-//docker-compose -f common.yml -f dev.yml run --rm --name bct_main_boards_producer test btc:main_boards_producer 2
+//docker-compose -f infra.yml -f backend.yml run --rm --name bct_main_boards_producer test btc:main_boards_producer 2
 
 class Start extends Command {
-    const COMMON_ARGS = ["docker-compose", "-f", "common.yml", "-f", "dev.yml", "run"];
+    const COMMON_ARGS = ["docker-compose", "-f", "infra.yml", "-f", "backend.yml", "run"];
     
     /**
      * The name and signature of the console command.
