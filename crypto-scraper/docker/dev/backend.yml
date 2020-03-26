@@ -6,7 +6,10 @@ networks:
 
 services:      
   scraper:
-    image: crypto_corvid_laravel
+    build:
+      context: ../../src/
+      dockerfile: ../docker/dev/Dockerfile-be
+    image: crypto_corvid_backend
     entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
     env_file:
       - ../../src/.env
@@ -20,7 +23,7 @@ services:
       - graylog
 
   wallet-explorer:
-    image: crypto_corvid_laravel
+    image: crypto_corvid_backend
     entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
     env_file:
       - ../../src/.env

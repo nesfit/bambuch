@@ -8,7 +8,7 @@ use App\Console\Constants\CommonCommands;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-//docker-compose -f infra.yml -f backend.yml run --rm --name bct_main_boards_producer test btc:main_boards_producer 2
+//docker-compose -f infra.yml -f backend.yml run --rm --name bct_main_boards_producer scraper bct:main_boards_producer 2
 
 class Start extends Command {
     const COMMON_ARGS = ["docker-compose", "-f", "infra.yml", "-f", "backend.yml", "run"];
@@ -58,7 +58,7 @@ class Start extends Command {
     private function startModule(string $module) {
         $dockerName = str_replace(":", "_", $module);
         print "Starting module: " . $dockerName . "\n";
-        $process = new Process(array_merge(self::COMMON_ARGS, ["--name", $dockerName, "test", $module, "2"]));
+        $process = new Process(array_merge(self::COMMON_ARGS, ["--name", $dockerName, "scraper", $module, "2"]));
         $process->start();
         
         sleep(5);

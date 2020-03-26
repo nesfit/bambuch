@@ -11,7 +11,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
-//docker-compose -f infra.yml -f backend.yml run --rm test bct:topic_pages_producer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_producer
 
 class TopicPagesProducer extends KafkaConProducer {
     use UrlValidations;

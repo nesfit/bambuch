@@ -16,7 +16,7 @@ use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f infra.yml -f backend.yml run --rm test bct:topic_pages_consumer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_consumer
 
 class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;

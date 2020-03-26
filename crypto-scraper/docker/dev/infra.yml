@@ -87,8 +87,6 @@ services:
     env_file:
       - ../../src/.env
     environment:
-      GRAYLOG_PASSWORD_SECRET: "${GRAYLOG_PASSWORD_SECRET}"
-      GRAYLOG_ROOT_PASSWORD_SHA2: "${GRAYLOG_ROOT_PASSWORD_SHA2}"
       GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
     volumes:
       - ../persistent/graylog/app/data/journal:/usr/share/graylog/data/journal

@@ -60,12 +60,12 @@ docker-compose -f infra.yml -f backend.yml run --rm --name consumer_<name> <serv
 
 Consumer test
 ```bash
-docker-compose -f infra.yml -f backend.yml run --rm test consumer:test 
+docker-compose -f infra.yml -f backend.yml run --rm scraper consumer:test 
 ```
 
 Producer test
 ```bash
-docker-compose -f infra.yml -f backend.yml run --rm test producer:test 
+docker-compose -f infra.yml -f backend.yml run --rm scraper producer:test 
 ```
 
 ## Dev commands

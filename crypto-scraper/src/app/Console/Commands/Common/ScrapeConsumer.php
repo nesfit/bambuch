@@ -10,7 +10,7 @@ use App\Console\Constants\CommonCommands;
 use App\Console\Constants\CommonKafka;
 use RdKafka\Message;
 
-//docker-compose -f infra.yml -f backend.yml run --rm test scraped_results_consumer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper scraped_results_consumer
 
 class ScrapeConsumer extends KafkaConsumer {
     use ReturnCodes;

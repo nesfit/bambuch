@@ -10,7 +10,7 @@ use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
-//docker-compose -f infra.yml -f backend.yml run --rm test bct:board_pages_producer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:board_pages_producer 2
 
 class BoardPagesProducer extends KafkaConProducer {
     use UrlValidations;

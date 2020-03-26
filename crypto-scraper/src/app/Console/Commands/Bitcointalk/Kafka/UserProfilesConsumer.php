@@ -17,7 +17,7 @@ use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f infra.yml -f backend.yml run --rm test bct:user_profiles_consumer 2
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:user_profiles_consumer 2
 
 class UserProfilesConsumer extends KafkaConProducer {
     use UrlValidations;

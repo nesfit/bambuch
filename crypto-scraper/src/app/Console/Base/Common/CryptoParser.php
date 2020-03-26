@@ -7,8 +7,8 @@ use App\Models\Kafka\ParsedAddress;
 use Illuminate\Console\Command;
 use Goutte;
 use GuzzleHttp;
-use Illuminate\Log\Logger;
 use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Facades\Log;
@@ -137,7 +137,7 @@ class CryptoParser extends Command {
         // to prevent traffic overloading
         sleep(5);
         $response = $this->browser->request('GET', $url);
-        $status = $this->browser->getResponse()->getStatus();
+        $status = $this->browser->getResponse()->getStatusCode();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
             $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
@@ -150,7 +150,7 @@ class CryptoParser extends Command {
         return $parsedUrl["scheme"] . "://" . $parsedUrl["host"];
     }
     
-    private function graylogChannel(): Logger {
+    private function graylogChannel(): LoggerInterface {
         return Log::channel('gelf');
     }
     
