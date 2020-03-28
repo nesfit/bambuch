@@ -11,7 +11,7 @@ use Symfony\Component\Process\Process;
 //docker-compose -f infra.yml -f backend.yml run --rm --name bct_main_boards_producer scraper bct:main_boards_producer 2
 
 class Start extends Command {
-    const COMMON_ARGS = ["docker-compose", "-f", "infra.yml", "-f", "backend.yml", "run"];
+    const COMMON_ARGS = ["docker-compose", "-f", "../docker/dev/infra.yml", "-f", "../docker/dev/backend.yml", "run"];
     
     /**
      * The name and signature of the console command.
