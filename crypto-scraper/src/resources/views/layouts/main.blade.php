@@ -53,8 +53,24 @@
             
             {{-- result data --}}
             <div class="container-lg">
-                @yield('resultTableInfo')
-                @yield('resultTable')
+                {{-- result data --}}    
+                <p class="text-secondary mb-2 ml-2">@yield('tableDescription')</p>
+
+                {{-- fixed result head --}}
+                <table class="table table-light hidden-overflow-table">
+                    <thead>
+                        @yield('headContent')
+                    </thead>
+                </table>
+
+                {{-- scrollable result body --}}
+                <div class="table-limit">
+                    <table class="table table-light hidden-overflow-table">
+                        <tbody>
+                            @yield('bodyContent')
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </body>

@@ -6,6 +6,7 @@
     </div>
 @endsection
 
-@section('resultTableInfo')
-    <span class="text-secondary">Table of available {{ $searchType }}</span>
+@section('tableDescription')
+    Table of available {{ $searchType }}
 @endsection
+
