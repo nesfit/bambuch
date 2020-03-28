@@ -36,7 +36,7 @@ class SearchOwner extends Controller {
         $addressData = array_map(function ($item) { return new AddressView($item); }, $addresses);
         $ownerData = new OwnerView($ownerInfo);
 
-        return view('owner', [
+        return view('owner-result', [
             'addresses' => $addressData,
             'owner' => $ownerData,
             'searchValue' => $ownerName

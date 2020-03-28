@@ -36,7 +36,7 @@ class SearchAddress extends Controller {
         $identityData = array_map(function ($item) { return new IdentityView($item); }, $identities);
         $addressData = new AddressView($addressInfo);
 
-        return view('address', [
+        return view('address-result', [
             'identities' => $identityData,
             'address' => $addressData,
             'searchValue' => $address
