@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Request;
 
 class SearchOwner extends Controller {
     
-    public function get() {
+    public function __invoke() {
         
         $ownerName = Request::input('search');
         if (!$ownerName) {
             $owners = Owner::query()->limit(30)->get()->all();
             $ownersData = array_map(function ($item) { return new OwnerView($item); }, $owners);
 
-            return view('owner-intro', [
+            return view('intro.owner', [
                 'searchType' => 'owners',
                 'owners' => $ownersData
             ]);
@@ -36,7 +36,7 @@ class SearchOwner extends Controller {
         $addressData = array_map(function ($item) { return new AddressView($item); }, $addresses);
         $ownerData = new OwnerView($ownerInfo);
 
-        return view('owner-result', [
+        return view('result.owner', [
             'addresses' => $addressData,
             'owner' => $ownerData,
             'searchValue' => $ownerName

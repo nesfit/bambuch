@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Request;
 
 class SearchAddress extends Controller {
     
-    public function get() {
+    public function __invoke() {
         
         $address = Request::input('search');
         if (!$address) {
             $address = Address::query()->limit(30)->get()->all();
             $addressData = array_map(function ($item) { return new AddressView($item); }, $address);
 
-            return view('address-intro', [
+            return view('intro.address', [
                 'searchType' => 'addresses',
                 'addresses' => $addressData
             ]);
@@ -36,7 +36,7 @@ class SearchAddress extends Controller {
         $identityData = array_map(function ($item) { return new IdentityView($item); }, $identities);
         $addressData = new AddressView($addressInfo);
 
-        return view('address-result', [
+        return view('result.address', [
             'identities' => $identityData,
             'address' => $addressData,
             'searchValue' => $address

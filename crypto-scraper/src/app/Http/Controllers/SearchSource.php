@@ -5,19 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Pg\Source;
 use App\Models\Views\AddressView;
 use App\Models\Views\SourceView;
-use Barryvdh\Debugbar\Facade;
 use Illuminate\Support\Facades\Request;
 
 class SearchSource extends Controller {
     
-    public function get() {
+    public function __invoke() {
 
         $source = Request::input('search');
         if (!$source) {
             $source = Source::all()->all();
             $sourceData = array_map(function ($item) { return new SourceView($item); }, $source);
 
-            return view('source-intro', [
+            return view('intro.source', [
                 'searchType' => 'sources',
                 'sources' => $sourceData
             ]);
@@ -36,7 +35,7 @@ class SearchSource extends Controller {
         $addressesData = array_map(function ($item) { return new AddressView($item); }, $addresses);
         $sourceData = new SourceView($sourceInfo);
         
-        return view('source-result', [
+        return view('result.source', [
             'addresses' => $addressesData,
             'source' => $sourceData,
             'searchValue' => $source

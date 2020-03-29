@@ -29,16 +29,6 @@ class Source extends Model
             ->first();
     }
     
-    /*
-SELECT
-  DISTINCT ad.address
-FROM identies AS id
-LEFT JOIN addresses AS ad ON id.address_id = ad.id
-WHERE
-  id.url LIKE 'https://bitcointalk.org%'
-     */
-    
-    
     public static function getAddresses(string $url) {
         return Address::query()
             ->leftJoin(
@@ -47,7 +37,7 @@ WHERE
                 '=',
                 Identity::TABLE .'.'. Identity::COL_ADDRID)
             ->where(Identity::TABLE .'.'. Identity::COL_URL, 'like', $url . '%')
-            ->limit(50)
+            ->limit(100)
             ->get(Address::TABLE .'.*')
             ->all();
     }
