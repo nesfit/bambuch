@@ -17,3 +17,4 @@ Route::view('/', 'index');
 
 Route::get('/search/address', 'SearchAddress@get');
 Route::get('/search/owner', 'SearchOwner@get');
+Route::get('/search/source', 'SearchSource@get');

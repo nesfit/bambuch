@@ -2,13 +2,15 @@
 
 @section('title', '| Owner')
 @section('searchRoute', 'owner')
-@section('searchValue', $searchValue)
 
 @section('infoContent')
     <tr>
         <td>
-            <span class="d-table text-secondary">Category</span>
-            <span id="owner">{{ $owner->category }}</span>
+            @include('components.info-item', [
+                'caption' => 'Category',
+                'value' => $owner->category
+            ])
+        </td>
     </tr>
 @endsection
 

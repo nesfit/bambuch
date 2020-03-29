@@ -115,7 +115,7 @@ class InsertIntoDB extends Command {
      * @return bool
      */
     private function newIdentity($addr_id, $newSource) {
-        $identities = Identity::getIdentitiesByAddress($addr_id);
+        $identities = Identity::getByAddress($addr_id);
         $existingIdentities = $identities->reduce(function ($acc, $identity) {
             array_push($acc, $identity->source);
             return $acc;

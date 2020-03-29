@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('searchValue', $searchValue)
+
 @section('info')
     <table class="table table-light hidden-overflow-table">
         <tbody>

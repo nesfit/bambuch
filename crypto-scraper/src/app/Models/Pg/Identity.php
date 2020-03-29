@@ -1,8 +1,5 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
 namespace App\Models\Pg;
 
@@ -27,13 +24,20 @@ class Identity extends Model
      * @param $addr_id
      * @return Identity[]
      */
-    public static function getIdentitiesByAddress($addr_id) {
+    public static function getByAddress($addr_id) {
         return self::query()
             ->where("address_id", $addr_id)
             ->get()
             ->all();
     }
 
+    public static function getByUrl(string $url) {
+        return self::query()
+            ->where(self::COL_URL, 'like', $url)
+            ->get()
+            ->all();
+    }
+    
     public static function getIdentity($source, $url, $label, $addr_id) {
         return self::query()
             ->where("source", $source)

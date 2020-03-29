@@ -2,7 +2,6 @@
 
 @section('title', '| Address')
 @section('searchRoute', 'address')
-@section('searchValue', $searchValue)
 
 @section('infoContent')
     <tbody>
@@ -17,20 +16,28 @@
                 </span>
             </td>
             <td>
-                <span class="d-table text-secondary">Currency</span>
-                <span id="currency">{{ $address->currency }}</span>
+                @include('components.info-item', [
+                    'caption' => 'Currency',
+                    'value' => $address->currency
+                ])
             </td>
             <td>
-                <span class="d-table text-secondary">Category</span>
-                <span id="category">{{ $address->category }}</span>
+                @include('components.info-item', [
+                    'caption' => 'Category',
+                    'value' => $address->category
+                ])
             </td>
             <td>
-                <span class="d-table text-secondary">Created</span>
-                <span id="created">{{ $address->created }}</span>
+                @include('components.info-item', [
+                    'caption' => 'Created',
+                    'value' => $address->created
+                ])
             </td>
             <td>
-                <span class="d-table text-secondary">Updated</span>
-                <span id="updated">{{ $address->updated }}</span>
+                @include('components.info-item', [
+                    'caption' => 'Updated',
+                    'value' => $address->updated
+                ])
             </td>
         </tr>
     </tbody>
@@ -52,7 +59,11 @@
     @foreach ($identities as $item)
         <tr>
             <th class="col-small">{{ $item->source }}</th>
-            <td class="col-medium"><a href="{{ $item->url }}" target="_blank">{{ $item->url }}</a></td>
+            <td class="col-medium">
+                @include('components.link', [
+                    'url' => $item->url 
+                ])
+            </td>
             <td class="col-medium">{{ $item->label }}</td>
             <td class="col-timestamp">{{ $item->created }}</td>
             <td class="col-timestamp">{{ $item->updated }}</td>

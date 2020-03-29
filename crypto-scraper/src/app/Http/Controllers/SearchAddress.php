@@ -18,7 +18,7 @@ class SearchAddress extends Controller {
             $addressData = array_map(function ($item) { return new AddressView($item); }, $address);
 
             return view('address-intro', [
-                'searchType' => 'address',
+                'searchType' => 'addresses',
                 'addresses' => $addressData
             ]);
         }        

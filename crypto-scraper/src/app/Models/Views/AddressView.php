@@ -21,7 +21,7 @@ class AddressView extends BaseView {
         $currency = $addressData->getAttribute(Address::COL_CRYPTO); // TODO FIX to display actual currency name NOT INTEGER
         $category = $addressData->categories()->first()->getAttribute(Category::COL_NAME); // TODO FIX display all categories
 
-        $this->owner = $owner->getAttribute(Owner::COL_NAME);
+        $this->owner = $owner ? $owner->getAttribute(Owner::COL_NAME) : 'unknown_owner';
         $this->currency = $currency;
         $this->category = $category;
         $this->address = $addressData->getAttribute(Address::COL_ADDRESS);
