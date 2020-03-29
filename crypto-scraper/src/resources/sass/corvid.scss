@@ -1,0 +1,48 @@
+.corvid-grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 70px 2fr 1fr 3fr 3fr 70px;
+}
+
+.hidden-overflow-table {
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+  
+  td, th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col-timestamp {
+    width: 160px;
+  }
+
+  .col-small {
+    max-width: 80px;
+    width: 15%;
+  }
+
+  .col-medium {
+    width: 25%;
+  }
+
+  .col-large {
+    width: 40%;
+  }
+}
+
+.search-input {
+  font-size: 2em !important;
+}
+
+.btn-circle {
+  border-radius: 30px;
+}
+
+.table-limit {
+  overflow: auto;
+  max-height: 30vh;
+}

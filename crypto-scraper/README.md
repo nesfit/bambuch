@@ -4,20 +4,32 @@ Cryptocurrency address parser made in PHP - Laravel.
 
 Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
 
-## Run project
-Migrate DB tables:
+## Build the project
 ```bash
-docker-compose -f common.yml -f migrate.yml up migrate
+docker build . -t crypto_scraper_laravel:latest
 ```
 
-Seed DB tables:
+## Run the project
+Install the dependencies
 ```bash
-docker-compose -f common.yml -f migrate.yml up seed
+docker-compose -f infra.yml -f maintenance.yml run --rm composer
 ```
 
-Run/stop common containers (Kafka, Zookeeper, Graylog, Postgres)
+Migrate DB tables
+```bash
+docker-compose -f infra.yml -f maintenance.yml up migrate
+```
+
+Seed DB tables
+```bash
+docker-compose -f infra.yml -f maintenance.yml up seed
+```
+
+Run/stop infra containers (Kafka, Zookeeper, Graylog, Postgres...)
 ```bash
 php artisan [start|stop]
+ OR
+docker-compose -f infra.yml up/stop -d
 ```
 
 Run/stop specific container
@@ -25,9 +37,9 @@ Run/stop specific container
 php artisan [kafka|graylog|postgres]:[start|stop]
 ```
 
-Serve Laravel app
+Serve Laravel app - not using Docker for FE
 ```bash
-docker-compose -f common.yml -f dev.yml up -d serve
+php artisan serve --host=0.0.0.0 --port=8000
 ```
 
 ## Bitcointalk commands
@@ -35,35 +47,33 @@ Run/stop modules
 ```bash
 php artisan bct:start/stop
 ```
+Run a module  
+```bash
+docker-compose -f infra.yml -f backend.yml run --rm scraper bct:<name>
+```
              
-## Composer in Docker
-Install the dependencies
-```bash
-docker-compose -f common.yml -f dev.yml run --rm composer
-```
-
-Install new dependencies
-```bash
-docker-compose -f common.yml -f dev.yml run --rm composer require <package>
-```
-
-## Run consumer 
+## Run a consumer 
 Common example
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm --name consumer_<name> <service> <artisan command>
+docker-compose -f infra.yml -f backend.yml run --rm --name consumer_<name> <service> <artisan command>
 ```
 
 Consumer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test consumer:test 
+docker-compose -f infra.yml -f backend.yml run --rm scraper consumer:test 
 ```
 
 Producer test
 ```bash
-docker-compose -f common.yml -f dev.yml run --rm test producer:test 
+docker-compose -f infra.yml -f backend.yml run --rm scraper producer:test 
 ```
 
 ## Dev commands
+Install new dependencies
+```bash
+docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
+```
+
 Stop all test runs
 ```bash
 docker stop $(docker ps | grep test_run | awk '{print $1}')
@@ -79,14 +89,7 @@ Stop everything
 docker stop $(docker ps | grep crypto | awk '{print $1}')
 ```
 ```bash
-docker-compose -f common.yml -f dev.yml stop
-```
-
-Insert some data into DB
-```bash
-docker-compose -f common.yml -f dev.yml run --rm seed bct:initialize_boards
-docker-compose -f common.yml -f dev.yml run --rm seed bct:run_boards 
-docker-compose -f common.yml -f dev.yml run --rm seed bct:run_main_topics
+docker-compose -f infra.yml -f backend.yml stop
 ```
 
 Broken composer autoload
