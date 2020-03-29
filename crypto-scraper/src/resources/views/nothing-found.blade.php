@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Address')
+@section('title', '| ' . ucfirst($searchRoute))
 @section('searchRoute', $searchRoute)
 @section('searchValue', $searchValue)
 

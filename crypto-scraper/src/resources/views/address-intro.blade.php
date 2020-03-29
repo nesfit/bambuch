@@ -1,6 +1,6 @@
 @extends('layouts.search-intro')
 
-@section('title', 'Addresses')
+@section('title', '| Addresses')
 @section('searchRoute', 'address')
 
 @section('headContent')

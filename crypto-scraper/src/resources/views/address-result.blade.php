@@ -1,6 +1,6 @@
 @extends('layouts.search-result')
 
-@section('title', 'Address')
+@section('title', '| Address')
 @section('searchRoute', 'address')
 @section('searchValue', $searchValue)
 

@@ -10,19 +10,26 @@ docker build . -t crypto_scraper_laravel:latest
 ```
 
 ## Run the project
-Migrate DB tables:
+Install the dependencies
+```bash
+docker-compose -f infra.yml -f maintenance.yml run --rm composer
+```
+
+Migrate DB tables
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up migrate
 ```
 
-Seed DB tables:
+Seed DB tables
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up seed
 ```
 
-Run/stop common containers (Kafka, Zookeeper, Graylog, Postgres)
+Run/stop infra containers (Kafka, Zookeeper, Graylog, Postgres...)
 ```bash
 php artisan [start|stop]
+ OR
+docker-compose -f infra.yml up/stop -d
 ```
 
 Run/stop specific container
@@ -40,18 +47,11 @@ Run/stop modules
 ```bash
 php artisan bct:start/stop
 ```
+Run a module  
+```bash
+docker-compose -f infra.yml -f backend.yml run --rm scraper bct:<name>
+```
              
-## Composer in Docker
-Install the dependencies
-```bash
-docker-compose -f infra.yml -f maintenance.yml run --rm composer
-```
-
-Install new dependencies
-```bash
-docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
-```
-
 ## Run a consumer 
 Common example
 ```bash
@@ -69,6 +69,11 @@ docker-compose -f infra.yml -f backend.yml run --rm scraper producer:test
 ```
 
 ## Dev commands
+Install new dependencies
+```bash
+docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
+```
+
 Stop all test runs
 ```bash
 docker stop $(docker ps | grep test_run | awk '{print $1}')
