@@ -101,3 +101,9 @@ php artisan cache:clear
 
 ## Additional notes
 OSX docker daemon.json location: `~/.docker/daemon.json`
+
+CRONTAB entry:
+```bash
+PATH=/usr/local/bin
+* * * * * cd ~/<proj_path>/crypto-scraper/src && php artisan schedule:run >/tmp/cron.stdout.log 2>/tmp/cron.stderr.log
+```

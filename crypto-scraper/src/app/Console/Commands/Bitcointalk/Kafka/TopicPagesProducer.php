@@ -32,7 +32,7 @@ class TopicPagesProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Send topics pages into Kafka';
+    protected $description = BitcointalkCommands::TOPIC_PAGES_PRODUCER_DESC;
 
     /**
      * Create a new command instance.

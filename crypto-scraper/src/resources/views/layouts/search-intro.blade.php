@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.search')
 
 @section('info')
     <div class="container text-center">
@@ -9,4 +9,3 @@
 @section('tableDescription')
     Table of available {{ $searchType }}
 @endsection
-

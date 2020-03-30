@@ -25,7 +25,7 @@ services:
       - db
         
   composer:
-    image: crypto_corvid_laravel
+    image: crypto_corvid_backend
     env_file:
       - ../../src/.env
     entrypoint: composer

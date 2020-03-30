@@ -12,7 +12,7 @@ use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:main_boards_producer
+//docker-compose -f ../docker/dev/infra.yml -f ../docker/dev/backend.yml run --rm scraper bct:main_boards_producer 2
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;
@@ -34,7 +34,7 @@ class MainBoardsProducer extends KafkaProducer {
      *
      * @var string
      */
-    protected $description = 'Send main boards into kafka';
+    protected $description = BitcointalkCommands::MAIN_BOARDS_PRODUCER_DESC;
 
     /**
      * Create a new command instance.

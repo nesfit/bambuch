@@ -29,4 +29,13 @@ abstract class BitcointalkCommands {
 
     const START = self::BITCOINTALK . 'start';
     const STOP = self::BITCOINTALK . 'stop';
+
+
+    const MAIN_BOARDS_PRODUCER_DESC = 'Scrapes main and child boards starting from index.';
+    const BOARD_PAGES_PRODUCER_DESC = 'Scrapes main boards and extract board pages.';
+    const MAIN_TOPICS_PRODUCER_DESC = 'Loads main topics from board page.';
+    const TOPIC_PAGES_PRODUCER_DESC = 'Loads topic pages from main topics.';
+    const TOPIC_PAGES_CONSUMER_DESC = 'Scrapes topic pages and extracts metadata.';
+    const USER_PROFILES_PRODUCER_DESC = 'Scrapes topic pages and extracts users.';
+    const USER_PROFILES_CONSUMER_DESC = 'Scrapes user profiles and extracts addresses.';
 }
