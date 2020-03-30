@@ -59,13 +59,25 @@ class MainBoardsProducer extends KafkaProducer {
         parent::handle();
         
         /**
+         * set all to unparsed
          * get unparsed from DB
          * get all from url
          * subtract the arrays
          * insert the result
          */
+        MainBoard::setParsedToAll(false);
         $this->loadMainBoardsFromUrl($this->url);
         $this->loadChildMainBoards();
+
+        /**
+         * All main boards are loaded in DB.
+         * Send all into Kafka => enable re-scraping in order to get new board pages.
+         */
+        $allMainBoards = MainBoard::getAll();
+        foreach ($allMainBoards as $mainBoard) {
+            $urlMessage = new UrlMessage("empty", $mainBoard, false);
+            $this->kafkaProduce($urlMessage->encodeData());
+        }
         
         return 0;
     }

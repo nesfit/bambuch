@@ -5,6 +5,7 @@ namespace App\Console\Base\Bitcointalk;
 
 use App\Kafka\ConProducerFeatures;
 use App\Models\Kafka\UrlMessage;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use RdKafka\Message;
 
 abstract class KafkaConProducer extends BitcointalkParser {
@@ -19,17 +20,30 @@ abstract class KafkaConProducer extends BitcointalkParser {
     protected function processInputUrl(string $mainUrl) {
         $urls = $this->getNewData($mainUrl);
         $count = count($urls);
+        
+//        if ($count) {
         foreach ($urls as $num => $url) {
-            $outUrlMessage = new UrlMessage($mainUrl, $url, $num === $count - 1);
+            $last = $num === $count - 1;
+            if ($last) {
+                /**
+                 * @var $table BitcointalkModel
+                 */
+                $table = new $this->tableName();
+                $table::unsetLast($mainUrl);
+            }
+            $outUrlMessage = new UrlMessage($mainUrl, $url, $last);
             $this->storeChildUrl($outUrlMessage);
             $this->kafkaProduce($outUrlMessage->encodeData());
-        }
+        }            
+//        }
     }
     
     protected function handleKafkaRead(Message $message) {
         $inUrlMessage = UrlMessage::decodeData($message->payload);
         $mainUrl = $inUrlMessage->url;
 
+        // TODO check if the scraped url IS UNPARSED => SHOULD BE!
+        
         if ($this->validateInputUrl($mainUrl)) {
             $this->processInputUrl($mainUrl);
             return 0;

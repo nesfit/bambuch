@@ -8,6 +8,8 @@ use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
+use App\Models\Kafka\UrlMessage;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
@@ -68,6 +70,18 @@ class TopicPagesProducer extends KafkaConProducer {
             $fromTopicId = self::getTopicPageId($url);
             $toTopicId = self::getTopicPageId($maxTopicPage);
 
+            /**
+             * Last topic page has to be re-scraped again for possible new messages.
+             */
+            $lastTopicPage = TopicPage::getLast($url);
+            // TODO should always get one => LOG if not
+            if ($lastTopicPage) {
+                TopicPage::unparseLast($url);
+                $lastUrl = $lastTopicPage->getAttribute(BitcointalkModel::COL_URL);
+                $outUrlMessage = new UrlMessage($url, $lastUrl, true);
+                $this->kafkaProduce($outUrlMessage->encodeData());
+            }
+            
             return self::calculateTopicPages($mainTopicId, $fromTopicId, $toTopicId);
         }
 
