@@ -6,7 +6,7 @@
         <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
-        <div class="corvid-grid-container">
+        <div class="main-grid-container">
         
             {{-- navbar --}}
             <div class="navbar bg-primary">
