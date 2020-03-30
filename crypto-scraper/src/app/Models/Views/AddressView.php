@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace App\Models\Views;
 
+use App\Console\Constants\CryptoCurrency;
 use App\Models\Pg\Address;
 use App\Models\Pg\Category;
 use App\Models\Pg\Owner;
-use Carbon\Carbon;
 
 class AddressView extends BaseView {
     public string $owner;
-    public int $currency;
+    public string $currency;
     public string $category;
     public string $created;
     public string $updated;
@@ -22,7 +22,7 @@ class AddressView extends BaseView {
         $category = $addressData->categories()->first()->getAttribute(Category::COL_NAME); // TODO FIX display all categories
 
         $this->owner = $owner ? $owner->getAttribute(Owner::COL_NAME) : 'unknown_owner';
-        $this->currency = $currency;
+        $this->currency = CryptoCurrency::getShortcut($currency);
         $this->category = $category;
         $this->address = $addressData->getAttribute(Address::COL_ADDRESS);
         $this->created = $addressData->getAttribute(Address::COL_CREATEDAT)->format(self::FORMAT_MINUTES);
