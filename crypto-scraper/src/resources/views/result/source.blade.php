@@ -21,10 +21,10 @@
 @section('headContent')
     <tr>
         <th class="col-medium">Address</th>
-        <th class="col-small">Category</th>
-        <th class="col-small">Currency</th>
-        <th class="col-timestamp">Created</th>
-        <th class="col-timestamp">Updated</th>
+        <th class="col-small text-center">Category</th>
+        <th class="col-small text-center">Currency</th>
+        <th class="col-timestamp text-center">Created</th>
+        <th class="col-timestamp text-center">Updated</th>
     </tr>
 @endsection
 
@@ -37,10 +37,10 @@
                     'linkRoute' => 'address' 
                 ])
             </th>
-            <td class="col-small">{{ $address->category }}</td>
-            <td class="col-small">{{ $address->currency }}</td>
-            <td class="col-timestamp">{{ $address->created }}</td>
-            <td class="col-timestamp">{{ $address->updated }}</td>
+            <td class="col-small text-center">{{ $address->category }}</td>
+            <td class="col-small text-center">{{ $address->currency }}</td>
+            <td class="col-timestamp text-center">{{ $address->created }}</td>
+            <td class="col-timestamp text-center">{{ $address->updated }}</td>
         </tr>
     @endforeach
 @endsection

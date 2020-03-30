@@ -21,3 +21,5 @@ repos:
     hooks:
       - id: php-strict-types
         files: \.(php)$
+        exclude: .*blade.php$
+
