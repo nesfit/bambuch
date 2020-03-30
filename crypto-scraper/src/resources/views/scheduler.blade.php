@@ -28,12 +28,7 @@
 
         {{-- scrollable result body --}}
         <div class="table-limit">
-            <form method="post" id="schedule_form" action="/scheduler/make">@csrf</form>
-            <table class="table table-light hidden-overflow-table">
-                <tbody>
-                    @each('components.task', $tasks, 'task')
-                </tbody>
-            </table>
+            @each('components.task', $tasks, 'task')
         </div>
     </div>
 @endsection

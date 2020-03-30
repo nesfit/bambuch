@@ -16,8 +16,8 @@ class CreateTasksTable extends Migration {
         Schema::create(Task::TABLE, function (Blueprint $table) {
             $table->id(Task::COL_ID);
             $table->string(Task::COL_NAME, 63);
-            $table->string(Task::COL_FREQ, 63)->nullable();
-            $table->string(Task::COL_STARTING, 63)->nullable();
+            $table->string(Task::COL_FREQ, 63);
+            $table->string(Task::COL_STARTING, 63);
             $table->string(Task::COL_DESC, 255);
         });
     }

@@ -1,17 +1,16 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Models\Pg\Task;
 use App\Models\Views\TaskView;
-use Barryvdh\Debugbar\Facade;
 use Illuminate\Support\Facades\Request;
 
 class Scheduler extends Controller {
     
     public function get() {
-        $tasks = Task::all()->all();
+        $tasks = Task::getOrdered();
         $taskData = array_map(function ($item) { return new TaskView($item); }, $tasks);
 
         return view('scheduler', [
@@ -20,13 +19,15 @@ class Scheduler extends Controller {
     }
     
     public function make() {
-        ['_token' => $token, 'frequency' => $frequency, 'starting' => $starting, 'name' => $name] = Request::all();
+        ['_token' => $token, 'frequency' => $frequency, 'starting' => $starting, 'name' => $name] = Request::post();
         
-        Facade::debug($frequency);
-        Facade::debug($starting);
-        Facade::debug($name);
+        $task = Task::getByName($name);
+        if ($task && $starting) {
+            $task->setAttribute(Task::COL_FREQ, $frequency);
+            $task->setAttribute(Task::COL_STARTING, $starting);
+            $task->save();
+        }
 
-        
         return redirect('/scheduler');
     }
 }

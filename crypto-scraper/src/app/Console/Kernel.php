@@ -24,8 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+//         $schedule
+//             ->exec('docker-compose -f ../docker/dev/infra.yml -f ../docker/dev/backend.yml run --rm scraper bct:main_boards_producer 2')
+//             ->everyMinute()
+//             ->runInBackground()
+//             ->storeOutput();
     }
 
     /**
