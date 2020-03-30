@@ -82,4 +82,14 @@ class Task extends Model {
             ->get()
             ->all();
     }
+
+    /**
+     * @return Task[]
+     */
+    public static function getEnabled() {
+        return self::query()
+            ->where(self::COL_FREQ, '!=', TaskConstants::NONE)
+            ->get()
+            ->all();
+    }
 }

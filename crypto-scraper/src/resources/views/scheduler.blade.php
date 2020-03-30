@@ -32,9 +32,3 @@
         </div>
     </div>
 @endsection
-
-
-{{--<div class="form-group">--}}
-{{--    <label for="exampleFormControlSelect1">Example select</label>--}}
-{{--    --}}
-{{--</div>--}}
