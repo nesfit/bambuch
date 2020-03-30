@@ -16845,13 +16845,23 @@ readers do not read off random characters that represent icons */
   border-radius: 30px;
 }
 
-.table-limit {
+.center-line td,
+.center-line th {
+  line-height: 2.5em;
+}
+
+.table-limit-30 {
   overflow: auto;
   max-height: 30vh;
 }
 
-.center-line td,
-.center-line th {
-  line-height: 2.5em;
+.table-limit-40 {
+  overflow: auto;
+  max-height: 40vh;
+}
+
+.table-limit-50 {
+  overflow: auto;
+  max-height: 50vh;
 }
 

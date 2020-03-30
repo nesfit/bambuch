@@ -42,13 +42,17 @@
   border-radius: 30px;
 }
 
-.table-limit {
-  overflow: auto;
-  max-height: 30vh;
-}
-
 .center-line {
   td, th {
     line-height: 2.5em;
+  }
+}
+
+
+$limits: (30, 40, 50);
+@each $limit in $limits {
+  .table-limit-#{$limit} {
+    overflow: auto;
+    max-height: #{$limit}vh;
   }
 }

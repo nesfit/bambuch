@@ -27,7 +27,7 @@
         </table>
 
         {{-- scrollable result body --}}
-        <div class="table-limit">
+        <div class="table-limit-50">
             @each('components.task', $tasks, 'task')
         </div>
     </div>

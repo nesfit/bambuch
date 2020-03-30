@@ -36,7 +36,7 @@
         </table>
 
         {{-- scrollable result body --}}
-        <div class="table-limit">
+        <div class="table-limit-30">
             <table class="table table-light hidden-overflow-table">
                 <tbody>
                     @yield('bodyContent')
