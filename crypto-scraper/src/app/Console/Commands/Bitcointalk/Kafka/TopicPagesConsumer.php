@@ -35,7 +35,7 @@ class TopicPagesConsumer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Load topic page from kafka and scrape it.';
+    protected $description = BitcointalkCommands::TOPIC_PAGES_CONSUMER_DESC;
 
     /**
      * Create a new command instance.

@@ -30,7 +30,7 @@ class BoardPagesProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Load board pages from main boards.';
+    protected $description = BitcointalkCommands::BOARD_PAGES_PRODUCER_DESC;
 
     /**
      * Create a new command instance.

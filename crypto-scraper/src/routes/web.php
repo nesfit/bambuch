@@ -18,3 +18,6 @@ Route::redirect('/', '/search/address');
 Route::get('/search/address', 'SearchAddress');
 Route::get('/search/owner', 'SearchOwner');
 Route::get('/search/source', 'SearchSource');
+
+Route::get('/scheduler', 'Scheduler@get');
+Route::post('/scheduler/make', 'Scheduler@make');

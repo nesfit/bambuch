@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.search')
 
 @section('searchValue', $searchValue)
 

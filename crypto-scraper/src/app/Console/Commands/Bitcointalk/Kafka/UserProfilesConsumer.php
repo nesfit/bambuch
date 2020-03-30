@@ -36,7 +36,7 @@ class UserProfilesConsumer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Load topic page from kafka and scrape it.';
+    protected $description = BitcointalkCommands::USER_PROFILES_CONSUMER_DESC;
 
     /**
      * Create a new command instance.

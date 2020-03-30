@@ -9,9 +9,8 @@ use App\Models\Views\OwnerView;
 use Illuminate\Support\Facades\Request;
 
 class SearchOwner extends Controller {
-    
+
     public function __invoke() {
-        
         $ownerName = Request::input('search');
         if (!$ownerName) {
             $owners = Owner::query()->limit(30)->get()->all();

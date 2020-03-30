@@ -29,7 +29,7 @@ class MainTopicsProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Load main topics from board page.';
+    protected $description = BitcointalkCommands::MAIN_TOPICS_PRODUCER_DESC;
 
     /**
      * Create a new command instance.

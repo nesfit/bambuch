@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Request;
 class SearchAddress extends Controller {
     
     public function __invoke() {
-        
         $address = Request::input('search');
         if (!$address) {
             $address = Address::query()->limit(30)->get()->all();

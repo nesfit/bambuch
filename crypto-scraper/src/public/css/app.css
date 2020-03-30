@@ -16850,3 +16850,8 @@ readers do not read off random characters that represent icons */
   max-height: 30vh;
 }
 
+.center-line td,
+.center-line th {
+  line-height: 2.5em;
+}
+

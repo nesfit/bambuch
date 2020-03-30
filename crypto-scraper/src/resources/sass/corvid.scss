@@ -46,3 +46,9 @@
   overflow: auto;
   max-height: 30vh;
 }
+
+.center-line {
+  td, th {
+    line-height: 2.5em;
+  }
+}

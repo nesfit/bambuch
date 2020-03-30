@@ -32,7 +32,7 @@ class UserProfilesProducer extends KafkaConProducer {
      *
      * @var string
      */
-    protected $description = 'Send topics pages into Kafka';
+    protected $description = BitcointalkCommands::USER_PROFILES_PRODUCER_DESC;
 
     /**
      * Create a new command instance.
