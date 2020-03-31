@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Kafka;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
 //docker-compose -f ../docker/dev/infra.yml -f ../docker/dev/backend.yml run --rm scraper bct:main_boards_producer 2
@@ -66,6 +68,7 @@ class MainBoardsProducer extends KafkaProducer {
          * insert the result
          */
         MainBoard::setParsedToAll(false);
+        $this->infoGraylog("Setting all to unparsed", GraylogTypes::INFO);
         $this->loadMainBoardsFromUrl($this->url);
         $this->loadChildMainBoards();
 
@@ -75,7 +78,7 @@ class MainBoardsProducer extends KafkaProducer {
          */
         $allMainBoards = MainBoard::getAll();
         foreach ($allMainBoards as $mainBoard) {
-            $urlMessage = new UrlMessage("empty", $mainBoard, false);
+            $urlMessage = new UrlMessage("empty", $mainBoard[BitcointalkModel::COL_URL], false);
             $this->kafkaProduce($urlMessage->encodeData());
         }
         
@@ -85,10 +88,14 @@ class MainBoardsProducer extends KafkaProducer {
     private function loadMainBoardsFromUrl(string $url) {
         if (self::mainBoardValid($url)) {
             $mainBoards = $this->getNewData($url);
-            foreach ($mainBoards as $mainBoard) {
-                $urlMessage = new UrlMessage("empty", $mainBoard, false);
-                $this->storeMainUrl($urlMessage);
-                $this->kafkaProduce($urlMessage->encodeData());
+            if ($mainBoards) {
+                foreach ($mainBoards as $mainBoard) {
+                    $urlMessage = new UrlMessage("empty", $mainBoard, false);
+                    $this->storeMainUrl($urlMessage);
+                    $this->kafkaProduce($urlMessage->encodeData());
+                }
+            } else {
+                $this->infoGraylog("No new main boards", GraylogTypes::NO_DATA);
             }
             
             return 0;

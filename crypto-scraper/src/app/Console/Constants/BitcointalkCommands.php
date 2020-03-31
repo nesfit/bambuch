@@ -21,7 +21,7 @@ abstract class BitcointalkCommands {
 
     const MAIN_BOARDS_PRODUCER = self::BITCOINTALK . 'main_boards_producer';
     const BOARD_PAGES_PRODUCER = self::BITCOINTALK . 'board_pages_producer';
-    const ALL_MAIN_TOPICS_PRODUCER = self::BITCOINTALK . 'un_board_pages_producer';
+    const ALL_MAIN_TOPICS_PRODUCER = self::BITCOINTALK . 'all_board_pages_producer';
     const MAIN_TOPICS_PRODUCER = self::BITCOINTALK . 'main_topics_producer';
     const TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'topic_pages_producer';
     const TOPIC_PAGES_CONSUMER = self::BITCOINTALK . 'topic_pages_consumer';
