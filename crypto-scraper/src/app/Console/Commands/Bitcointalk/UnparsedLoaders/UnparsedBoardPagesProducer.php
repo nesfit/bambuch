@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Kafka;
+namespace App\Console\Commands\Bitcointalk\UnparsedLoaders;
 
 use App\Console\Base\Bitcointalk\UnparsedProducer;
 use App\Console\Constants\BitcointalkCommands;

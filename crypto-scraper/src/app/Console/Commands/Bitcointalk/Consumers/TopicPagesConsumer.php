@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Kafka;
+namespace App\Console\Commands\Bitcointalk\Consumers;
 
 use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;

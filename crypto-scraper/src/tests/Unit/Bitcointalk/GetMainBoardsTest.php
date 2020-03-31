@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\Kafka\MainBoardsProducer;
+use App\Console\Commands\Bitcointalk\Producers\MainBoardsProducer;
 use Tests\TestCase;
 
 class GetMainBoardsTest extends TestCase

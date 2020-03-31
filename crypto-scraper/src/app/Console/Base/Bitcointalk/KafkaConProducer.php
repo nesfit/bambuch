@@ -21,7 +21,6 @@ abstract class KafkaConProducer extends BitcointalkParser {
         $urls = $this->getNewData($mainUrl);
         $count = count($urls);
         
-//        if ($count) {
         foreach ($urls as $num => $url) {
             $last = $num === $count - 1;
             if ($last) {
@@ -35,7 +34,6 @@ abstract class KafkaConProducer extends BitcointalkParser {
             $this->storeChildUrl($outUrlMessage);
             $this->kafkaProduce($outUrlMessage->encodeData());
         }            
-//        }
     }
     
     protected function handleKafkaRead(Message $message) {
