@@ -16877,3 +16877,15 @@ readers do not read off random characters that represent icons */
   max-height: 50vh;
 }
 
+.strict-vh-40 {
+  height: 40vh;
+}
+
+.strict-vh-50 {
+  height: 50vh;
+}
+
+.strict-vh-90 {
+  height: 90vh;
+}
+
