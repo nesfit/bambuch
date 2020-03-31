@@ -49,8 +49,8 @@
     <tr>
         <th class="col-medium">URL</th>
         <th class="col-medium">Label</th>
-        <th class="col-timestamp text-center">Created</th>
-        <th class="col-timestamp text-center">Updated</th>
+        <th class="col-timestamp">Created</th>
+        <th class="col-timestamp">Updated</th>
         <th class="col-small text-center">Show DOM</th>
     </tr>
 @endsection
@@ -63,9 +63,9 @@
                     'url' => $item->url 
                 ])
             </td>
-            <td class="col-medium">{{ $item->label }}</td>
-            <td class="col-timestamp text-center">{{ $item->created }}</td>
-            <td class="col-timestamp text-center">{{ $item->updated }}</td>
+            <td class="col-medium ">{{ $item->label }}</td>
+            <td class="col-timestamp">{{ $item->created }}</td>
+            <td class="col-timestamp">{{ $item->updated }}</td>
             <td class="col-small text-center">
                 @include('components.modal')
                 @include('components.modal-button')

@@ -20,7 +20,7 @@
 
 @section('headContent')
     <tr>
-        <th class="col-medium">Address</th>
+        <th class="col-medium text-center">Address</th>
         <th class="col-small text-center">Category</th>
         <th class="col-small text-center">Currency</th>
         <th class="col-timestamp text-center">Created</th>
@@ -31,7 +31,7 @@
 @section('bodyContent')
     @foreach ($addresses as $address)
         <tr>
-            <th class="col-medium">
+            <th class="col-medium text-center">
                 @include('components.clickable', [
                     'linkValue' => $address->address,
                     'linkRoute' => 'address' 
