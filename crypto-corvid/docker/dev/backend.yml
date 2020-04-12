@@ -2,7 +2,7 @@ version: "3"
 networks:
   default:
     external:
-      name: crypto-scraper_default
+      name: crypto-corvid_default
 
 services:      
   scraper:
