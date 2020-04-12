@@ -1,6 +1,8 @@
 # Crypto Corvid
 
-![logo](assets/logo.png)
+<p align="center">
+  <img src="assets/logo.png">
+</p>
 
 Cryptocurrency address parser made in PHP - Laravel.
 
