@@ -1,8 +1,10 @@
 # Crypto Corvid
 
-![logo](assets/logo.png)
+<p align="center">
+  <img src="assets/logo.png">
+</p>
 
-Cryptocurrency address parser made in PHP - Laravel.
+Crypto Corvid is a platform for collecting and displaying metadata about cryptocurrency addresses. It is written in PHP - Laravel and uses Apache Kafka for communication between particular modules running in Docker containers.
 
 Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
 
