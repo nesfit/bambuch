@@ -1,4 +1,4 @@
-# Crypto parser
+# Crypto Corvid
 
 Cryptocurrency address parser made in PHP - Laravel.
 
