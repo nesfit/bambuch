@@ -1,8 +1,11 @@
-# Crypto parser
+# Crypto Corvid
+
+![logo](assets/logo.png)
 
 Cryptocurrency address parser made in PHP - Laravel.
 
 Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
+
 
 ## Build the project
 ```bash
@@ -105,5 +108,5 @@ OSX docker daemon.json location: `~/.docker/daemon.json`
 CRONTAB entry:
 ```bash
 PATH=/usr/local/bin
-* * * * * cd ~/<proj_path>/crypto-scraper/src && php artisan schedule:run >/tmp/cron.stdout.log 2>/tmp/cron.stderr.log
+* * * * * cd ~/<proj_path>/crypto-corvid/src && php artisan schedule:run >/tmp/cron.stdout.log 2>/tmp/cron.stderr.log
 ```

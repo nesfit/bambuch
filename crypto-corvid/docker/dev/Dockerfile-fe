@@ -2,9 +2,9 @@
 #
 #COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 #
-#COPY ./ /crypto-scraper
+#COPY ./ /crypto-corvid
 #
-#WORKDIR /crypto-scraper
+#WORKDIR /crypto-corvid
 #
 #
 ##RUN ["composer", "install"]
