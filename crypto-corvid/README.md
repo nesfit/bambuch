@@ -1,8 +1,11 @@
 # Crypto Corvid
 
+![logo](assets/logo.png)
+
 Cryptocurrency address parser made in PHP - Laravel.
 
 Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
+
 
 ## Build the project
 ```bash
