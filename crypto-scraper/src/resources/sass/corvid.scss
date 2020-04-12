@@ -68,3 +68,10 @@ $limits: (30, 40, 50);
     max-height: #{$limit}vh;
   }
 }
+
+$vhs: (40, 50, 90);
+@each $vh in $vhs {
+  .strict-vh-#{$vh} {
+    height: #{$vh}vh;
+  }
+}

@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Kafka;
+namespace App\Console\Commands\Bitcointalk\Producers;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\BitcointalkKafka;
+use App\Models\Kafka\UrlMessage;
+use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
 //docker-compose -f infra.yml -f backend.yml run --rm scraper bct:board_pages_producer 2
@@ -65,6 +67,18 @@ class BoardPagesProducer extends KafkaConProducer {
             $fromBoardId = self::getBoardPageId($url);
             $toBoardId = self::getBoardPageId($maxBoardPage);
 
+            /**
+             * Last board page has to be re-scraped again for possible new main topics.
+             */
+            $lastBoardPage = BoardPage::getLast($url);
+            // TODO should always get one => LOG if not
+            if ($lastBoardPage) {
+                BoardPage::unparseLast($url);
+                $lastUrl = $lastBoardPage->getAttribute(BitcointalkModel::COL_URL);
+                $outUrlMessage = new UrlMessage($url, $lastUrl, true);
+                $this->kafkaProduce($outUrlMessage->encodeData());
+            }
+            
             return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);
         }
         return [$url];

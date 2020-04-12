@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,5 @@ Route::get('/search/source', 'SearchSource');
 
 Route::get('/scheduler', 'Scheduler@get');
 Route::post('/scheduler/make', 'Scheduler@make');
+
+Route::get('loader/dom/{id}', 'ModalDOM');

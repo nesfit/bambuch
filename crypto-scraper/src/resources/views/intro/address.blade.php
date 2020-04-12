@@ -5,8 +5,8 @@
 
 @section('headContent')
     <tr>
-        <th class="col-small">Owner</th>
-        <th class="col-medium">Address</th>
+        <th class="col-small text-center">Owner</th>
+        <th class="col-large text-center">Address</th>
         <th class="col-small text-center">Currency</th>
         <th class="col-small text-center">Category</th>
         <th class="col-timestamp text-center">Created</th>
@@ -17,13 +17,13 @@
 @section('bodyContent')
     @foreach ($addresses as $address)
         <tr>
-            <th class="col-small">
+            <th class="col-small text-center">
                 @include('components.clickable', [
                     'linkValue' => $address->owner,
                     'linkRoute' => 'owner' 
                 ])
             </th> 
-            <td class="col-medium">
+            <td class="col-large text-center">
                 @include('components.clickable', [
                     'linkValue' => $address->address,
                     'linkRoute' => 'address' 

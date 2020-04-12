@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Docker;
+namespace App\Console\Commands\Bitcointalk;
 
 use App\Console\Constants\BitcointalkCommands;
 use App\Console\Constants\CommonCommands;

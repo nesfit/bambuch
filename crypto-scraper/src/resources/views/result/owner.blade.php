@@ -18,27 +18,27 @@
 
 @section('headContent')
     <tr>
-        <th class="col-medium">Address</th>
-        <th class="col-small">Category</th>
-        <th class="col-small">Currency</th>
-        <th class="col-timestamp">Created</th>
-        <th class="col-timestamp">Updated</th>
+        <th class="col-medium text-center">Address</th>
+        <th class="col-small text-center">Category</th>
+        <th class="col-small text-center">Currency</th>
+        <th class="col-timestamp text-center">Created</th>
+        <th class="col-timestamp text-center">Updated</th>
     </tr>
 @endsection
 
 @section('bodyContent')
     @foreach ($addresses as $item)
         <tr>
-            <th class="col-medium">
+            <th class="col-medium text-center">
                 @include('components.clickable', [
                     'linkValue' => $item->address,
                     'linkRoute' => 'address' 
                 ])
             </th>
-            <td class="col-small">{{ $item->category }}</td>
-            <td class="col-small">{{ $item->currency }}</td>
-            <td class="col-timestamp">{{ $item->created }}</td>
-            <td class="col-timestamp">{{ $item->updated }}</td>
+            <td class="col-small text-center">{{ $item->category }}</td>
+            <td class="col-small text-center">{{ $item->currency }}</td>
+            <td class="col-timestamp text-center">{{ $item->created }}</td>
+            <td class="col-timestamp text-center">{{ $item->updated }}</td>
         </tr>
     @endforeach
 @endsection

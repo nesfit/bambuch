@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 return [
 
@@ -45,7 +46,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('statics'),
         ],
 
         'public' => [

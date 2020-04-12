@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Bitcointalk;
 
-use App\Console\Commands\Bitcointalk\Kafka\BoardPagesProducer;
+use App\Console\Commands\Bitcointalk\Producers\BoardPagesProducer;
 use Tests\TestCase;
 
 class CalculateBoardPagesTest extends TestCase

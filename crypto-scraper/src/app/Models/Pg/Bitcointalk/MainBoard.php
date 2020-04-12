@@ -16,7 +16,7 @@ class MainBoard extends BitcointalkModel {
         return $this->hasMany(BoardPage::class);
     }
 
-    public static function unsetLast(int $int) {
+    public static function unsetLast(string $string) {
         return;
     }
 }

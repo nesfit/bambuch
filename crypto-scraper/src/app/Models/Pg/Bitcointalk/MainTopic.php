@@ -17,7 +17,7 @@ class MainTopic extends BitcointalkModel
         return $this->hasMany(TopicPage::class);
     }
 
-    public static function unsetLast(int $int) {
+    public static function unsetLast(string $string) {
         return;
     }
 }

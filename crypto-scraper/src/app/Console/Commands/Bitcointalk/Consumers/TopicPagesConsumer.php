@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Kafka;
+namespace App\Console\Commands\Bitcointalk\Consumers;
 
 use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
@@ -16,7 +16,7 @@ use App\Models\Pg\Category;
 use Illuminate\Support\Arr;
 use Symfony\Component\DomCrawler\Crawler;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_consumer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_consumer 2
 
 class TopicPagesConsumer extends KafkaConProducer {
     use UrlValidations;
