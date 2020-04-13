@@ -34,7 +34,7 @@ trait ProducerFeatures {
     protected function kafkaProduce(string $message) {
         $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
         
-        $this->topic->produce(0, 0, $message);
+        $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
         $result = $this->producer->flush(10000);
 
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {

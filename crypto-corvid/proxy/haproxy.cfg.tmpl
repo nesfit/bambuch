@@ -37,7 +37,7 @@ frontend proxy_frontend
 
 backend proxy_backend
     mode http
-    balance roundrobin
+    balance leastconn
     option httpchk HEAD https://www.sde.co.ke/ HTTP/1.1\r\nHost:\ www.sde.co.ke
     # http-check expect status 200
     {% for backend in backends -%}

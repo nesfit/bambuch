@@ -23,6 +23,17 @@ class Owner extends Model
             ->get()
             ->first();
     }
+    
+    public static function getByNameWithCreate($name): Owner {
+        $existing = self::getByName($name);
+        if ($existing === null) {
+            $owner = new Owner();
+            $owner->name = $name;
+            $owner->save();
+            return $owner;
+        }
+        return $existing;
+    }
 
     public static function getAllNames() {
         return self::query()->get()->reduce(function ($acc, $owner) {

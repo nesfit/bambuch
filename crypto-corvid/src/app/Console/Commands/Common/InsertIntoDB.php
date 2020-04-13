@@ -55,7 +55,7 @@ class InsertIntoDB extends Command {
             return $this->RETURN_FAILED;
         }
 
-        $owner = Owner::getByName($ownerName); // TODO doesn't create if doesn't exists anymore!
+        $owner = Owner::getByNameWithCreate($ownerName);
         $category = $categoryFromText->name != Category::CAT_1 ? $categoryFromText : $this->getCategoryFromOwner($ownerName);
         $existingAddress = Address::getByAddress($address);
         
@@ -116,7 +116,7 @@ class InsertIntoDB extends Command {
      */
     private function newIdentity($addr_id, $newSource) {
         $identities = Identity::getByAddress($addr_id);
-        $existingIdentities = $identities->reduce(function ($acc, $identity) {
+        $existingIdentities = array_reduce($identities, function ($acc, $identity) {
             array_push($acc, $identity->source);
             return $acc;
         }, []);
