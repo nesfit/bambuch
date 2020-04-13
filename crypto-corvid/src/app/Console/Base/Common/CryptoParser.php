@@ -5,7 +5,8 @@ namespace App\Console\Base\Common;
 
 use App\Models\Kafka\ParsedAddress;
 use Illuminate\Console\Command;
-use Goutte;
+use Goutte\Client;
+use Symfony\Component\HttpClient\HttpClient;
 use GuzzleHttp;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
@@ -24,7 +25,8 @@ class CryptoParser extends Command {
 
     public function __construct() {
         parent::__construct();
-        $this->browser = new Goutte\Client();
+        
+        $this->browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
         // TODO define custom progress bar with message
         ProgressBar::setFormatDefinition('custom', ' %percent% -- %message%');
     }
@@ -135,7 +137,7 @@ class CryptoParser extends Command {
         // delete history to prevent running out of memory
         $this->browser->restart();
         // to prevent traffic overloading
-        sleep(5);
+        sleep(1);
         $response = $this->browser->request('GET', $url);
         $status = $this->browser->getResponse()->getStatusCode();
         if ($status != 200) {

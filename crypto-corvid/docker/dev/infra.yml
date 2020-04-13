@@ -50,7 +50,18 @@ services:
     volumes:
       - ./license.json:/license.json
     depends_on:
-      - kafka      
+      - kafka
+
+  #  PROXY
+  proxy:
+    build: ../../proxy/
+    env_file:
+      - ../../src/.env
+    ports:
+      - "5566:5566"
+      - "4444:4444"
+    volumes:
+      - ../../proxy/:/haproxy
 
   #  DATABASE
   db:
