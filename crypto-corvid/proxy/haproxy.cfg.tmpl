@@ -1,0 +1,45 @@
+global
+    daemon
+    maxconn 256
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    user        haproxy
+    group       haproxy
+    spread-checks 5
+
+defaults
+    mode http
+    timeout connect 3s
+    timeout client  5s
+    timeout server  3s
+    timeout check   3s
+    retries 1
+
+listen stats
+    bind            *:4444
+    mode            http
+    log             global
+    maxconn 200
+    timeout client  3s
+    timeout server  3s
+    timeout connect 4s
+    timeout queue   10s
+    stats enable
+    stats refresh   30s
+    stats show-node
+    stats uri /
+
+frontend proxy_frontend
+    bind *:5566
+    default_backend proxy_backend
+    mode http
+    option forwardfor
+
+backend proxy_backend
+    mode http
+    balance roundrobin
+    option httpchk HEAD https://www.sde.co.ke/ HTTP/1.1\r\nHost:\ www.sde.co.ke
+    # http-check expect status 200
+    {% for backend in backends -%}
+    server proxy{{ loop.index }}  {{ backend.ipaddress }}:{{ backend.port }} check fall 2 rise 2 inter 5s fastinter 1s downinter 5s
+    {% endfor %}

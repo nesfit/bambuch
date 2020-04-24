@@ -21,6 +21,7 @@ services:
       - kafka
       - db
       - graylog
+      - proxy
 
   wallet-explorer:
     image: crypto_corvid_backend
