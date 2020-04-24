@@ -1,9 +1,9 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Common\CryptoCurrency;
 use Symfony\Component\DomCrawler\Crawler;
 
 interface ParserInterface {

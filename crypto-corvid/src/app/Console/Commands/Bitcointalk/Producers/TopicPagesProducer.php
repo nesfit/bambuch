@@ -6,14 +6,14 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\BitcointalkKafka;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_producer
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_producer 2
 
 class TopicPagesProducer extends KafkaConProducer {
     use UrlValidations;

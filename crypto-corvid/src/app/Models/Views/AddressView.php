@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Views;
 
-use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Common\CryptoCurrency;
 use App\Models\Pg\Address;
 use App\Models\Pg\Category;
 use App\Models\Pg\Owner;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcoinabuse;
 
-use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Common\CryptoCurrency;
 use App\Console\Base\Common\ParserInterface;
 use App\Console\Base\Common\Utils;
 use App\Models\Kafka\ParsedAddress;

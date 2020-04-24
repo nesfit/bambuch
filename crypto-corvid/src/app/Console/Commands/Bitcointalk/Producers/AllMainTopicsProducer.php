@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\Producers;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\BitcointalkKafka;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainTopic;
+
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:all_main_topics_producer 2
 
 class AllMainTopicsProducer extends KafkaProducer {
 

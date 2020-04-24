@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Common\CryptoCurrency;
 
 class CryptoCurrencyTest extends TestCase {
 
