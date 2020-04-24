@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Kafka;
+namespace App\Console\Base\KafkaClient;
 
 use RdKafka\Conf;
 

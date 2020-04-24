@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Bitcointalk;
 
-use App\Kafka\ConProducerFeatures;
+use App\Console\Base\KafkaClient\ConProducerFeatures;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use RdKafka\Message;

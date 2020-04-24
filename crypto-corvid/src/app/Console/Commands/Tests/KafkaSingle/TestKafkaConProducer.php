@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Tests\KafkaSingle;
 
 
-use App\Console\Base\Common\KafkaConProducer;
+use App\Console\Base\KafkaClient\KafkaConProducer;
 use RdKafka\Message;
 
 class TestKafkaConProducer extends KafkaConProducer {

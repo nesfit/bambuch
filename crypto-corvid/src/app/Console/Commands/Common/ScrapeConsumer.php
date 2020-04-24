@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Common;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\Common\KafkaConsumer;
+use App\Console\Base\KafkaClient\KafkaConsumer;
 use App\Console\Base\Common\ReturnCodes;
 use App\Console\Constants\Common\CommonCommands;
 use App\Console\Constants\Common\CommonKafka;

@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Kafka;
+namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
+use App\Console\Base\KafkaClient\CommonFeatures;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
 use RuntimeException;

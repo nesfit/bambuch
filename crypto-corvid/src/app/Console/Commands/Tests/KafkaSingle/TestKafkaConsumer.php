@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Tests\KafkaSingle;
 
-use App\Console\Base\Common\KafkaConsumer;
+use App\Console\Base\KafkaClient\KafkaConsumer;
 use RdKafka\Message;
 
 class TestKafkaConsumer extends KafkaConsumer {

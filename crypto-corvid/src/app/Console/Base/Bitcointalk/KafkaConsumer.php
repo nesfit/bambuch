@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Bitcointalk;
 
-use App\Kafka\ConsumerFeatures;
+use App\Console\Base\KafkaClient\ConsumerFeatures;
 
 abstract class KafkaConsumer extends BitcointalkParser {
     use ConsumerFeatures;

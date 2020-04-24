@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Tests\KafkaSingle;
 
-use App\Console\Base\Common\KafkaProducer;
+use App\Console\Base\KafkaClient\KafkaProducer;
 
 class TestKafkaProducer extends KafkaProducer {
 
