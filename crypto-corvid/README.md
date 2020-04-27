@@ -56,7 +56,7 @@ Stop all modules
 docker stop $(docker ps | grep common | awk '{print $1}')
 ```
 
-## Bitcointalk commands
+## Bitcointalk modules execution
 Run all modules
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d
@@ -70,6 +70,11 @@ docker-compose -f infra.yml -f bitcointalk-base.yml up -d <name> (bct-main-board
 Stop all modules
 ```bash
 docker stop $(docker ps | grep bct | awk '{print $1}')
+```
+
+Scaling a module
+```bash
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct-board-pages-producer=5 bct-board-pages-producer
 ```
 
 ## Dev commands
