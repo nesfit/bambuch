@@ -1,12 +1,9 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Console\Constants\CryptoCurrency;
+use App\Console\Constants\Common\CryptoCurrency;
 use DOMDocument;
 use DOMXPath;
 

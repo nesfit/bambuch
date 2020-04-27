@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk;
 
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\CommonCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Common\CommonCommands;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -49,7 +49,7 @@ class Start extends Command {
         $this->startModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
         $this->startModule(BitcointalkCommands::USER_PROFILES_PRODUCER);
         $this->startModule(BitcointalkCommands::USER_PROFILES_CONSUMER);
-        $this->startModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
+        $this->startModule(BitcointalkCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";
         return 0;

@@ -112,3 +112,13 @@ CRONTAB entry:
 PATH=/usr/local/bin
 * * * * * cd ~/<proj_path>/crypto-corvid/src && php artisan schedule:run >/tmp/cron.stdout.log 2>/tmp/cron.stderr.log
 ```
+
+Generate UML depchart (using https://github.com/mihaeu/dephpend):
+```bash
+dephpend uml app/Console/ -o out.png --no-classes -d 0 -e '/Models|Psr|Symfony|GuzzleHttp|RdKafka|Illuminate|Tests|Bitcoinabuse|Bitinfocharts|Docker|Constants/' 
+```
+
+Generate Docker Compose dep chart (all services has to be in only one yml file):
+```bash
+docker run --rm -it --name dcv -v $(pwd):/input pmsipilot/docker-compose-viz render -o ./all.png -m image all.yml --no-volumes -f
+```

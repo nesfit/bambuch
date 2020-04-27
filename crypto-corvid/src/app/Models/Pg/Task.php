@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Pg;
 
-use App\Console\Constants\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use App\Models\Constants\TaskConstants;
 use Illuminate\Database\Eloquent\Model;
 

@@ -6,8 +6,8 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\BitcointalkKafka;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\UserProfile;
 

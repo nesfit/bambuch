@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Base\Common;
+namespace App\Console\Base\KafkaClient;
 
-use App\Kafka\ProducerFeatures;
+use App\Console\Base\KafkaClient\ProducerFeatures;
 use Illuminate\Console\Command;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;

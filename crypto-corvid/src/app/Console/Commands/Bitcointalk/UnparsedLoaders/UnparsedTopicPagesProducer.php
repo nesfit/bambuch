@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcointalk\UnparsedLoaders;
 
 use App\Console\Base\Bitcointalk\UnparsedProducer;
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\BitcointalkKafka;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
 class UnparsedTopicPagesProducer extends UnparsedProducer {

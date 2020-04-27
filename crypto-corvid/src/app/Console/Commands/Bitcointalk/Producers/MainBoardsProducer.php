@@ -8,13 +8,13 @@ use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
-use App\Console\Constants\BitcointalkCommands;
-use App\Console\Constants\BitcointalkKafka;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f ../docker/dev/infra.yml -f ../docker/dev/backend.yml run --rm scraper bct:main_boards_producer 2
+//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:main_boards_producer 2
 
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;
@@ -59,6 +59,16 @@ class MainBoardsProducer extends KafkaProducer {
         $this->tableName = MainBoard::class;
 
         parent::handle();
+
+        /**
+         * All main boards are loaded in DB.
+         * Send all into Kafka => enable re-scraping in order to get new board pages.
+         */
+        $allMainBoards = MainBoard::getAll();
+        foreach ($allMainBoards as $mainBoard) {
+            $urlMessage = new UrlMessage("empty", $mainBoard[BitcointalkModel::COL_URL], false);
+            $this->kafkaProduce($urlMessage->encodeData());
+        }
         
         /**
          * set all to unparsed
@@ -71,16 +81,6 @@ class MainBoardsProducer extends KafkaProducer {
         $this->infoGraylog("Setting all to unparsed", GraylogTypes::INFO);
         $this->loadMainBoardsFromUrl($this->url);
         $this->loadChildMainBoards();
-
-        /**
-         * All main boards are loaded in DB.
-         * Send all into Kafka => enable re-scraping in order to get new board pages.
-         */
-        $allMainBoards = MainBoard::getAll();
-        foreach ($allMainBoards as $mainBoard) {
-            $urlMessage = new UrlMessage("empty", $mainBoard[BitcointalkModel::COL_URL], false);
-            $this->kafkaProduce($urlMessage->encodeData());
-        }
         
         return 0;
     }

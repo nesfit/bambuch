@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Tests\KafkaContinuous;
 
-use App\Console\Base\Common\KafkaConProducer;
+use App\Console\Base\KafkaClient\KafkaConProducer;
 use RdKafka\Message;
 
 // docker-compose -f infra.yml -f backend.yml run --rm scraper conproducer:test

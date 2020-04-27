@@ -21,7 +21,7 @@ abstract class BitcointalkModel extends Model {
     public static function getAllUnParsed() {
         return self::query()
             ->where(self::COL_PARSED, false)
-            ->get(self::COL_URL)
+            ->get()
             ->all();
     }
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Constants;
+namespace App\Console\Constants\Common;
 
 abstract class CryptoCurrency {
     const BTC   = ['short' => 'BTC', 'name' => 'bitcoin', 'code' => 1, 'regex' => '/([13][a-km-zA-HJ-NP-Z1-9]{25,34})/'];

@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands\Common;
 
 use App\Console\Base\Common\CryptoParser;
 use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\Common\Utils;
-use App\Console\Constants\CommonCommands;
+use App\Console\Constants\Common\CommonCommands;
 use App\Models\Pg\Category;
 use App\Models\Pg\WalletExplorer;
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace App\Console\Commands\Common;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\Common\KafkaConsumer;
+use App\Console\Base\KafkaClient\KafkaConsumer;
 use App\Console\Base\Common\ReturnCodes;
-use App\Console\Constants\CommonCommands;
-use App\Console\Constants\CommonKafka;
+use App\Console\Constants\Common\CommonCommands;
+use App\Console\Constants\Common\CommonKafka;
 use RdKafka\Message;
 
 //docker-compose -f infra.yml -f backend.yml run --rm scraper scraped_results_consumer
