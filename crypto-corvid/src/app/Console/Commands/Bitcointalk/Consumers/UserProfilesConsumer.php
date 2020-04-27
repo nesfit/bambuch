@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Bitcointalk\Consumers;
 
-use App\Console\Base\Common\AddressMatcher;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
@@ -11,11 +10,8 @@ use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Console\Constants\Common\CryptoCurrency;
 use App\Console\Constants\Common\CommonKafka;
 use App\Models\Kafka\ParsedAddress;
-use App\Models\Pg\Bitcointalk\TopicPage;
 use App\Models\Pg\Bitcointalk\UserProfile;
 use App\Models\Pg\Category;
-use Illuminate\Support\Arr;
-use Symfony\Component\DomCrawler\Crawler;
 
 //docker-compose -f infra.yml -f backend.yml run --rm scraper bct:user_profiles_consumer 2
 
@@ -54,7 +50,7 @@ class UserProfilesConsumer extends KafkaConProducer {
      */
     public function handle() {
         $this->inputTopic = BitcointalkKafka::USER_PROFILES_TOPIC;
-        $this->outputTopic = BitcointalkKafka::SCRAPE_RESULTS_TOPIC;
+        $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::USER_PROFILES_LOAD_GROUP;
         $this->serviceName = BitcointalkCommands::USER_PROFILES_CONSUMER;
         $this->tableName = UserProfile::class;

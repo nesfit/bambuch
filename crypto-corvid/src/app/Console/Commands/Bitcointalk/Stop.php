@@ -14,7 +14,7 @@ class Stop extends Command {
      *
      * @var string
      */
-    protected $signature = CommonCommands::STOP;
+    protected $signature = BitcointalkCommands::STOP;
 
     /**
      * The console command description.
@@ -38,13 +38,13 @@ class Stop extends Command {
      * @return mixed
      */
     public function handle() {
-        $this->stopModule(CommonCommands::MAIN_BOARDS_PRODUCER);
-        $this->stopModule(CommonCommands::BOARD_PAGES_PRODUCER);
-        $this->stopModule(CommonCommands::MAIN_TOPICS_PRODUCER);
-        $this->stopModule(CommonCommands::TOPIC_PAGES_PRODUCER);
-        $this->stopModule(CommonCommands::TOPIC_PAGES_CONSUMER);
-        $this->stopModule(CommonCommands::USER_PROFILES_PRODUCER);
-        $this->stopModule(CommonCommands::USER_PROFILES_CONSUMER);
+        $this->stopModule(BitcointalkCommands::MAIN_BOARDS_PRODUCER);
+        $this->stopModule(BitcointalkCommands::BOARD_PAGES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::MAIN_TOPICS_PRODUCER);
+        $this->stopModule(BitcointalkCommands::TOPIC_PAGES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::TOPIC_PAGES_CONSUMER);
+        $this->stopModule(BitcointalkCommands::USER_PROFILES_PRODUCER);
+        $this->stopModule(BitcointalkCommands::USER_PROFILES_CONSUMER);
         $this->stopModule(CommonCommands::SCRAPED_RESULTS_CONSUMER);
         
         print "Ending... \n";

@@ -53,7 +53,7 @@ class TopicPagesConsumer extends KafkaConProducer {
      */
     public function handle() {
         $this->inputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
-        $this->outputTopic = BitcointalkKafka::SCRAPE_RESULTS_TOPIC;
+        $this->outputTopic = CommonKafka::SCRAPE_RESULTS_TOPIC;
         $this->groupID = BitcointalkKafka::TOPIC_PAGES_ADDR_GROUP;
         $this->serviceName = BitcointalkCommands::TOPIC_PAGES_CONSUMER;
         // TODO getNewData() will always return whole array so the function (neither this property) is not necessary at all
