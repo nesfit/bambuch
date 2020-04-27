@@ -32,14 +32,12 @@ docker-compose -f infra.yml -f maintenance.yml up seed
 
 Run/stop infra containers (Kafka, Zookeeper, Graylog, Postgres...)
 ```bash
-php artisan [start|stop]
- OR
 docker-compose -f infra.yml up/stop -d
 ```
 
 Run/stop specific container
 ```bash
-php artisan [kafka|graylog|postgres]:[start|stop]
+docker-compose -f infra.yml up/stop -d [kafka|graylog|postgres]
 ```
 
 Serve Laravel app - not using Docker for FE
@@ -47,41 +45,37 @@ Serve Laravel app - not using Docker for FE
 php artisan serve --host=0.0.0.0 --port=8000
 ```
 
-## Bitcointalk commands
-Run/stop modules
+## Common modules execution
+Run all modules
 ```bash
-php artisan bct:start/stop
+docker-compose -f infra.yml -f common.yml up -d
 ```
+
+Stop all modules
+```bash
+docker stop $(docker ps | grep common | awk '{print $1}')
+```
+
+## Bitcointalk commands
+Run all modules
+```bash
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d
+```
+
 Run a module  
 ```bash
-docker-compose -f infra.yml -f backend.yml run --rm scraper bct:<name>
-```
-             
-## Run a consumer 
-Common example
-```bash
-docker-compose -f infra.yml -f backend.yml run --rm --name consumer_<name> <service> <artisan command>
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d <name> (bct-main-boards-producer)
 ```
 
-Consumer test
+Stop all modules
 ```bash
-docker-compose -f infra.yml -f backend.yml run --rm scraper consumer:test 
-```
-
-Producer test
-```bash
-docker-compose -f infra.yml -f backend.yml run --rm scraper producer:test 
+docker stop $(docker ps | grep bct | awk '{print $1}')
 ```
 
 ## Dev commands
 Install new dependencies
 ```bash
 docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
-```
-
-Stop all test runs
-```bash
-docker stop $(docker ps | grep test_run | awk '{print $1}')
 ```
 
 Stop seeding
@@ -95,6 +89,11 @@ docker stop $(docker ps | grep crypto | awk '{print $1}')
 ```
 ```bash
 docker-compose -f infra.yml -f backend.yml stop
+```
+
+Remove containers
+```bash
+docker rm $(docker ps -a | grep producer | awk '{print $1}')
 ```
 
 Broken composer autoload

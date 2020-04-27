@@ -23,31 +23,31 @@ x-scraper-base: &scraper-base
     - proxy
 
 services:
-  main-boards-producer:
+  bct-main-boards-producer:
     << : *scraper-base
     command: "bct:main_boards_producer 2"
 
-  board-pages-producer:
+  bct-board-pages-producer:
     << : *scraper-base
     command: "bct:board_pages_producer 2"
 
-  main-topics-producer:
+  bct-main-topics-producer:
     << : *scraper-base
     command: "bct:main_topics_producer 2"
 
-  topic-pages-producer:
+  bct-topic-pages-producer:
     << : *scraper-base
     command: "bct:topic_pages_producer 2"
 
-  user-profiles-producer:
+  bct-user-profiles-producer:
     << : *scraper-base
     command: "bct:user_profiles_producer 2"
 
-  topic-pages-consumer:
+  bct-topic-pages-consumer:
     << : *scraper-base
     command: "bct:topic_pages_consumer 2"
 
-  user-profiles-consumer:
+  bct-user-profiles-consumer:
     << : *scraper-base
     command: "bct:board_pages_producer 2"
   

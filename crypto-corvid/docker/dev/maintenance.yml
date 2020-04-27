@@ -32,15 +32,3 @@ services:
     command: install
     volumes:
       - ../../src:/crypto-app
-
-  wallet-explorer:
-    image: crypto_corvid_backend
-    entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
-    env_file:
-      - ../../src/.env
-    command: fetch_wallet_explorer
-    volumes:
-      - ../../src:/crypto-app
-    depends_on:
-      - db
-      - graylog
