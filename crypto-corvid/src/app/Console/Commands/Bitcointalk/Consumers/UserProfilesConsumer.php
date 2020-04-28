@@ -13,8 +13,6 @@ use App\Models\Kafka\ParsedAddress;
 use App\Models\Pg\Bitcointalk\UserProfile;
 use App\Models\Pg\Category;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:user_profiles_consumer 2
-
 class UserProfilesConsumer extends KafkaConProducer {
     use UrlValidations;
 

@@ -13,8 +13,6 @@ use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainTopic;
 use App\Models\Pg\Bitcointalk\TopicPage;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:topic_pages_producer 2
-
 class TopicPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;

@@ -12,8 +12,6 @@ use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\BoardPage;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:board_pages_producer 2
-
 class BoardPagesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;

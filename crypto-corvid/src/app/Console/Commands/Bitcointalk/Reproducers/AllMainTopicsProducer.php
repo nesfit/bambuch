@@ -10,8 +10,6 @@ use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainTopic;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:all_main_topics_producer 2
-
 class AllMainTopicsProducer extends KafkaProducer {
 
     protected $signature = BitcointalkCommands::ALL_MAIN_TOPICS_PRODUCER .' {verbose=1} {--force} {dateTime?}';
