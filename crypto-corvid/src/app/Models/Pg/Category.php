@@ -1,8 +1,5 @@
 <?php
-/**
- * Project: BitInfoCharts parser
- * Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
- */
+declare(strict_types=1);
 
 namespace App\Models\Pg;
 
@@ -36,6 +33,7 @@ class Category extends Model
     const CAT_11 = "Scam";             const CAT_11_COLOR = "#cc0066";
     const CAT_12 = "Theft";            const CAT_12_COLOR = "#990033";
     const CAT_13 = "Ransom";           const CAT_13_COLOR = "#ff3300";
+    const CAT_14 = "Sextortion";           const CAT_14_COLOR = "#00FFFB";
 
     const CATEGORIES = [
             ["name" => Category::CAT_1, "color" => Category::CAT_1_COLOR],
@@ -51,6 +49,7 @@ class Category extends Model
             ["name" => Category::CAT_11, "color" => Category::CAT_11_COLOR],
             ["name" => Category::CAT_12, "color" => Category::CAT_12_COLOR],
             ["name" => Category::CAT_13, "color" => Category::CAT_13_COLOR],
+            ["name" => Category::CAT_14, "color" => Category::CAT_14_COLOR],
     ];
 
     protected $table        = self::TABLE;
@@ -84,6 +83,7 @@ class Category extends Model
             case preg_match('/' . self::CAT_11 . '/i', $text): return self::CAT_11;
             case preg_match('/' . self::CAT_12 . '/i', $text): return self::CAT_12;
             case preg_match('/' . self::CAT_13 . '/i', $text): return self::CAT_13;
+            case preg_match('/' . self::CAT_14 . '/i', $text): return self::CAT_14;
         }
         return self::CAT_1;
     }

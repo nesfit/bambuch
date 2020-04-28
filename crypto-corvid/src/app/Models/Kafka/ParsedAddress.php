@@ -29,7 +29,7 @@ class ParsedAddress {
     public function createTSVData(): string {
         $cleanArray = array_reduce(self::getData(),
             function ($acc, $value)  {
-                array_push($acc, Utils::cleanText($value));
+                array_push($acc, Utils::cleanText(strval($value)));
                 return $acc;
             }, []
         );
