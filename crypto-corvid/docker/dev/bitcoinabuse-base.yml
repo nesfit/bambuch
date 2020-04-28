@@ -23,7 +23,7 @@ x-scraper-base: &scraper-base
     - proxy
 
 services:
-  bca_load_csv_data_1d:
+  bca_load_csv_data:
     << : *scraper-base
     command: "bca:load_csv_data 2 1d"
 

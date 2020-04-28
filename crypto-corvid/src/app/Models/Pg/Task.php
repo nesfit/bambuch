@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Pg;
 
+use App\Console\Constants\Bitcoinabuse\BitcoinabuseCommands;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use App\Models\Constants\TaskConstants;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,12 @@ class Task extends Model {
         [ 
             self::COL_NAME => BitcointalkCommands::ALL_MAIN_TOPICS_PRODUCER, 
             self::COL_DESC => BitcointalkCommands::ALL_MAIN_TOPICS_PRODUCER_DESC,
+            self::COL_FREQ => TaskConstants::NONE,
+            self::COL_STARTING => TaskConstants::MIDNIGHT,
+        ],
+        [ 
+            self::COL_NAME => BitcoinabuseCommands::LOAD_CSV_DATA, 
+            self::COL_DESC => BitcoinabuseCommands::LOAD_CSV_DATA_DESC,
             self::COL_FREQ => TaskConstants::NONE,
             self::COL_STARTING => TaskConstants::MIDNIGHT,
         ],

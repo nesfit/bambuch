@@ -23,18 +23,18 @@ x_scraper_base: &scraper_base
     - proxy
 
 services:
-  all_main_topics_producer:
+  bct_all_main_topics_producer:
     << : *scraper_base
     command: "bct:all_main_topics_producer 2"
 
-  un_board_pages_producer:
+  bct_un_board_pages_producer:
     << : *scraper_base
     command: "bct:un_board_pages_producer 2"
 
-  un_topic_pages_producer:
+  bct_un_topic_pages_producer:
     << : *scraper_base
     command: "bct:un_topic_pages_producer 2"
 
-  un_user_profiles_producer:
+  bct_un_user_profiles_producer:
     << : *scraper_base
     command: "bct:un_user_profiles_producer 2"

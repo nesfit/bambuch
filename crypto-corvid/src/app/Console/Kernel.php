@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console;
 
@@ -17,6 +18,13 @@ class Kernel extends ConsoleKernel {
         //
     ];
 
+    private function getComposeFile(string $container): string {
+        if(preg_match('bct_all', $container)) return 'bitcointalk-reproducers.yml';
+        if(preg_match('bca_', $container)) return 'bitcoinabuse-base.yml';
+        if(preg_match('bct_', $container)) return 'bitcointalk-base.yml';
+        return 'unknown-compose.yml';
+    }
+    
     /**
      * Define the application's command schedule.
      *
@@ -30,7 +38,10 @@ class Kernel extends ConsoleKernel {
             $taskName = $task->getAttribute(Task::COL_NAME);
             $taskFreq = $task->getAttribute(Task::COL_FREQ);
             $taskStart = $task->getAttribute(Task::COL_STARTING);
-            $command = 'docker-compose -f ../docker/dev/infra.yml -f ../docker/dev/backend.yml run --rm scraper '. $taskName . ' 2';
+            
+            $container = preg_replace(':', '_', $taskName);
+            $composeFile = $this->getComposeFile($container);
+            $command = 'docker-compose -f infra.yml -f '. $composeFile . ' up -d'. $container;
 
             $preTask = $schedule->exec($command)->runInBackground()->storeOutput();
             
