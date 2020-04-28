@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\KafkaClient\CommonFeatures;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
 use RuntimeException;
@@ -34,7 +33,7 @@ trait ProducerFeatures {
     
     protected function kafkaProduce(string $message) {
         $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
-        
+
         $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
         $result = $this->producer->flush(10000);
 

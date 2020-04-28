@@ -5,7 +5,6 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\Common\StoreCrawledUrl;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
@@ -14,12 +13,9 @@ use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use App\Models\Pg\Bitcointalk\MainBoard;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:main_boards_producer 2
-
 class MainBoardsProducer extends KafkaProducer {
     use UrlValidations;
     use UrlCalculations;
-    use StoreCrawledUrl;
 
     const ENTITY = 'board';
 
