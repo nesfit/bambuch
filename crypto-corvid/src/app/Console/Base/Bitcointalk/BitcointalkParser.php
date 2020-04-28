@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace App\Console\Base\Bitcointalk;
 
 use App\Console\Base\Common\CryptoParser;
-use App\Console\Base\Common\StoreCrawledUrl;
+use App\Console\Base\Common\GraylogTypes;
+use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\BitcointalkModel;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class BitcointalkParser extends CryptoParser { 
-    use StoreCrawledUrl;
-
+abstract class BitcointalkParser extends CryptoParser {
     private BitcointalkModel $table;
+    protected string $tableName;
 
     public function __construct() {
         parent::__construct();
@@ -21,6 +21,43 @@ abstract class BitcointalkParser extends CryptoParser {
         parent::handle();
 
         $this->table = new $this->tableName();
+    }
+
+    private function checkTable() {
+        if (!isset($this->tableName)) {
+            $this->errorGraylog("'tableName' property is not set!");
+            exit(0);
+        }
+    }
+
+    protected function storeMainUrl(UrlMessage $message) {
+        $this->checkTable();
+
+        /**
+         * @var $entity BitcointalkModel
+         */
+        $entity = new $this->tableName();
+        $entity->setAttribute(BitcointalkModel::COL_URL, $message->url);
+        $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
+        $entity->save();
+
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
+    }
+
+    protected function storeChildUrl(UrlMessage $message) {
+        $this->checkTable();
+
+        /**
+         * @var $entity BitcointalkModel
+         */
+        $entity = new $this->tableName();
+        $entity->setAttribute(BitcointalkModel::COL_URL, $message->url);
+        $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
+        $entity->setAttribute(BitcointalkModel::COL_PARENT_URL, $message->mainUrl);
+        $entity->setAttribute(BitcointalkModel::COL_LAST, $message->last);
+        $entity->save();
+
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
     }
     
     /**

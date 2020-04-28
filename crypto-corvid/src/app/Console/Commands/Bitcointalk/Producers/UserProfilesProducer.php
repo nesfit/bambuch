@@ -11,8 +11,6 @@ use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
 use App\Models\Pg\Bitcointalk\UserProfile;
 
-//docker-compose -f infra.yml -f backend.yml run --rm scraper bct:user_profiles_producer 2
-
 class UserProfilesProducer extends KafkaConProducer {
     use UrlValidations;
     use UrlCalculations;

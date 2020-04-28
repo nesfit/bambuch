@@ -2,6 +2,11 @@
 
 namespace App\Console\Base\Common;
 
+/**
+ * THIS NEEDS TO BE REFACTORED!
+ * THE FILE WAS TAKEN FROM XVOKRA00  
+ */
+
 class AddressMatcher
 {
     const BTC = 0;
