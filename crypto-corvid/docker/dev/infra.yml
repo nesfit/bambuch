@@ -52,7 +52,7 @@ services:
     depends_on:
       - kafka
 
-  #  PROXY
+  # PROXY
   proxy:
     build: ../../proxy/
     env_file:
@@ -63,7 +63,7 @@ services:
     volumes:
       - ../../proxy/:/haproxy
 
-  #  DATABASE
+  # DATABASE
   db:
     image: "postgres:11"
     ports:
