@@ -63,6 +63,21 @@ services:
     volumes:
       - ../../proxy/:/haproxy
 
+  selenium-proxy:
+    image: devel.netsearch.cz:5000/selenium-proxy
+    ports:
+      - "5566:8080"
+    links:
+      - redis
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      #SELENIUM_DRIVER_PROXIES: 52.168.182.12:9898,52.170.194.161:9898
+
+  redis:
+    container_name: selenium-proxy-redis
+    image: redis:alpine
   #  DATABASE
   db:
     image: "postgres:11"
