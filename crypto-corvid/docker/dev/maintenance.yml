@@ -32,4 +32,3 @@ services:
     command: install
     volumes:
       - ../../src:/crypto-app
-

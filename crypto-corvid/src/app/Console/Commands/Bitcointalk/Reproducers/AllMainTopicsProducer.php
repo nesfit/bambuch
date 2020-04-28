@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\Producers;
+namespace App\Console\Commands\Bitcointalk\Reproducers;
 
 use App\Console\Base\Bitcointalk\KafkaProducer;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;

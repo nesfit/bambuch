@@ -1,0 +1,32 @@
+version: "3.7"
+networks:
+  default:
+    external:
+      name: crypto-corvid_default
+
+x-scraper-base: &scraper-base
+  build:
+    context: ../../src/
+    dockerfile: ../docker/dev/Dockerfile-be
+  image: crypto_corvid_backend
+  entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+  env_file:
+    - ../../src/.env
+  environment:
+    - DB_HOST=db
+  volumes:
+    - ../../src:/crypto-app
+  depends_on:
+    - kafka
+    - db
+    - graylog
+    - proxy
+
+services:
+  common_wallet-explorer:
+    << : *scraper-base
+    command: "fetch_wallet_explorer"
+
+  common_scrape-consumer:
+    << : *scraper-base
+    command: "scraped_results_consumer"
