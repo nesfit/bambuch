@@ -23,10 +23,10 @@ x-scraper-base: &scraper-base
     - proxy
 
 services:
-  common_wallet-explorer:
+  common_wallet_explorer:
     << : *scraper-base
     command: "fetch_wallet_explorer"
 
-  common_scrape-consumer:
+  common_scrape_consumer:
     << : *scraper-base
     command: "scraped_results_consumer"
