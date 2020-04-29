@@ -4,7 +4,7 @@ networks:
     external:
       name: crypto-corvid_default
       
-x-scraper-base: &scraper-base
+x-scraper-base: &scraper_base
   build:
     context: ../../src/
     dockerfile: ../docker/dev/Dockerfile-be
@@ -24,13 +24,13 @@ x-scraper-base: &scraper-base
 
 services:
   bca_load_csv_data:
-    << : *scraper-base
+    << : *scraper_base
     command: "bca:load_csv_data 2 1d"
 
   bca_load_csv_data_30d:
-    << : *scraper-base
+    << : *scraper_base
     command: "bca:load_csv_data 2 30d"
 
   bca_load_csv_data_forever:
-    << : *scraper-base
+    << : *scraper_base
     command: "bca:load_csv_data 2 forever"

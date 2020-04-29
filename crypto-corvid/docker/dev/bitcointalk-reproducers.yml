@@ -4,7 +4,7 @@ networks:
     external:
       name: crypto-corvid_default
 
-x_scraper_base: &scraper_base
+x-scraper-base: &scraper_base
   build:
     context: ../../src/
     dockerfile: ../docker/dev/Dockerfile-be

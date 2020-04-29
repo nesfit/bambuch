@@ -19,7 +19,8 @@ class AddressView extends BaseView {
     public function __construct(Address $addressData) {
         $owner = $addressData->owner()->first();
         $currency = $addressData->getAttribute(Address::COL_CRYPTO); // TODO FIX to display actual currency name NOT INTEGER
-        $category = $addressData->categories()->first()->getAttribute(Category::COL_NAME); // TODO FIX display all categories
+        $firstCategory = $addressData->categories()->first(); // TODO FIX display all categories
+        $category = $firstCategory ? $firstCategory->getAttribute(Category::COL_NAME) : ''; 
 
         $this->owner = $owner ? $owner->getAttribute(Owner::COL_NAME) : 'unknown_owner';
         $this->currency = CryptoCurrency::getShortcut($currency);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Bitcoinabuse;
 
 use App\Console\Base\Common\CryptoParser;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Base\KafkaClient\ProducerFeatures;
 use App\Console\Constants\Bitcoinabuse\BitcoinabuseCommands;
 use App\Console\Constants\Common\CommonKafka;
@@ -32,6 +33,7 @@ class LoadCSVData extends CryptoParser {
 
         $past = $this->argument('past');
         $this->loadData($past);
+        $this->infoGraylog("All work done", GraylogTypes::INFO);
     }
     
     private function loadData(string $past) {
@@ -58,7 +60,6 @@ class LoadCSVData extends CryptoParser {
             );
             $tsvData = $parsedAddress->createTSVData();
             $this->kafkaProduce($tsvData);
-            break;
         }
         fclose($handle);
     }

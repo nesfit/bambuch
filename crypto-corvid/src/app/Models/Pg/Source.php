@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models\Pg;
 
+use App\Console\Constants\Bitcoinabuse\BitcoinabuseCommands;
+use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use Illuminate\Database\Eloquent\Model;
 
 class Source extends Model
@@ -18,8 +21,8 @@ class Source extends Model
     public $timestamps = false;
 
     const SOURCES = [
-        [self::COL_NAME => 'bitcointalk', self::COL_URL => 'https://bitcointalk.org'],
-        [self::COL_NAME => 'bitcoinabuse', self::COL_URL => 'https://www.bitcoinabuse.com'],
+        [self::COL_NAME => 'bitcointalk', self::COL_URL => BitcointalkCommands::BITCOINTALK_URL],
+        [self::COL_NAME => 'bitcoinabuse', self::COL_URL => BitcoinabuseCommands::BITCOINABUSE_URL],
     ];
         
     public static function getByName(string $name): ?Source {

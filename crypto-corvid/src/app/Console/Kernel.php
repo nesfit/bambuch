@@ -19,9 +19,9 @@ class Kernel extends ConsoleKernel {
     ];
 
     private function getComposeFile(string $container): string {
-        if(preg_match('bct_all', $container)) return 'bitcointalk-reproducers.yml';
-        if(preg_match('bca_', $container)) return 'bitcoinabuse-base.yml';
-        if(preg_match('bct_', $container)) return 'bitcointalk-base.yml';
+        if(preg_match('/bct_all/', $container)) return '../docker/dev/bitcointalk-reproducers.yml';
+        if(preg_match('/bca_/', $container)) return '../docker/dev/bitcoinabuse-base.yml';
+        if(preg_match('/bct_/', $container)) return '../docker/dev/bitcointalk-base.yml';
         return 'unknown-compose.yml';
     }
     
@@ -39,10 +39,10 @@ class Kernel extends ConsoleKernel {
             $taskFreq = $task->getAttribute(Task::COL_FREQ);
             $taskStart = $task->getAttribute(Task::COL_STARTING);
             
-            $container = preg_replace(':', '_', $taskName);
+            $container = preg_replace('/:/', '_', $taskName);
             $composeFile = $this->getComposeFile($container);
-            $command = 'docker-compose -f infra.yml -f '. $composeFile . ' up -d'. $container;
-
+            $command = 'docker-compose -f ../docker/dev/infra.yml -f '. $composeFile . ' up -d '. $container;
+            
             $preTask = $schedule->exec($command)->runInBackground()->storeOutput();
             
             switch ($taskFreq) {

@@ -35,4 +35,10 @@ services:
         
   schedule:
     image: crypto_corvid_backend
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ../../src:/crypto-app
+    depends_on:
+      - db
     command: php artisan schedule:run
