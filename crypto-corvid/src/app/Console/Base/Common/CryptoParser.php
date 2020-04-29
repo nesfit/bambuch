@@ -132,7 +132,7 @@ class CryptoParser extends Command {
             return null;
         }
     }
-    
+
     protected function getPageCrawler(string $url): Crawler {
         // delete history to prevent running out of memory
         $this->browser->restart();
@@ -145,6 +145,11 @@ class CryptoParser extends Command {
             $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
         }
         return $response;
+    }
+    
+    protected function getPageContent(string $url): string {
+        $this->getPageCrawler($url);
+        return $this->browser->getResponse()->getContent();
     }
     
     protected function getFullHost(string $url = null): string {

@@ -4,7 +4,7 @@ networks:
     external:
       name: crypto-corvid_default
 
-x-scraper-base: &scraper-base
+x-scraper-base: &scraper_base
   build:
     context: ../../src/
     dockerfile: ../docker/dev/Dockerfile-be
@@ -23,31 +23,31 @@ x-scraper-base: &scraper-base
     - proxy
 
 services:
-  bct-main-boards-producer:
-    << : *scraper-base
+  bct_main_boards_producer:
+    << : *scraper_base
     command: "bct:main_boards_producer 2"
 
-  bct-board-pages-producer:
-    << : *scraper-base
+  bct_board_pages_producer:
+    << : *scraper_base
     command: "bct:board_pages_producer 2"
 
-  bct-main-topics-producer:
-    << : *scraper-base
+  bct_main_topics_producer:
+    << : *scraper_base
     command: "bct:main_topics_producer 2"
 
-  bct-topic-pages-producer:
-    << : *scraper-base
+  bct_topic_pages_producer:
+    << : *scraper_base
     command: "bct:topic_pages_producer 2"
 
-  bct-user-profiles-producer:
-    << : *scraper-base
+  bct_user_profiles_producer:
+    << : *scraper_base
     command: "bct:user_profiles_producer 2"
 
-  bct-topic-pages-consumer:
-    << : *scraper-base
+  bct_topic_pages_consumer:
+    << : *scraper_base
     command: "bct:topic_pages_consumer 2"
 
-  bct-user-profiles-consumer:
-    << : *scraper-base
+  bct_user_profiles_consumer:
+    << : *scraper_base
     command: "bct:board_pages_producer 2"
   

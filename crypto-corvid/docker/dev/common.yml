@@ -4,7 +4,7 @@ networks:
     external:
       name: crypto-corvid_default
 
-x-scraper-base: &scraper-base
+x-scraper-base: &scraper_base
   build:
     context: ../../src/
     dockerfile: ../docker/dev/Dockerfile-be
@@ -23,10 +23,10 @@ x-scraper-base: &scraper-base
     - proxy
 
 services:
-  common_wallet-explorer:
-    << : *scraper-base
+  common_wallet_explorer:
+    << : *scraper_base
     command: "fetch_wallet_explorer"
 
-  common_scrape-consumer:
-    << : *scraper-base
+  common_scrape_consumer:
+    << : *scraper_base
     command: "scraped_results_consumer"

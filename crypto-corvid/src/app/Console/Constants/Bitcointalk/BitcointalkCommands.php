@@ -7,9 +7,6 @@ abstract class BitcointalkCommands {
     const BITCOINTALK = 'bct:';
     const BITCOINTALK_URL = 'https://bitcointalk.org';
     
-    const START = self::BITCOINTALK . 'start';
-    const STOP = self::BITCOINTALK . 'stop';
-    
     /**
      * COMMAND SIGNATURES
      */

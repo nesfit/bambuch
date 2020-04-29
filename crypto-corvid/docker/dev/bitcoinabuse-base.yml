@@ -3,7 +3,7 @@ networks:
   default:
     external:
       name: crypto-corvid_default
-
+      
 x-scraper-base: &scraper_base
   build:
     context: ../../src/
@@ -23,18 +23,14 @@ x-scraper-base: &scraper_base
     - proxy
 
 services:
-  bct_all_main_topics_producer:
+  bca_load_csv_data:
     << : *scraper_base
-    command: "bct:all_main_topics_producer 2"
+    command: "bca:load_csv_data 2 1d"
 
-  bct_un_board_pages_producer:
+  bca_load_csv_data_30d:
     << : *scraper_base
-    command: "bct:un_board_pages_producer 2"
+    command: "bca:load_csv_data 2 30d"
 
-  bct_un_topic_pages_producer:
+  bca_load_csv_data_forever:
     << : *scraper_base
-    command: "bct:un_topic_pages_producer 2"
-
-  bct_un_user_profiles_producer:
-    << : *scraper_base
-    command: "bct:un_user_profiles_producer 2"
+    command: "bca:load_csv_data 2 forever"

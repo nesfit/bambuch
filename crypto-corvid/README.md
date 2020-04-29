@@ -64,7 +64,7 @@ docker-compose -f infra.yml -f bitcointalk-base.yml up -d
 
 Run a module  
 ```bash
-docker-compose -f infra.yml -f bitcointalk-base.yml up -d <name> (bct-main-boards-producer)
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d <name> (bct_main_boards_producer)
 ```
 
 Stop all modules
@@ -74,7 +74,7 @@ docker stop $(docker ps | grep bct | awk '{print $1}')
 
 Scaling a module
 ```bash
-docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct-board-pages-producer=5 bct-board-pages-producer
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```
 
 ## Dev commands

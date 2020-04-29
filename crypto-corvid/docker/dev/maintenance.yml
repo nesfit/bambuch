@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   migrate:
     image: crypto_corvid_laravel
@@ -32,3 +32,13 @@ services:
     command: install
     volumes:
       - ../../src:/crypto-app
+        
+  schedule:
+    image: crypto_corvid_backend
+    environment:
+      - DB_HOST=db
+    volumes:
+      - ../../src:/crypto-app
+    depends_on:
+      - db
+    command: php artisan schedule:run

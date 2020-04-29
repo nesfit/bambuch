@@ -113,12 +113,12 @@ class Utils {
         return implode("\t", $cleanArray);
     }
 
-    public static function extractXorCode($address, $position) {
+    public static function extractXorCode(string $address, int $position) {
         $value = substr($address, $position, 2);
         return hexdec($value);
     }
 
-    public static function decrypt($address) {
+    public static function decrypt(string $address) {
         $output = "";
         $xor_base = self::extractXorCode($address, 0);
 
@@ -130,7 +130,7 @@ class Utils {
         return $output;
     }
     
-    public static function cleanText($text) {
+    public static function cleanText(string $text) {
         $ascii = iconv("UTF-8", "UTF-8//TRANSLIT", $text);
         return str_replace(["\r", "\n", "\t"], ' ', $ascii);
     }
