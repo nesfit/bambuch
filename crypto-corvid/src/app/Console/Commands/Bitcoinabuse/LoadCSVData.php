@@ -38,6 +38,10 @@ class LoadCSVData extends CryptoParser {
     
     private function loadData(string $past) {
         $token = env('BITCOIN_ABUSE_TOKEN', '');
+        if ($token === '') {
+            $this->errorGraylog('BITCOIN_ABUSE_TOKEN not found!');
+            exit(1);
+        }
         $url = self::DOWNLOAD_URL . $past . '?api_token=' . $token;
 
         $data = $this->getPageContent($url);
@@ -48,7 +52,7 @@ class LoadCSVData extends CryptoParser {
         // skip CSV header
         fgetcsv($handle);
         while($row = fgetcsv($handle)) {
-            // id, address, type_id, type_other, abuser, descr, from_country, from_country_code, created_at           
+            // id, address, type_id, type_other, abuser, description, from_country, from_country_code, created_at           
             list(, $address, $type_id, , $owner, $description) = $row;
             $url = self::REPORTS_URL . $address;
             $parsedAddress = new ParsedAddress(
