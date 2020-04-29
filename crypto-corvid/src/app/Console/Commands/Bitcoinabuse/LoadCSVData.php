@@ -45,8 +45,10 @@ class LoadCSVData extends CryptoParser {
 
         // MAKE SURE "/statics" IS STILL THE VALID PATH!
         $handle = fopen('storage/statics/' . self::TMP_CSV_FILE, "r");
-        fgetcsv($handle); // skip CSV header
+        // skip CSV header
+        fgetcsv($handle);
         while($row = fgetcsv($handle)) {
+            // id, address, type_id, type_other, abuser, descr, from_country, from_country_code, created_at           
             list(, $address, $type_id, , $owner, $description) = $row;
             $url = self::REPORTS_URL . $address;
             $parsedAddress = new ParsedAddress(

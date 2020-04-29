@@ -80,7 +80,7 @@ docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct_board_page
 ## Bitcoinabuse modules execution
 Run a modules
 ```bash
-docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d bca_load_csv_data [30d, forever]
+docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d bca_load_csv_data [_30d, _forever]
 ```
 
 Stop all modules
