@@ -77,6 +77,17 @@ Scaling a module
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```
 
+## Bitcoinabuse modules execution
+Run a modules
+```bash
+docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d bca_load_csv_data [_30d, _forever]
+```
+
+Stop all modules
+```bash
+docker stop $(docker ps | grep bca | awk '{print $1}')
+```
+
 ## Dev commands
 Install new dependencies
 ```bash
