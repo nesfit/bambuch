@@ -85,32 +85,37 @@ class TopicPagesConsumer extends KafkaConProducer {
      */
     protected function loadDataFromUrl(string $url): array {
         $crawler = $this->getPageCrawler($url);
-        $title = $crawler->filter('title')->text();
-        $results = $crawler->filter('.td_headerandpost')->each(function (Crawler $node) use($title, $url) {
-            $addresses = array_keys(AddressMatcher::matchAddresses($node->html()));
-            $userInfo = $node->previousAll()->first();
-            $userName = $userInfo->filter('a')->first()->text();
-            $msgURL = $node->filter('a')->first()->attr('href');
-
-            if(count($addresses)) {
-                return array_reduce($addresses, function ($acc, $address) use ($userName, $msgURL, $title, $url) {
-                    array_push($acc,
-                        new ParsedAddress(
-                            $userName,
-                            $msgURL,
-                            $title,
-                            $url,
-                            $address,
-                            CryptoCurrency::BTC["code"],
-                            Category::CAT_1
-                        )
-                    );
-                    return $acc;
-                }, []);
-            }
-            return null;
-        });
-        return array_filter(Arr::flatten($results, 2));
+        try {
+            $title = $crawler->filter('title')->text();
+            $results = $crawler->filter('.td_headerandpost')->each(function (Crawler $node) use($title, $url) {
+                $addresses = array_keys(AddressMatcher::matchAddresses($node->html()));
+                $userInfo = $node->previousAll()->first();
+                $userName = $userInfo->filter('a')->first()->text();
+                $msgURL = $node->filter('a')->first()->attr('href');
+    
+                if(count($addresses)) {
+                    return array_reduce($addresses, function ($acc, $address) use ($userName, $msgURL, $title, $url) {
+                        array_push($acc,
+                            new ParsedAddress(
+                                $userName,
+                                $msgURL,
+                                $title,
+                                $url,
+                                $address,
+                                CryptoCurrency::BTC["code"],
+                                Category::CAT_1
+                            )
+                        );
+                        return $acc;
+                    }, []);
+                }
+                return null;
+            });
+            return array_filter(Arr::flatten($results, 2));
+        } catch(\Exception $e) {
+            $this->errorGraylog("Goutte failed - loadDataFromUrl", $e, ["url" => $url]);
+            return [];
+        }
     }
 
     protected function validateInputUrl(string $url): bool {

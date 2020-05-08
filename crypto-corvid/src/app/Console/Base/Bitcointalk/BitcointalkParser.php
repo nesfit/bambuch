@@ -66,17 +66,28 @@ abstract class BitcointalkParser extends CryptoParser {
      * @return array
      */
     protected function getLinksFromPage(string $url, string $pageType): array {
-        $crawler = $this->getPageCrawler($url);
-        $allLinks = $crawler->filterXPath('//a[contains(@href,"https://bitcointalk.org/index.php?' . $pageType. '")]/@href')->each(function (Crawler $node) {
-            return $node->getNode(0)->nodeValue;
-        });
-        return array_unique($allLinks);
+        try{
+            $crawler = $this->getPageCrawler($url);
+            $allLinks = $crawler->filterXPath('//a[contains(@href,"https://bitcointalk.org/index.php?' . $pageType. '")]/@href')->each(function (Crawler $node) {
+                return $node->getNode(0)->nodeValue;
+            });
+            return array_unique($allLinks);
+        } catch(\Exception $e) {
+            $this->errorGraylog("Goutte failed - getLinksFromPage", $e);
+            return [];
+        }
     }
     
     protected function getMaxPage(string $url): ?string {
-        $crawler = $this->getPageCrawler($url);
-        $node = $crawler->filterXPath('//td/a[@class="navPages"][last()]/@href')->getNode(0);
-
+        try {
+            $crawler = $this->getPageCrawler($url);
+            $node = $crawler->filterXPath('//td/a[@class="navPages"][last()]/@href')->getNode(0);
+        } catch(\Exception $e) {
+            $this->errorGraylog("Goutte failed - getMaxPage", $e);
+            return null;
+        }
+        
+        
         if ($node) {
             $nextPage = $node->nodeValue;
             $this->printVerbose3("<fg=blue>Max page: " . $nextPage ."</>");
@@ -87,8 +98,14 @@ abstract class BitcointalkParser extends CryptoParser {
     }
     
     protected function getNextPage(string $url): ?string {
-        $crawler = $this->getPageCrawler($url);
-        $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
+        try {
+            $crawler = $this->getPageCrawler($url);
+            $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
+        } catch(\Exception $e) {
+            $this->errorGraylog("Goutte failed - getNextPage", $e);
+            return null;
+        }
+
 
         if ($node) {
             $nextPage = $node->nodeValue;
