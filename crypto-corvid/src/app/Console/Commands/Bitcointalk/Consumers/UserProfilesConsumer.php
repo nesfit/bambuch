@@ -103,12 +103,16 @@ class UserProfilesConsumer extends KafkaConProducer {
     }
 
     private function parseProfile(string $url): array {
-        $crawler = $this->getPageCrawler($url);
-        $addressNode = $crawler->filterXPath('//text()[contains(.,"Bitcoin address: ")]/../../../td[last()]')->getNode(0);
-        if ($addressNode) {
-            $name = $crawler->filterXPath('//text()[contains(.,"Name")]/../../../td[last()]')->text();
-            $address = $addressNode->nodeValue;
-            return [$name,$address];
+        try {
+            $crawler = $this->getPageCrawler($url);
+            $addressNode = $crawler->filterXPath('//text()[contains(.,"Bitcoin address: ")]/../../../td[last()]')->getNode(0);
+            if ($addressNode) {
+                $name = $crawler->filterXPath('//text()[contains(.,"Name")]/../../../td[last()]')->text();
+                $address = $addressNode->nodeValue;
+                return [$name,$address];
+            }
+        } catch(\Exception $e) {
+            $this->errorGraylog("Goutte failed - getLinksFromPage", $e);
         }
         return [null,null];
     }

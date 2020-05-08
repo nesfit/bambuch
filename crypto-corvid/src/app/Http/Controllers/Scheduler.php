@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Constants\TaskConstants;
 use App\Models\Pg\Task;
 use App\Models\Views\TaskView;
 use Illuminate\Support\Facades\Request;
@@ -23,8 +24,12 @@ class Scheduler extends Controller {
         
         $task = Task::getByName($name);
         if ($task && $starting) {
+            if ($frequency === TaskConstants::NONE) {
+                $task->setAttribute(Task::COL_STARTING, "00:00");
+            } else {
+                $task->setAttribute(Task::COL_STARTING, $starting);
+            }
             $task->setAttribute(Task::COL_FREQ, $frequency);
-            $task->setAttribute(Task::COL_STARTING, $starting);
             $task->save();
         }
 
