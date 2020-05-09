@@ -13,3 +13,5 @@ COPY . /crypto-app
 
 RUN composer global require hirak/prestissimo
 RUN composer install
+
+RUN php artisan config:cache
