@@ -99,7 +99,7 @@ services:
     env_file:
       - ../../src/.env
     environment:
-      GRAYLOG_HTTP_EXTERNAL_URI: http://127.0.0.1:9000/
+      GRAYLOG_HTTP_EXTERNAL_URI: http://172.23.0.1:9000/
     volumes:
       - ../persistent/graylog/app/data/journal:/usr/share/graylog/data/journal
     depends_on:
