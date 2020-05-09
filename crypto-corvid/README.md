@@ -10,16 +10,35 @@ Author: Vladislav Bambuch - xbambu03@stud.fit.vutbr.cz
 
 
 ## Build the project
+Build frontend image
 ```bash
-docker build . -t crypto_scraper_laravel:latest
+DOCKER_BUILDKIT=1 docker build . -t crypto_corvid_frontend -f Dockerfile-fe
 ```
+Build backend image
+```bash
+DOCKER_BUILDKIT=1 docker build . -t crypto_corvid_backend -f Dockerfile-be
+```
+
 
 ## Run the project
-Install the dependencies
+### Production
+Run the web app
 ```bash
-docker-compose -f infra.yml -f maintenance.yml run --rm composer
+docker-compose -f infra.yml -f frontend.yml up serve
 ```
 
+### Development
+Run the web app
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+Install the dependencies
+```bash
+docker-compose -f infra.yml -f maintenance.yml up composer
+```
+
+### Common for both envs
 Migrate DB tables
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up migrate
@@ -32,17 +51,12 @@ docker-compose -f infra.yml -f maintenance.yml up seed
 
 Run/stop infra containers (Kafka, Zookeeper, Graylog, Postgres...)
 ```bash
-docker-compose -f infra.yml up/stop -d
+docker-compose -f infra.yml up/stop
 ```
 
 Run/stop specific container
 ```bash
-docker-compose -f infra.yml up/stop -d [kafka|graylog|postgres]
-```
-
-Serve Laravel app - not using Docker for FE
-```bash
-php artisan serve --host=0.0.0.0 --port=8000
+docker-compose -f infra.yml up/stop [kafka|graylog|postgres]
 ```
 
 ## Common modules execution

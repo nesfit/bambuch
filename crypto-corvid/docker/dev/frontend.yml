@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 networks:
   default:
     external:
@@ -6,10 +6,7 @@ networks:
 
 services:
   serve:
-    build:
-      context: ../../src/
-      dockerfile: ../docker/dev/Dockerfile-fe
-    image: crypto_corvid_laravel
+    image: crypto_corvid_frontend
     env_file:
       - ../../src/.env
     working_dir: /crypto-app
@@ -18,5 +15,3 @@ services:
       - db
     ports:
       - 8000:8000
-    volumes:
-      - ../../src:/crypto-app

@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   migrate:
-    image: crypto_corvid_laravel
+    image: crypto_corvid_backend
     env_file:
       - ../../src/.env
     command: php artisan migrate
@@ -13,7 +13,7 @@ services:
       - db
 
   seed:
-    image: crypto_corvid_laravel
+    image: crypto_corvid_backend
     env_file:
       - ../../src/.env
     command: php artisan db:seed
