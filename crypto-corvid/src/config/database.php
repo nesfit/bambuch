@@ -62,7 +62,7 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('APP_ENV') === 'production' ? 'db' : 'localhost',
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'scraper'),
             'username' => env('DB_USERNAME', 'postgres'),

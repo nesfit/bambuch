@@ -11,8 +11,6 @@ RUN echo "extension=rdkafka.so" >> /usr/local/etc/php/php.ini
 WORKDIR /crypto-app
 COPY . /crypto-app
 
-ENV APP_ENV production
-
 RUN composer global require hirak/prestissimo
 RUN composer install
 
