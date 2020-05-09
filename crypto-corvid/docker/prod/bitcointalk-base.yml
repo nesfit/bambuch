@@ -1,0 +1,46 @@
+version: "3.7"
+networks:
+  default:
+    external:
+      name: crypto-corvid_default
+
+x-scraper-base: &scraper_base
+  image: crypto_corvid_backend
+  entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+  env_file:
+    - ../../src/.env
+  depends_on:
+    - kafka
+    - db
+    - graylog
+    - proxy
+
+services:
+  bct_main_boards_producer:
+    << : *scraper_base
+    command: "bct:main_boards_producer 2"
+
+  bct_board_pages_producer:
+    << : *scraper_base
+    command: "bct:board_pages_producer 2"
+
+  bct_main_topics_producer:
+    << : *scraper_base
+    command: "bct:main_topics_producer 2"
+
+  bct_topic_pages_producer:
+    << : *scraper_base
+    command: "bct:topic_pages_producer 2"
+
+  bct_user_profiles_producer:
+    << : *scraper_base
+    command: "bct:user_profiles_producer 2"
+
+  bct_topic_pages_consumer:
+    << : *scraper_base
+    command: "bct:topic_pages_consumer 2"
+
+  bct_user_profiles_consumer:
+    << : *scraper_base
+    command: "bct:board_pages_producer 2"
+  
