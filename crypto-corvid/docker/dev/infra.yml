@@ -38,8 +38,6 @@ services:
     environment:
       LENSES_PORT: "9991"
       LENSES_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
-      LENSES_SECURITY_USER: "${LENSES_SECURITY_USER}"
-      LENSES_SECURITY_PASSWORD: "${LENSES_SECURITY_PASSWORD}"
       LENSES_ZOOKEEPER_HOSTS: |
         [
           {url:"zookeeper:2181"}
@@ -73,7 +71,6 @@ services:
     environment:
       POSTGRES_DB: scraper
       POSTGRES_USER: scraper
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
 
   # GRAYLOG       
   mongo:
