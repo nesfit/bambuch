@@ -95,6 +95,7 @@ services:
 
   graylog:
     image: 'graylog/graylog:3.2.3'
+    user: 'root'
     env_file:
       - ../../src/.env
     environment:
