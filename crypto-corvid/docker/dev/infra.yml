@@ -35,6 +35,7 @@ services:
 
   lenses:
     image: lensesio/lenses
+    user: 'root'
     env_file:
       - ../../src/.env
     environment:
