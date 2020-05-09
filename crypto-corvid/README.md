@@ -56,13 +56,13 @@ docker-compose -f infra.yml up/stop
 
 Run/stop specific container
 ```bash
-docker-compose -f infra.yml up/stop [kafka|graylog|postgres]
+docker-compose -f infra.yml up/stop -d --no-deps [kafka|graylog|postgres]
 ```
 
 ## Common modules execution
 Run all modules
 ```bash
-docker-compose -f infra.yml -f common.yml up -d
+docker-compose -f infra.yml -f common.yml up -d --no-deps
 ```
 
 Stop all modules
@@ -73,12 +73,12 @@ docker stop $(docker ps | grep common | awk '{print $1}')
 ## Bitcointalk modules execution
 Run all modules
 ```bash
-docker-compose -f infra.yml -f bitcointalk-base.yml up -d
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps
 ```
 
 Run a module  
 ```bash
-docker-compose -f infra.yml -f bitcointalk-base.yml up -d <name> (bct_main_boards_producer)
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps <name> (bct_main_boards_producer)
 ```
 
 Stop all modules
@@ -88,13 +88,13 @@ docker stop $(docker ps | grep bct | awk '{print $1}')
 
 Scaling a module
 ```bash
-docker-compose -f infra.yml -f bitcointalk-base.yml up -d --scale bct_board_pages_producer=5 bct_board_pages_producer
+docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```
 
 ## Bitcoinabuse modules execution
 Run a modules
 ```bash
-docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d bca_load_csv_data [_30d, _forever]
+docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d --no-deps bca_load_csv_data [_30d, _forever]
 ```
 
 Stop all modules

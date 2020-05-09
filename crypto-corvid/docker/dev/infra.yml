@@ -17,6 +17,7 @@ services:
 
   kafka:
     image: 'bitnami/kafka:latest'
+    user: 'root'
     ports:
       - '9092:9092'
       - '29092:29092'
