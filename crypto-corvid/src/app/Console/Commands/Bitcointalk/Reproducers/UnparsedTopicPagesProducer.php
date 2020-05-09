@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Console\Commands\Bitcointalk\UnparsedLoaders;
+namespace App\Console\Commands\Bitcointalk\Reproducers;
 
 use App\Console\Base\Bitcointalk\UnparsedProducer;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
