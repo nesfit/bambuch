@@ -14,7 +14,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
-      - ../persistent/zookeeper:/bitnami/zookeeper
+      - ./persistent/zookeeper:/bitnami/zookeeper
 
   kafka:
     image: 'bitnami/kafka:latest'
@@ -29,7 +29,7 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
-      - ../persistent/kafka:/bitnami/kafka
+      - ./persistent/kafka:/bitnami/kafka
     depends_on:
       - zookeeper
 
@@ -55,14 +55,14 @@ services:
 
   # PROXY
   proxy:
-    build: ../../proxy/
+    build: ../proxy/
     env_file:
       - ../src/.env
     ports:
       - "5566:5566"
       - "4444:4444"
     volumes:
-      - ../../proxy/:/haproxy
+      - ../proxy/:/haproxy
 
   # DATABASE
   db:
@@ -79,7 +79,7 @@ services:
   mongo:
     image: 'mongo:latest'
     volumes:
-      - ../persistent/graylog/mongo/data/db:/data/db
+      - ./persistent/graylog/mongo/data/db:/data/db
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
@@ -101,7 +101,7 @@ services:
     environment:
       GRAYLOG_HTTP_EXTERNAL_URI: http://172.23.0.1:9000/
     volumes:
-      - ../persistent/graylog/app/data/journal:/usr/share/graylog/data/journal
+      - ./persistent/graylog/app/data/journal:/usr/share/graylog/data/journal
     depends_on:
       - mongo
       - elasticsearch
