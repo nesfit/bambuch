@@ -8,6 +8,7 @@ services:
   # KAFKA  
   zookeeper:
     image: 'bitnami/zookeeper:latest'
+    user: 'root'
     ports:
       - '2181:2181'
     environment:
