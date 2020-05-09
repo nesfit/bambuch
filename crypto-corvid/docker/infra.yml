@@ -37,7 +37,7 @@ services:
     image: lensesio/lenses
     user: 'root'
     env_file:
-      - ../../src/.env
+      - ../src/.env
     environment:
       LENSES_PORT: "9991"
       LENSES_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
@@ -57,7 +57,7 @@ services:
   proxy:
     build: ../../proxy/
     env_file:
-      - ../../src/.env
+      - ../src/.env
     ports:
       - "5566:5566"
       - "4444:4444"
@@ -70,7 +70,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - ../../src/.env
+      - ../src/.env
     environment:
       POSTGRES_DB: scraper
       POSTGRES_USER: scraper
@@ -97,7 +97,7 @@ services:
     image: 'graylog/graylog:3.2.3'
     user: 'root'
     env_file:
-      - ../../src/.env
+      - ../src/.env
     environment:
       GRAYLOG_HTTP_EXTERNAL_URI: http://172.23.0.1:9000/
     volumes:
