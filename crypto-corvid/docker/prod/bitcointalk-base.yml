@@ -9,6 +9,8 @@ x-scraper-base: &scraper_base
   entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
   env_file:
     - ../../src/.env
+  environment:
+    - SCRAPER_TIMEOUT=1
   depends_on:
     - kafka
     - db
@@ -18,7 +20,7 @@ x-scraper-base: &scraper_base
 services:
   bct_main_boards_producer:
     << : *scraper_base
-    command: "bct:main_boards_producer 2"
+    command: "bct:main_boards_producer 2"    
 
   bct_board_pages_producer:
     << : *scraper_base
