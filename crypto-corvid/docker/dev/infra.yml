@@ -52,14 +52,14 @@ services:
 
   # PROXY
   proxy:
-    build: ../proxy/
+    build: ../../proxy/
     env_file:
       - ../../src/.env
     ports:
       - "5566:5566"
       - "4444:4444"
     volumes:
-      - ../proxy/:/haproxy
+      - ../../proxy/:/haproxy
 
   # DATABASE
   db:
