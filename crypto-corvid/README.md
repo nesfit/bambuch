@@ -60,7 +60,7 @@ docker-compose -f infra.yml up/stop -d --no-deps [kafka|graylog|postgres]
 ```
 
 ## Common modules execution
-Run all modules
+Run all modules - commons modules HAS to be run before any source-specific modules 
 ```bash
 docker-compose -f infra.yml -f common.yml up -d --no-deps
 ```
