@@ -20,40 +20,40 @@ services:
     << : *scraper_base
     command: "bct:main_boards_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=5
+      - SCRAPER_TIMEOUT=5000
 
   bct_board_pages_producer:
     << : *scraper_base
     command: "bct:board_pages_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=5
+      - SCRAPER_TIMEOUT=5000
 
   bct_main_topics_producer:
     << : *scraper_base
     command: "bct:main_topics_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=1
+      - SCRAPER_TIMEOUT=500
 
   bct_topic_pages_producer:
     << : *scraper_base
     command: "bct:topic_pages_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=1
+      - SCRAPER_TIMEOUT=500
 
   bct_user_profiles_producer:
     << : *scraper_base
     command: "bct:user_profiles_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=1
+      - SCRAPER_TIMEOUT=500
 
   bct_topic_pages_consumer:
     << : *scraper_base
     command: "bct:topic_pages_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=1
+      - SCRAPER_TIMEOUT=500
 
   bct_user_profiles_consumer:
     << : *scraper_base
     command: "bct:user_profiles_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=1
+      - SCRAPER_TIMEOUT=500

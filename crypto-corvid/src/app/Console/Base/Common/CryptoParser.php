@@ -138,7 +138,7 @@ class CryptoParser extends Command {
         // delete history to prevent running out of memory
         $this->browser->restart();
         // to prevent traffic overloading
-        sleep(intval(env('SCRAPER_TIMEOUT', 2)));
+        usleep(intval(env('SCRAPER_TIMEOUT', 2000)));
         $response = $this->browser->request('GET', $url);
         $status = $this->browser->getResponse()->getStatusCode();
         if ($status != 200) {
