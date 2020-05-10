@@ -15,16 +15,14 @@ services:
     command: php artisan db:seed
     depends_on:
       - db
-        
-  composer:
+
+  composer_scheduler:
     image: crypto_corvid_backend
     env_file:
       - ../../src/.env
+    environment:
+      - COMPOSER=composer-frontend.json
     entrypoint: composer
     command: install
-        
-  schedule:
-    image: crypto_corvid_backend
-    depends_on:
-      - db
-    command: php artisan schedule:run
+    volumes:
+      - ../../src:/crypto-app

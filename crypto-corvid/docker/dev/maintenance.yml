@@ -28,11 +28,3 @@ services:
     command: install
     volumes:
       - ../../src:/crypto-app
-        
-  schedule:
-    image: crypto_corvid_backend
-    environment:
-      - DB_HOST=db
-    depends_on:
-      - db
-    command: php artisan schedule:run
