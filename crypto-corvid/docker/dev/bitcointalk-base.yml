@@ -49,5 +49,5 @@ services:
 
   bct_user_profiles_consumer:
     << : *scraper_base
-    command: "bct:board_pages_producer 2"
+    command: "bct:user_profiles_consumer 2"
   
