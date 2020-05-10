@@ -134,6 +134,7 @@ class CryptoParser extends Command {
     }
 
     protected function getPageCrawler(string $url): Crawler {
+        $this->browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
         // delete history to prevent running out of memory
         $this->browser->restart();
         // to prevent traffic overloading
