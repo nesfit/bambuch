@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Exceptions;
 
@@ -34,6 +35,10 @@ class Handler extends ExceptionHandler
      */
     public function report(\Throwable $exception)
     {
+        if (app()->bound('sentry') && $this->shouldReport($exception)) {
+            app('sentry')->captureException($exception);
+        }
+
         parent::report($exception);
     }
 
