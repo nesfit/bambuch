@@ -22,7 +22,6 @@ services:
       - ../../src/.env
     environment:
       - APP_ENV=production
-      - COMPOSER=composer-frontend.json
     entrypoint: composer
     command: install
     volumes:
