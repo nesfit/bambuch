@@ -36,7 +36,7 @@ abstract class KafkaConProducer extends BitcointalkParser {
         }            
     }
     
-    protected function handleKafkaRead(Message $message) {
+    protected function handleKafkaRead(Message $message): int {
         $inUrlMessage = UrlMessage::decodeData($message->payload);
         $mainUrl = $inUrlMessage->url;
 

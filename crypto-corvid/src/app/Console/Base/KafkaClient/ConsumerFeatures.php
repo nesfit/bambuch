@@ -21,12 +21,12 @@ trait ConsumerFeatures {
     
     protected function initConsumer() {
         if (!isset($this->inputTopic)) {
-            $this->error("'inputTopic' property is not set!");
+            $this->errorGraylog("'inputTopic' property is not set!");
             exit(0);
         }
 
         if (!isset($this->groupID)) {
-            $this->error("'groupID' property is not set!");
+            $this->errorGraylog("'groupID' property is not set!");
             exit(0);
         }
         
@@ -54,7 +54,11 @@ trait ConsumerFeatures {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
                         $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
                         
-                        $this->handleKafkaRead($message);
+                        try {
+                            $this->handleKafkaRead($message);
+                        } catch (Exception $e) {
+                            $this->errorGraylog("Couldn't handleKafkaRead", $e);
+                        }
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
                         $this->infoGraylog('No more messages; will wait for more...', GraylogTypes::NO_DATA);
@@ -63,7 +67,7 @@ trait ConsumerFeatures {
                         $this->infoGraylog('Timed out!', GraylogTypes::WAITING);
                         break;
                     default:
-                        throw new Exception($message->errstr(), $message->err);
+                        $this->errorGraylog("Unknown consuming error", new Exception($message->errstr(), $message->err));
                         break;
                 }
             }

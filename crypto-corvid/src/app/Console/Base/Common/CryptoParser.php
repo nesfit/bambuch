@@ -33,7 +33,7 @@ class CryptoParser extends Command {
     
     public function handle() {
         if ($this->serviceName === '') {
-            $this->error("'serviceName' property is not set!");
+            $this->errorGraylog("'serviceName' property is not set!");
             exit(0);
         }
         
@@ -175,6 +175,7 @@ class CryptoParser extends Command {
     public function errorGraylog(string $message, Exception $e = null, array $context = []) {
         $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
         $this->graylogChannel()->error($message, $attrs);
+        report($e);
         $this->error($message);
         if ($e) {
             $this->error($e->getMessage());
