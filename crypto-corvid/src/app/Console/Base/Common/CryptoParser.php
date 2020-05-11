@@ -17,7 +17,6 @@ use Exception;
 
 class CryptoParser extends Command {    
     protected $verbose = 1;
-    protected $browser;
     protected $dateTime;
     protected $url;
     protected $print = true;
@@ -26,7 +25,6 @@ class CryptoParser extends Command {
     public function __construct() {
         parent::__construct();
         
-        $this->browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
         // TODO define custom progress bar with message
         ProgressBar::setFormatDefinition('custom', ' %percent% -- %message%');
     }
@@ -132,25 +130,32 @@ class CryptoParser extends Command {
             return null;
         }
     }
-
-    protected function getPageCrawler(string $url): Crawler {
-        $this->browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
+    
+    private function makeRequest(string $url): array {
+        $browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
         // delete history to prevent running out of memory
-        $this->browser->restart();
+//        $browser->restart();
         // to prevent traffic overloading
         usleep(intval(env('SCRAPER_TIMEOUT', 2000)));
-        $response = $this->browser->request('GET', $url);
-        $status = $this->browser->getResponse()->getStatusCode();
+        $request = $browser->request('GET', $url);
+        $response = $browser->getResponse();
+        $status = $response->getStatusCode();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
             $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
         }
-        return $response;
+        
+        return [$request, $response];
+    }
+
+    protected function getPageCrawler(string $url): Crawler {
+        [$request] = $this->makeRequest($url);
+        return $request;
     }
     
     protected function getPageContent(string $url): string {
-        $this->getPageCrawler($url);
-        return $this->browser->getResponse()->getContent();
+        [, $response] = $this->makeRequest($url);
+        return $response->getContent();
     }
     
     protected function getFullHost(string $url = null): string {
