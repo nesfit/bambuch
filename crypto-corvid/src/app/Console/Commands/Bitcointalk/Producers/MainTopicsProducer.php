@@ -57,7 +57,7 @@ class MainTopicsProducer extends KafkaConProducer {
     }
 
     protected function loadDataFromUrl(string $url): array {
-        $this->debugGraylog("PHP memory allocation", GraylogTypes::INFO, memory_get_usage());
+        $this->infoGraylog("PHP memory allocation", GraylogTypes::INFO, memory_get_usage());
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         
         if(!BoardPage::setParsedByUrl($url)) {
