@@ -61,7 +61,7 @@ trait ConsumerFeatures {
                                 memory_get_usage(),
                                 [
                                     "trueAlloc" => memory_get_usage(true),
-                                    "percentage" => memory_get_usage(true) / 1004544000
+                                    "percentage" => memory_get_usage(true) / 1073741824
                                 ]
                             );
                             $this->handleKafkaRead($message);
@@ -71,7 +71,7 @@ trait ConsumerFeatures {
                                 memory_get_usage(),
                                 [
                                     "trueAlloc" => memory_get_usage(true),
-                                    "percentage" => memory_get_usage(true) / 1004544000
+                                    "percentage" => memory_get_usage(true) / 1073741824
                                 ]
                             );
                         } catch (Exception $e) {
