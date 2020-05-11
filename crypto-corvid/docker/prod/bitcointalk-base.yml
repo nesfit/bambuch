@@ -32,28 +32,28 @@ services:
     << : *scraper_base
     command: "bct:main_topics_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=100
 
   bct_topic_pages_producer:
     << : *scraper_base
     command: "bct:topic_pages_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=100
 
   bct_user_profiles_producer:
     << : *scraper_base
     command: "bct:user_profiles_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=100
 
   bct_topic_pages_consumer:
     << : *scraper_base
     command: "bct:topic_pages_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=100
 
   bct_user_profiles_consumer:
     << : *scraper_base
     command: "bct:user_profiles_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=100
