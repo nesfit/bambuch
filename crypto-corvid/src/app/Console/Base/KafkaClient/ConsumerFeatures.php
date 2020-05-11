@@ -55,7 +55,25 @@ trait ConsumerFeatures {
                         $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
                         
                         try {
+                            $this->infoGraylog(
+                                "PHP memory allocation - before handleKafkaRead",
+                                GraylogTypes::INFO,
+                                memory_get_usage(),
+                                [
+                                    "trueAlloc" => memory_get_usage(true),
+                                    "percentage" => memory_get_usage(true) / 1004544000
+                                ]
+                            );
                             $this->handleKafkaRead($message);
+                            $this->infoGraylog(
+                                "PHP memory allocation - after handleKafkaRead",
+                                GraylogTypes::INFO,
+                                memory_get_usage(),
+                                [
+                                    "trueAlloc" => memory_get_usage(true),
+                                    "percentage" => memory_get_usage(true) / 1004544000
+                                ]
+                            );
                         } catch (Exception $e) {
                             $this->errorGraylog("Couldn't handleKafkaRead", $e);
                         }
