@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlValidations;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
@@ -56,6 +57,7 @@ class MainTopicsProducer extends KafkaConProducer {
     }
 
     protected function loadDataFromUrl(string $url): array {
+        $this->debugGraylog("PHP memory allocation", GraylogTypes::INFO, memory_get_usage());
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         
         if(!BoardPage::setParsedByUrl($url)) {
