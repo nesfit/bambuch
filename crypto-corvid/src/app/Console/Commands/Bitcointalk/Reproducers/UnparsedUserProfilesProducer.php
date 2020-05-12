@@ -19,7 +19,7 @@ class UnparsedUserProfilesProducer extends UnparsedProducer {
     }
 
     public function handle() {
-        $this->outputTopic = BitcointalkKafka::TOPIC_PAGES_TOPIC;
+        $this->outputTopic = BitcointalkKafka::USER_PROFILES_TOPIC;
         $this->serviceName = BitcointalkCommands::UN_USER_PROFILES_PRODUCER;
         $this->tableName = UserProfile::class;
 
