@@ -7,5 +7,5 @@ topics="btalkMainBoards btalkBoardPages btalkMainTopics btalkTopicUrl btalkUserP
 
 for val in ${topics}; do
     kafka-topics.sh --zookeeper zookeeper:2181 --topic ${val}  --create --partitions ${parts} --replication-factor ${rep_fact}; 
-    echo ""
+    echo -e "Created: ${val} \n"
 done

@@ -4,4 +4,5 @@ topics="btalkMainBoards btalkBoardPages btalkMainTopics btalkTopicUrl btalkUserP
 
 for val in ${topics}; do
     kafka-topics.sh --zookeeper zookeeper:2181 --topic ${val} --describe
+    echo "";
 done

@@ -60,7 +60,7 @@ docker-compose -f infra.yml up/stop -d --no-deps [kafka|graylog|postgres]
 ### Production
 Create topics in running kafka
 ```bash
-docker exec -it -w /host prod_kafka_1 bash create-topics.sh 
+docker exec -it -w /scripts prod_kafka_1 bash create-topics.sh 
 ```
 
 ### Development
@@ -86,7 +86,7 @@ kafka-topics.sh --zookeeper zookeeper:2181 --list
 ```
 Run host shell script in kafka
 ```bash
-docker exec -it -w /host dev_kafka_1 bash alter-topics.sh 
+docker exec -it -w /scripts dev_kafka_1 bash alter-topics.sh 
 ```
 Change group offset
 ```bash
