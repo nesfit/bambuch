@@ -58,7 +58,7 @@ docker-compose -f infra.yml up/stop -d --no-deps [kafka|graylog|postgres]
 
 ## Kafka management
 ### Production
-Create topics in running kafka
+Create topics in running Kafka
 ```bash
 docker exec -it -w /scripts prod_kafka_1 bash create-topics.sh 
 ```
@@ -84,7 +84,7 @@ List topics
 ```bash
 kafka-topics.sh --zookeeper zookeeper:2181 --list
 ```
-Run host shell script in kafka
+Run host shell script in Kafka
 ```bash
 docker exec -it -w /scripts dev_kafka_1 bash alter-topics.sh 
 ```
@@ -122,7 +122,10 @@ Scaling a module (when scaling up the SCRAPER_TIMEOUT has to be increased)
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```
-
+Unparsed data into Kafka
+```bash
+docker-compose -f infra.yml -f bitcointalk-reproducers.yml up -d --no-deps bct_un_board_pages_producer
+```
 
 ## Bitcoinabuse modules execution
 Run a modules
