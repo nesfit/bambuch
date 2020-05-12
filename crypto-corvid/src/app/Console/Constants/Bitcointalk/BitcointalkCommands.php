@@ -19,8 +19,9 @@ abstract class BitcointalkCommands {
     const USER_PROFILES_PRODUCER = self::BITCOINTALK . 'user_profiles_producer';
     const USER_PROFILES_CONSUMER = self::BITCOINTALK . 'user_profiles_consumer';
     
-    const UN_TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'un_topic_pages_producer';
     const UN_BOARD_PAGES_PRODUCER = self::BITCOINTALK . 'un_board_pages_producer';
+    const UN_MAIN_TOPICS_PRODUCER = self::BITCOINTALK . 'un_main_topics_producer';
+    const UN_TOPIC_PAGES_PRODUCER = self::BITCOINTALK . 'un_topic_pages_producer';
     const UN_USER_PROFILES_PRODUCER = self::BITCOINTALK . 'un_user_profiles_producer';
 
     /**

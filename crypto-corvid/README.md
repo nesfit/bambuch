@@ -32,7 +32,6 @@ Run the web app
 ```bash
 php artisan serve --host=0.0.0.0 --port=8000
 ```
-
 Install the dependencies
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up composer
@@ -43,76 +42,108 @@ Migrate DB tables
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up migrate
 ```
-
 Seed DB tables
 ```bash
 docker-compose -f infra.yml -f maintenance.yml up seed
 ```
-
 Run/stop infra containers (Kafka, Zookeeper, Graylog, Postgres...)
 ```bash
 docker-compose -f infra.yml up/stop
 ```
-
 Run/stop specific container
 ```bash
 docker-compose -f infra.yml up/stop -d --no-deps [kafka|graylog|postgres]
 ```
+
+
+## Kafka management
+### Production
+Create topics in running kafka
+```bash
+docker exec -it -w /host prod_kafka_1 bash create-topics.sh 
+```
+
+### Development
+Create a topic
+```bash
+kafka-topics.sh --zookeeper zookeeper:2181 --topic testTopic1 --create --partitions 10 --replication-factor 1
+```
+Delete a topic
+```bash
+kafka-topics.sh --zookeeper zookeeper:2181 --topic testTopic1 --delete
+```
+Describe a topic
+```bash
+kafka-topics.sh --describe --zookeeper zookeeper:2181 --topic btalkMainTopics
+```
+Alter a topic
+```bash
+kafka-topics.sh --zookeeper zookeeper:2181 --topic btalkMainTopics --alter --partitions 6
+```
+List topics
+```bash
+kafka-topics.sh --zookeeper zookeeper:2181 --list
+```
+Run host shell script in kafka
+```bash
+docker exec -it -w /host dev_kafka_1 bash alter-topics.sh 
+```
+Change group offset
+```bash
+kafka-consumer-groups.sh --bootstrap-server kafka:9092 --group btalkBoardPagesGroupLoad --reset-offsets --to-earliest --all-topics --execute
+```
+
 
 ## Common modules execution
 Run all modules - commons modules HAS to be run before any source-specific modules 
 ```bash
 docker-compose -f infra.yml -f common.yml up -d --no-deps
 ```
-
 Stop all modules
 ```bash
 docker stop $(docker ps | grep common | awk '{print $1}')
 ```
+
 
 ## Bitcointalk modules execution
 Run all modules
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps
 ```
-
 Run a module  
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps <name> (bct_main_boards_producer)
 ```
-
 Stop all modules
 ```bash
 docker stop $(docker ps | grep bct | awk '{print $1}')
 ```
-
 Scaling a module
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```
+
 
 ## Bitcoinabuse modules execution
 Run a modules
 ```bash
 docker-compose -f infra.yml -f bitcoinabuse-base.yml up -d --no-deps bca_load_csv_data [_30d, _forever]
 ```
-
 Stop all modules
 ```bash
 docker stop $(docker ps | grep bca | awk '{print $1}')
 ```
+
 
 ## Dev commands
 Install new dependencies
 ```bash
 docker-compose -f infra.yml -f maintenance.yml run --rm composer require <package>
 ```
-
 Stop seeding
 ```bash
 docker stop $(docker ps | grep seed_run | awk '{print $1}')
 ```
-
 Stop everything
 ```bash
 docker stop $(docker ps | grep crypto | awk '{print $1}')
@@ -120,18 +151,17 @@ docker stop $(docker ps | grep crypto | awk '{print $1}')
 ```bash
 docker-compose -f infra.yml -f backend.yml stop
 ```
-
 Remove containers
 ```bash
 docker rm $(docker ps -a | grep producer | awk '{print $1}')
 ```
-
 Broken composer autoload
 ```bash
 composer dump-autoload
 composer clear-cache
 php artisan cache:clear
 ```
+
 
 ## Additional notes
 OSX docker daemon.json location: `~/.docker/daemon.json`
