@@ -28,7 +28,7 @@ abstract class UnparsedProducer extends KafkaProducer {
         foreach ($unparsedPages as $unparsedPage) {
             $parentUrl = $unparsedPage->getAttribute(BitcointalkModel::COL_PARENT_URL);
             $url = $unparsedPage->getAttribute(BitcointalkModel::COL_URL);
-            $urlMessage = new UrlMessage($parentUrl, $url, false);
+            $urlMessage = new UrlMessage($parentUrl ?? '', $url, false);
             $this->kafkaProduce($urlMessage->encodeData());
         }
     }
