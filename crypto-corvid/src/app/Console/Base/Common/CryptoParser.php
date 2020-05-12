@@ -49,25 +49,32 @@ class CryptoParser extends Command {
 //        $browser->restart();
         // to prevent traffic overloading
         usleep(intval(env('SCRAPER_TIMEOUT', 2000)));
-        $request = $browser->request('GET', $url);
+        $crawler = $browser->request('GET', $url);
         $response = $browser->getResponse();
+        $content = $response->getContent();
+        
+        $this->infoGraylog("Response content size", GraylogTypes::INFO, null, [
+            "url" => $url,
+            "contentSize" => strlen($content)
+        ]);
+        
         $status = $response->getStatusCode();
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
             $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
         }
 
-        return [$request, $response];
+        return [$crawler, $content];
     }
 
     protected function getPageCrawler(string $url): Crawler {
-        [$request] = $this->makeRequest($url);
-        return $request;
+        [$crawler] = $this->makeRequest($url);
+        return $crawler;
     }
 
     protected function getPageContent(string $url): string {
-        [, $response] = $this->makeRequest($url);
-        return $response->getContent();
+        [, $content] = $this->makeRequest($url);
+        return $content->getContent();
     }
 
     protected function getFullHost(string $url = null): string {

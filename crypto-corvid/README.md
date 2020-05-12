@@ -118,7 +118,7 @@ Stop all modules
 ```bash
 docker stop $(docker ps | grep bct | awk '{print $1}')
 ```
-Scaling a module
+Scaling a module (when scaling up the SCRAPER_TIMEOUT has to be increased)
 ```bash
 docker-compose -f infra.yml -f bitcointalk-base.yml up -d --no-deps --scale bct_board_pages_producer=5 bct_board_pages_producer
 ```

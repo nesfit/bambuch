@@ -12,8 +12,6 @@ x-scraper-base: &scraper_base
   entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
   env_file:
     - ../../src/.env
-  environment:
-    - DB_HOST=db
   volumes:
     - ../../src:/crypto-app
   depends_on:
@@ -26,28 +24,49 @@ services:
   bct_main_boards_producer:
     << : *scraper_base
     command: "bct:main_boards_producer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_board_pages_producer:
     << : *scraper_base
     command: "bct:board_pages_producer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_main_topics_producer:
     << : *scraper_base
     command: "bct:main_topics_producer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_topic_pages_producer:
     << : *scraper_base
     command: "bct:topic_pages_producer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_user_profiles_producer:
     << : *scraper_base
     command: "bct:user_profiles_producer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_topic_pages_consumer:
     << : *scraper_base
     command: "bct:topic_pages_consumer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
 
   bct_user_profiles_consumer:
     << : *scraper_base
     command: "bct:user_profiles_consumer 2"
+    environment:
+      - SCRAPER_TIMEOUT=1000
+      - DB_HOST=db
   
