@@ -112,7 +112,7 @@ class UserProfilesConsumer extends KafkaConProducer {
                 return [$name,$address];
             }
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getLinksFromPage", $e);
+            $this->errorGraylog("Goutte failed - getLinksFromPage", $e, ["url" => $url]);
         }
         return [null,null];
     }

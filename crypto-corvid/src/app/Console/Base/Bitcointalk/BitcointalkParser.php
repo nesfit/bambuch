@@ -73,7 +73,7 @@ abstract class BitcointalkParser extends CryptoParser {
             });
             return array_unique($allLinks);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getLinksFromPage", $e);
+            $this->errorGraylog("Goutte failed - getLinksFromPage", $e, ["url" => $url]);
             return [];
         }
     }
@@ -83,7 +83,7 @@ abstract class BitcointalkParser extends CryptoParser {
             $crawler = $this->getPageCrawler($url);
             $node = $crawler->filterXPath('//td/a[@class="navPages"][last()]/@href')->getNode(0);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getMaxPage", $e);
+            $this->errorGraylog("Goutte failed - getMaxPage", $e, ["url" => $url]);
             return null;
         }
         
@@ -102,7 +102,7 @@ abstract class BitcointalkParser extends CryptoParser {
             $crawler = $this->getPageCrawler($url);
             $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getNextPage", $e);
+            $this->errorGraylog("Goutte failed - getNextPage", $e, ["url" => $url]);
             return null;
         }
 
