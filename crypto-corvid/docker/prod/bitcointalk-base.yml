@@ -38,13 +38,13 @@ services:
     << : *scraper_base
     command: "bct:topic_pages_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=0
+      - SCRAPER_TIMEOUT=1000
 
   bct_user_profiles_producer:
     << : *scraper_base
     command: "bct:user_profiles_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=0
+      - SCRAPER_TIMEOUT=1000
 
   bct_topic_pages_consumer:
     << : *scraper_base
