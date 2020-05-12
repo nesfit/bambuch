@@ -95,6 +95,6 @@ class BoardPagesProducer extends KafkaConProducer {
     }
 
     public static function calculateBoardPages(int $boardId, int $from, int $to): array {
-        return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to);
+        return self::calculateEntityPages(self::ENTITY, $boardId, $from, $to, 40);
     }
 }

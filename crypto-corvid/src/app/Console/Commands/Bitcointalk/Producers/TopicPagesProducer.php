@@ -103,6 +103,6 @@ class TopicPagesProducer extends KafkaConProducer {
     }
 
     private static function calculateTopicPages(int $topicId, int $from, int $to): array {
-        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
+        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to, 20);
     }
 }
