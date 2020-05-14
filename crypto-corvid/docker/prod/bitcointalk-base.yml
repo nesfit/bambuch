@@ -20,7 +20,7 @@ services:
     << : *scraper_base
     command: "bct:main_boards_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=2000
+      - SCRAPER_TIMEOUT=500
 
   bct_board_pages_producer:
     << : *scraper_base
