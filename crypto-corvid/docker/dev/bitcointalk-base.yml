@@ -7,8 +7,8 @@ networks:
 x-scraper-base: &scraper_base
   build:
     context: ../../src/
-    dockerfile: ../docker/dev/Dockerfile-be
-  image: crypto_corvid_backend
+    dockerfile: ./Dockerfile-be-dev
+  image: crypto_corvid_backend_dev
   entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
   env_file:
     - ../../src/.env
@@ -46,7 +46,7 @@ services:
     << : *scraper_base
     command: "bct:topic_pages_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=1000
+      - SCRAPER_TIMEOUT=0
       - DB_HOST=db
 
   bct_user_profiles_producer:
