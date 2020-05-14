@@ -111,6 +111,7 @@ class MainBoardsProducer extends KafkaProducer {
             $firstUnparsed->setAttribute(MainBoard::COL_PARSED, true);
             $firstUnparsed->save();
             
+            unset($firstUnparsed);
             $this->loadChildMainBoards();
         }
     }

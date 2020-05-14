@@ -73,5 +73,6 @@ class UserProfilesProducer extends KafkaConProducer {
         $topicPage->setAttribute(UserProfile::COL_URL, $message->url);
         $topicPage->setAttribute(UserProfile::COL_PARSED, false);
         $topicPage->save();
+        unset($topicPage);
     }
 }
