@@ -12,7 +12,7 @@ declare(strict_types=1);
 |
 */
 
-ini_set('memory_limit', '1G');
+ini_set('memory_limit', '2G');
 ini_set('xdebug.gc_stats_enable ', true);
 
 $app = new Illuminate\Foundation\Application(
