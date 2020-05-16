@@ -10,6 +10,7 @@ COPY . /crypto-app
 
 ENV APP_ENV production
 ENV DB_HOST db
+ENV DEBUGBAR_ENABLED false
 ENV COMPOSER composer-frontend.json
 
 RUN composer global require hirak/prestissimo
