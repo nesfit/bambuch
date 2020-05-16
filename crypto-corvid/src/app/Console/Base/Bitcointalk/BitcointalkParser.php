@@ -119,13 +119,13 @@ abstract class BitcointalkParser extends CryptoParser {
     }
     
     protected function getNewData(string $url) {
-        $table = $this->table;
         /** @var BitcointalkModel $table */
-        $dbData = $table::getAll();
-        $all = array_map(function ($val) { return $val[BitcointalkModel::COL_URL]; }, $dbData);
+        $table = $this->table;
         $fromUrl = $this->loadDataFromUrl($url);
 
-        return array_diff($fromUrl, $all);
+        return array_filter($fromUrl, function ($url) use ($table) {
+            return !$table::exists($url);
+        });
     }
 
     abstract protected function loadDataFromUrl(string $url): array;

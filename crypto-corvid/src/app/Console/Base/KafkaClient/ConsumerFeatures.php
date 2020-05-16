@@ -66,8 +66,6 @@ trait ConsumerFeatures {
                             );
                             $this->handleKafkaRead($message);
 
-                            gc_collect_cycles();
-
                             $this->infoGraylog(
                                 "PHP memory allocation - after handleKafkaRead",
                                 GraylogTypes::INFO,
