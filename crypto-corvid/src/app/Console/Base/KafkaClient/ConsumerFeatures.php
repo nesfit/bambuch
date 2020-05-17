@@ -64,6 +64,7 @@ trait ConsumerFeatures {
                                     "percentage" => memory_get_usage(true) / 2147483648
                                 ]
                             );
+
                             $this->handleKafkaRead($message);
 
                             $this->infoGraylog(

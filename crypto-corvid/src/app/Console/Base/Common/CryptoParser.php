@@ -49,6 +49,9 @@ class CryptoParser extends Command {
 //        $browser->restart();
         // to prevent traffic overloading
         usleep(intval(env('SCRAPER_TIMEOUT', 2000)));
+        
+        $this->infoGraylog("Requesting url", GraylogTypes::INFO, null, ["url" => $url]);
+
         $crawler = $browser->request('GET', $url);
         $response = $browser->getResponse();
         $content = $response->getContent();
