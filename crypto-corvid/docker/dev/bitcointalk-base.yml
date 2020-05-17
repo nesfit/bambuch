@@ -9,6 +9,7 @@ x-scraper-base: &scraper_base
     context: ../../src/
     dockerfile: ./Dockerfile-be-dev
   image: crypto_corvid_backend_dev
+#  entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "blackfire", "run", "php", "artisan"]
   entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
   env_file:
     - ../../src/.env

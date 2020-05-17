@@ -113,3 +113,11 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+     
+  # BLACKFIRE      
+  blackfire:
+    image: blackfire/blackfire
+    env_file:
+      - ../../src/.env
+    ports: 
+      - "8707:8707"

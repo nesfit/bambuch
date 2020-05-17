@@ -10,6 +10,21 @@ RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 RUN echo "extension=rdkafka.so" >> /usr/local/etc/php/php.ini
 #RUN echo 'zend_extension="/usr/local/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so"' >> /usr/local/etc/php/php.ini
 
+RUN php -r "echo ini_get ('extension_dir');"
+
+#RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+RUN curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/74
+RUN mkdir -p /tmp/blackfire
+RUN tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire
+RUN mv /tmp/blackfire/blackfire-*.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/blackfire.so
+RUN printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
+RUN rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+
+RUN mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire
+
 WORKDIR /crypto-app
 COPY ./wait-for-it.sh /crypto-app
 
