@@ -103,7 +103,7 @@ class CryptoParser extends Command {
     }
 
     public function errorGraylog(string $message, Exception $e = null, array $context = []) {
-        $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
+        $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "", $e);
         $this->graylogChannel()->error($message, $attrs);
         $this->error($message);
         if ($e) {
