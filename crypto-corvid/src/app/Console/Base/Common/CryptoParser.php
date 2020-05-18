@@ -88,8 +88,12 @@ class CryptoParser extends Command {
         return Log::channel('gelf');
     }
 
-    private function getGraylogAttrs(array $context, string $logType, $payload): array {
-        return array_merge($context, ["serviceName" => $this->serviceName, "logType" => $logType, "payload" => $payload]);
+    private function getGraylogAttrs(array $context, string $logType, $payload, Exception $e = null): array {
+        $general = ["serviceName" => $this->serviceName, "logType" => $logType, "payload" => $payload];
+        if ($e) {
+            return array_merge($context, $general, ["errorMsg" => $e->getMessage()]);
+        }
+        return array_merge($context, $general);
     }
 
     public function infoGraylog(string $message, string $logType, $payload = null, array $context = []) {
@@ -101,9 +105,9 @@ class CryptoParser extends Command {
     public function errorGraylog(string $message, Exception $e = null, array $context = []) {
         $attrs = $this->getGraylogAttrs($context, GraylogTypes::ERROR, "");
         $this->graylogChannel()->error($message, $attrs);
-        report($e);
         $this->error($message);
         if ($e) {
+            report($e);
             $this->error($e->getMessage());
         }
     }
