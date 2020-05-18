@@ -89,7 +89,7 @@ class CryptoParser extends Command {
     }
 
     private function getGraylogAttrs(array $context, string $logType, $payload, Exception $e = null): array {
-        $general = ["serviceName" => $this->serviceName, "logType" => $logType, "payload" => $payload];
+        $general = ["serviceName" => $this->serviceName, "logType" => $logType, "payloadData" => $payload];
         if ($e) {
             return array_merge($context, $general, ["errorMsg" => $e->getMessage()]);
         }
