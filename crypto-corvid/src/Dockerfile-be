@@ -1,5 +1,8 @@
 FROM php:7.4.6-cli-alpine3.11
 
+# iconv issue fix: https://github.com/docker-library/php/issues/240#issuecomment-305038173
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
+
 RUN apk update && apk add openssl zip unzip git postgresql-dev librdkafka-dev bash $PHPIZE_DEPS
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN docker-php-ext-install pdo pdo_pgsql
@@ -7,6 +10,8 @@ RUN pecl install rdkafka
 RUN docker-php-ext-enable rdkafka
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 RUN echo "extension=rdkafka.so" >> /usr/local/etc/php/php.ini
+
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 WORKDIR /crypto-app
 COPY . /crypto-app
