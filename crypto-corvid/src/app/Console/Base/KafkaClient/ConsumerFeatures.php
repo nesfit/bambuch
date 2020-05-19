@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\KafkaClient\CommonFeatures;
 use Exception;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
@@ -78,7 +77,7 @@ trait ConsumerFeatures {
                             );
                         } catch (Exception $e) {
                             $this->errorGraylog("Couldn't handleKafkaRead", $e);
-                            sleep(2);
+                            sleep(1);
                         }
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
