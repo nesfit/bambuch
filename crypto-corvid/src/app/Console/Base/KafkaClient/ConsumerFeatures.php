@@ -77,7 +77,7 @@ trait ConsumerFeatures {
                             );
                         } catch (Exception $e) {
                             $this->errorGraylog("Couldn't handleKafkaRead", $e);
-                            sleep(1);
+                            usleep(200000);
                         }
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
