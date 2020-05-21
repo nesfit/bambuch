@@ -64,6 +64,7 @@ class CryptoParser extends Command {
         if ($status != 200) {
             $this->line("<fg=red>Page " . $url . " responded with status " . $status . "!</>");
             $this->warningGraylog("Failed to scrape page", $url, ["status" => $status]);
+            sleep(1);
         }
 
         return [$crawler, $content];

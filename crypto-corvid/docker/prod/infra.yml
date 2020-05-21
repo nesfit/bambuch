@@ -89,6 +89,8 @@ services:
       - transport.host=localhost
       - network.host=0.0.0.0
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ../persistent/graylog/elastic/data:/usr/share/elasticsearch/data
     ulimits:
       memlock:
         soft: -1

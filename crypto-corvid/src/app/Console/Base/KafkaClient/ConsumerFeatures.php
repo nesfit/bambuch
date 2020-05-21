@@ -51,7 +51,7 @@ trait ConsumerFeatures {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
-                        $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
+                        $this->infoGraylog("Consuming", GraylogTypes::CONSUMED);
                         
                         try {
                             $this->infoGraylog(
@@ -66,15 +66,15 @@ trait ConsumerFeatures {
 
                             $this->handleKafkaRead($message);
 
-                            $this->infoGraylog(
-                                "PHP memory allocation - after handleKafkaRead",
-                                GraylogTypes::INFO,
-                                memory_get_usage(),
-                                [
-                                    "trueAlloc" => memory_get_usage(true),
-                                    "percentage" => memory_get_usage(true) / 2147483648
-                                ]
-                            );
+//                            $this->infoGraylog(
+//                                "PHP memory allocation - after handleKafkaRead",
+//                                GraylogTypes::INFO,
+//                                memory_get_usage(),
+//                                [
+//                                    "trueAlloc" => memory_get_usage(true),
+//                                    "percentage" => memory_get_usage(true) / 2147483648
+//                                ]
+//                            );
                         } catch (Exception $e) {
                             $this->errorGraylog("Couldn't handleKafkaRead", $e);
                             usleep(200000);
