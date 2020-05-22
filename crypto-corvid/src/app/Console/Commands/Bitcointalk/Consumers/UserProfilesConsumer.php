@@ -68,7 +68,7 @@ class UserProfilesConsumer extends KafkaConProducer {
         }
 
         if(!UserProfile::setParsedByUrl($mainUrl)) {
-           $this->warningGraylog("Couldn't find url in DB", $mainUrl); 
+           $this->warningGraylog("Couldn't find url in DB", ["url" => $mainUrl]); 
         
         }
 

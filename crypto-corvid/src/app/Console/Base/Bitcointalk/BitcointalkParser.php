@@ -42,7 +42,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->save();
 
         unset($entity);
-        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
 
     protected function storeChildUrl(UrlMessage $message) {
@@ -59,7 +59,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->save();
 
         unset($entity);
-        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
     
     /**

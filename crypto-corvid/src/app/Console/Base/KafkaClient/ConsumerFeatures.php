@@ -57,8 +57,8 @@ trait ConsumerFeatures {
                             $this->infoGraylog(
                                 "PHP memory allocation - before handleKafkaRead",
                                 GraylogTypes::INFO,
-                                memory_get_usage(),
                                 [
+                                    "emalloc" => memory_get_usage(),
                                     "trueAlloc" => memory_get_usage(true),
                                     "percentage" => memory_get_usage(true) / 2147483648
                                 ]
@@ -69,8 +69,8 @@ trait ConsumerFeatures {
 //                            $this->infoGraylog(
 //                                "PHP memory allocation - after handleKafkaRead",
 //                                GraylogTypes::INFO,
-//                                memory_get_usage(),
 //                                [
+//                                    "emalloc" => memory_get_usage(),
 //                                    "trueAlloc" => memory_get_usage(true),
 //                                    "percentage" => memory_get_usage(true) / 2147483648
 //                                ]

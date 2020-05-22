@@ -97,7 +97,7 @@ class MainBoardsProducer extends KafkaProducer {
             return 0;
         }
         else {
-            $this->warningGraylog('Invalid main board url', $url);
+            $this->warningGraylog('Invalid main board url', ["url" => $url]);
             return 1;
         }
     }

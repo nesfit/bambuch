@@ -46,7 +46,7 @@ abstract class KafkaConProducer extends BitcointalkParser {
             $this->processInputUrl($mainUrl);
             return 0;
         } else {
-            $this->warningGraylog('Invalid input url', $mainUrl);
+            $this->warningGraylog('Invalid input url', ["url" => $mainUrl]);
             return 1;
         }
     }

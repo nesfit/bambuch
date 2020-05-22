@@ -84,7 +84,7 @@ class TopicPagesProducer extends KafkaConProducer {
         }
 
         if(!MainTopic::setParsedByUrl($url)) {
-            $this->warningGraylog("Couldn't find url in DB", $url);
+            $this->warningGraylog("Couldn't find url in DB", ["url" => $url]);
         }
 
         return [$url];

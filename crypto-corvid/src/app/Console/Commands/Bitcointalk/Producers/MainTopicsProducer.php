@@ -60,7 +60,7 @@ class MainTopicsProducer extends KafkaConProducer {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         
         if(!BoardPage::setParsedByUrl($url)) {
-            $this->warningGraylog("Couldn't find url in DB", $url);
+            $this->warningGraylog("Couldn't find url in DB", ["url" => $url]);
         }
         
         return self::getMainTopics($allBoards);

@@ -68,7 +68,7 @@ class FetchWalletExplorer extends CryptoParser
                 $lowerCaseOwner = strtolower($match[0]);
                 $this->insertCategory($category, $lowerCaseOwner);
             } else {
-                $this->warningGraylog("Unknown category", $category, ["match" => $match]);
+                $this->warningGraylog("Unknown category", ["match" => $match, "category" => $category]);
             }
         }
     }
