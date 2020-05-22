@@ -50,7 +50,7 @@ services:
     << : *scraper_base
     command: "bct:topic_pages_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=100
+      - SCRAPER_TIMEOUT=150
 
   bct_user_profiles_consumer:
     << : *scraper_base
