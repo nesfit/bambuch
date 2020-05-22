@@ -46,8 +46,8 @@ class CryptoParser extends Command {
     private function makeRequest(string $url): array {
         // creating new browser every time causes regular proxy switching and better scraping performance 
         $browser = new Client(HttpClient::create(['proxy' => 'proxy:5566']));
-        // to prevent traffic overloading
-        usleep(intval(env('SCRAPER_TIMEOUT', 2000)));
+        // to prevent traffic overloading + convert to milliseconds
+        usleep(intval(env('SCRAPER_TIMEOUT', 2000)) * 1000);
         
         $this->infoGraylog("Requesting url", GraylogTypes::INFO, ["url" => $url]);
 
