@@ -23,7 +23,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $this->table = new $this->tableName();
     }
 
-    private function checkTable() {
+    protected function checkTable() {
         if (!isset($this->tableName)) {
             $this->errorGraylog("'tableName' property is not set!");
             exit(0);

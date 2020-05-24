@@ -6,6 +6,7 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlCalculations;
 use App\Console\Base\Bitcointalk\UrlValidations;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Kafka\UrlMessage;
@@ -69,9 +70,13 @@ class UserProfilesProducer extends KafkaConProducer {
 
     // TODO merge with StoreCrawledUrl
     protected function storeChildUrl(UrlMessage $message) {
+        $this->checkTable();
+
         $topicPage = new UserProfile();
         $topicPage->setAttribute(UserProfile::COL_URL, $message->url);
         $topicPage->setAttribute(UserProfile::COL_PARSED, false);
         $topicPage->save();
+
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
 }
