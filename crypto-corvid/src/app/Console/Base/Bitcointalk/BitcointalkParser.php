@@ -41,7 +41,6 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
         $entity->save();
 
-        unset($entity);
         $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
 
@@ -58,7 +57,6 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->setAttribute(BitcointalkModel::COL_LAST, $message->last);
         $entity->save();
 
-        unset($entity);
         $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
     
