@@ -51,7 +51,11 @@ trait ConsumerFeatures {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
-                        $this->infoGraylog("Consuming", GraylogTypes::CONSUMED);
+                        $this->infoGraylog(
+                            "Consuming", 
+                            GraylogTypes::CONSUMED, 
+                            ["kafkaMessage" => $message]
+                        );
                         
                         try {
                             $this->infoGraylog(
