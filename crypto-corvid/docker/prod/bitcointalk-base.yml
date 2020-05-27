@@ -44,7 +44,7 @@ services:
     << : *scraper_base
     command: "bct:user_profiles_producer 2"
     environment:
-      - SCRAPER_TIMEOUT=300
+      - SCRAPER_TIMEOUT=600
 
   bct_topic_pages_consumer:
     << : *scraper_base
