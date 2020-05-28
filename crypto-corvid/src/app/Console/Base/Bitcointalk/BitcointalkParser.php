@@ -89,9 +89,7 @@ abstract class BitcointalkParser extends CryptoParser {
         
         
         if ($node) {
-            $nextPage = $node->nodeValue;
-            $this->printVerbose3("<fg=blue>Max page: " . $nextPage ."</>");
-            return $nextPage;
+            return $node->nodeValue;
         }
 
         return null;
@@ -108,9 +106,7 @@ abstract class BitcointalkParser extends CryptoParser {
 
 
         if ($node) {
-            $nextPage = $node->nodeValue;
-            $this->printVerbose3("<fg=blue>Next page: " . $nextPage ."</>");
-            return $nextPage;
+            return $node->nodeValue;
         }
 
         return null;
