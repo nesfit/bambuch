@@ -3,31 +3,10 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Console\Constants\Common\CryptoCurrency;
 use DOMDocument;
 use DOMXPath;
 
 class Utils {
-    private const replaceRegexes = [
-        '/wallet: /',
-        '/-.*wallet$/',
-        '/-.*\d$/',
-        '/^Huobi$/',
-        '/^Bittrex$/',
-        '/^PoloniEx$/',
-        '/^Poloniex$/',
-    ];
-
-    private const replaceValues = [
-        '',
-        '',
-        '',
-        'Huobi.com',
-        'Bittrex.com',
-        'Poloniex',
-        'Poloniex.com',
-    ];
-
     /**
      * Uses curl to get DOM from a url.
      * @deprecated 
@@ -63,73 +42,6 @@ class Utils {
         return new DOMXPath($doc);
     }
 
-    /**
-     * Strips unwanted characters from owner label.
-     *
-     * @param string $label Owner label to be parsed
-     * @return string Owner name
-     */
-    public static function getOwnerName($label) {
-        return preg_replace(self::replaceRegexes, self::replaceValues, $label);
-    }
-
-    /**
-     * Helper constructor for wallet.
-     *
-     * @param string $url
-     * @param string $label
-     * @param array $addresses
-     * @return array
-     */
-    public static function newWallet($url, $label, $addresses) {
-        return [
-            "url" => $url,
-            "label" => $label,
-            "addresses" => $addresses
-        ];
-    }
-    
-    public static function getCryptoSettings(string $url) {
-        switch (true) {
-            case preg_match('/' . CryptoCurrency::BTC['name'] . '/' , $url): return CryptoCurrency::BTC;
-            case preg_match('/' . CryptoCurrency::LTC['name']. '/', $url): return CryptoCurrency::LTC;
-            case preg_match('/' . CryptoCurrency::BCH['name']. '/', $url): return CryptoCurrency::BCH;
-            case preg_match('/' . CryptoCurrency::DASH['name']. '/', $url): return CryptoCurrency::DASH;
-            case preg_match('/' . CryptoCurrency::BTG['name']. '/', $url): return CryptoCurrency::BTG;
-        }
-        return CryptoCurrency::EMPTY;
-    }
-
-    /**
-     * @deprecated
-    **/
-    public static function createTSVData($owner, $url, $label, $source, $address, $cryptoType, $category) {
-        $cleanArray = array_reduce([$owner, $url, $label, $source, $address, $cryptoType, $category],
-            function ($acc, $value)  {
-                array_push($acc, str_replace("\t", " ", $value));
-                return $acc;
-            }, []
-        );
-        return implode("\t", $cleanArray);
-    }
-
-    public static function extractXorCode(string $address, int $position) {
-        $value = substr($address, $position, 2);
-        return hexdec($value);
-    }
-
-    public static function decrypt(string $address) {
-        $output = "";
-        $xor_base = self::extractXorCode($address, 0);
-
-        for ($i = 2; $i < strlen($address); $i += 2) {
-            $char_code = self::extractXorCode($address, $i) ^ $xor_base;
-            $output .= chr($char_code);
-        }
-
-        return $output;
-    }
-    
     public static function cleanText(string $text) {
         $ascii = iconv("UTF-8", "UTF-8//TRANSLIT", $text);
         return str_replace(["\r", "\n", "\t"], ' ', $ascii);

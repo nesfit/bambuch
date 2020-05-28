@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace App\Console\Base\Common;
 
-use App\Models\Kafka\ParsedAddress;
 use Illuminate\Console\Command;
 use Goutte\Client;
 use Symfony\Component\HttpClient\HttpClient;
-use GuzzleHttp;
-use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\DomCrawler\Crawler;
@@ -38,8 +35,6 @@ class CryptoParser extends Command {
         $this->verbose = $this->argument("verbose");
         $this->dateTime = $this->argument("dateTime") ?? date("Y-m-d H:i:s");
         $this->url = $this->hasArgument('url') ? $this->argument('url') : null;
-
-        $this->print && $this->url && $this->printParsingPage($this->url);
     }
 
 
@@ -123,115 +118,5 @@ class CryptoParser extends Command {
         $attrs = $this->getGraylogAttrs($context, $logType);
         $this->graylogChannel()->debug($message, $attrs);
         $this->info($message);
-    }
-    
-    /**
-     * Print a string when verbose > 1.
-     * Verbose output printing management.
-     *
-     * @deprecated 
-     * @param string $text Text to print
-     * @return void
-     */
-    protected function printVerbose2($text) {
-        if ($this->verbose > 1) {
-            $this->line($text);
-        }
-    }
-    
-    /**
-     * Print a string when verbose > 2.
-     * Verbose output printing management.
-     *
-     * @deprecated
-     * @param string $text Text to print
-     * @return void
-     */
-    protected function printVerbose3($text) {
-        if ($this->verbose > 2) {
-            $this->line($text);
-        }
-    }
-
-    /**
-     * Print a string when verbose > 2.
-     * Verbose output printing management.
-     *
-     * @deprecated
-     * @param string $text Text to print
-     * @return void
-     */
-    protected function printDetail($text) {
-        if ($this->verbose > 2) {
-            print($text);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function printRedLine($text) {
-        $this->line('<fg=red>' . $text . '</>');
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function printCyanLine($text) {
-        $this->line('<fg=cyan>' . $text . '</>');
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function saveParsedData(string $dateTime, ParsedAddress ...$parsedAddresses) {
-        if (!empty($parsedAddresses)) {
-            $progressBar = $this->output->createProgressBar(count($parsedAddresses));
-//            $progressBar->setFormat('custom');
-//            $progressBar->setMessage('Saving results...');
-            foreach ($parsedAddresses as $item) {
-                $tsvData = $item->createTSVData();
-                $this->call("storage:write", [
-                    "data" => $tsvData,
-                    "dateTime" => $dateTime,
-                    "verbose" => $this->verbose
-                ]);
-                $progressBar->advance();
-            }
-            $progressBar->finish();
-            print("\n");
-        } else {
-            $this->printDetail("- no data to insert.\n");
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function printParsingPage(string $url) {
-        $this->line("<fg=cyan>Parsing page: " . $url ."</>");
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function printVerbosity() {
-        $this->line("<fg=green>Starting with output verbosity: ". $this->verbose .".</>");
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function getDOMBody(string $url): ?StreamInterface {
-        try {
-            return $this->browser
-                        ->getClient()
-                        ->request('GET', $url)
-                        ->getBody();
-
-        } catch (GuzzleHttp\Exception\GuzzleException $exception) {
-            $this->errorGraylog("Failed to get DOMBody", $exception, ["url" => $url]);
-            return null;
-        }
     }
 }
