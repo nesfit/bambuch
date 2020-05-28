@@ -67,16 +67,16 @@ class ScrapeConsumer extends KafkaConsumer {
         
         switch ($success) {
             case $this->RETURN_ALREADY_EXISTS:
-                $this->infoGraylog("Already exists", GraylogTypes::EXISTS, $url);
+                $this->infoGraylog("Already exists", GraylogTypes::EXISTS, ["url" => $url]);
                 break;
             case $this->RETURN_FAILED:
                 $this->errorGraylog("Insert failed");
                 break;
             case $this->RETURN_NEW_IDENTITY:
-                $this->infoGraylog("New identity", GraylogTypes::STORED, $url);
+                $this->infoGraylog("New identity", GraylogTypes::STORED, ["url" => $url]);
                 break;
             case $this->RETURN_NEW_ADDRESS:
-                $this->infoGraylog("New address", GraylogTypes::STORED, $url);
+                $this->infoGraylog("New address", GraylogTypes::STORED, ["url" => $url]);
                 break;            
         }
     }

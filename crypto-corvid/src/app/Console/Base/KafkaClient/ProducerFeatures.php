@@ -32,7 +32,7 @@ trait ProducerFeatures {
     }
     
     protected function kafkaProduce(string $message) {
-        $this->infoGraylog("Producing", GraylogTypes::PRODUCED, $message);
+        $this->infoGraylog("Producing", GraylogTypes::PRODUCED);
 
         $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
         $result = $this->producer->flush(10000);

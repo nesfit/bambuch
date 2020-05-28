@@ -6,9 +6,19 @@ namespace App\Console;
 use App\Models\Constants\TaskConstants;
 use App\Models\Pg\Task;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel {
+    private string $envName;
+    
+    public function __construct(Application $app, Dispatcher $events) {
+        parent::__construct($app, $events);
+
+        $this->envName = env('APP_ENV') === 'production' ? 'prod' : 'dev';
+    }
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -19,9 +29,9 @@ class Kernel extends ConsoleKernel {
     ];
 
     private function getComposeFile(string $container): string {
-        if(preg_match('/bct_all/', $container)) return '../docker/dev/bitcointalk-reproducers.yml';
-        if(preg_match('/bca_/', $container)) return '../docker/dev/bitcoinabuse-base.yml';
-        if(preg_match('/bct_/', $container)) return '../docker/dev/bitcointalk-base.yml';
+        if(preg_match('/bct_all/', $container)) return '../docker/'. $this->envName .'/bitcointalk-reproducers.yml';
+        if(preg_match('/bca_/', $container)) return '../docker/'. $this->envName .'/bitcoinabuse-base.yml';
+        if(preg_match('/bct_/', $container)) return '../docker/'. $this->envName .'/bitcointalk-base.yml';
         return 'unknown-compose.yml';
     }
     
@@ -41,7 +51,7 @@ class Kernel extends ConsoleKernel {
             
             $container = preg_replace('/:/', '_', $taskName);
             $composeFile = $this->getComposeFile($container);
-            $command = 'docker-compose -f ../docker/dev/infra.yml -f '. $composeFile . ' up -d '. $container;
+            $command = 'docker-compose -f ../docker/'. $this->envName .'/infra.yml -f '. $composeFile . ' up -d '. $container;
             
             $preTask = $schedule->exec($command)->runInBackground()->storeOutput();
             

@@ -72,7 +72,7 @@ class TopicPagesConsumer extends KafkaConProducer {
         }
 
         if(!TopicPage::setParsedByUrl($mainUrl)) {
-           $this->warningGraylog("Couldn't find url in DB", $mainUrl); 
+           $this->warningGraylog("Couldn't find url in DB", ["url" => $mainUrl]); 
         
         }
 

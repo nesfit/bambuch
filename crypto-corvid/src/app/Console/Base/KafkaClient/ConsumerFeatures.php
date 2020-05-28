@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Console\Base\KafkaClient\CommonFeatures;
 use Exception;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer as Consumer;
@@ -21,12 +20,12 @@ trait ConsumerFeatures {
     
     protected function initConsumer() {
         if (!isset($this->inputTopic)) {
-            $this->error("'inputTopic' property is not set!");
+            $this->errorGraylog("'inputTopic' property is not set!");
             exit(0);
         }
 
         if (!isset($this->groupID)) {
-            $this->error("'groupID' property is not set!");
+            $this->errorGraylog("'groupID' property is not set!");
             exit(0);
         }
         
@@ -52,9 +51,38 @@ trait ConsumerFeatures {
                 $message = $consumer->consume($this->timeout);
                 switch ($message->err) {
                     case RD_KAFKA_RESP_ERR_NO_ERROR:
-                        $this->infoGraylog("Consuming", GraylogTypes::CONSUMED, $message);
+                        $this->infoGraylog(
+                            "Consuming", 
+                            GraylogTypes::CONSUMED, 
+                            ["kafkaMessage" => $message]
+                        );
                         
-                        $this->handleKafkaRead($message);
+                        try {
+                            $this->infoGraylog(
+                                "PHP memory allocation - before handleKafkaRead",
+                                GraylogTypes::INFO,
+                                [
+                                    "emalloc" => memory_get_usage(),
+                                    "trueAlloc" => memory_get_usage(true),
+                                    "percentage" => memory_get_usage(true) / 2147483648
+                                ]
+                            );
+
+                            $this->handleKafkaRead($message);
+
+//                            $this->infoGraylog(
+//                                "PHP memory allocation - after handleKafkaRead",
+//                                GraylogTypes::INFO,
+//                                [
+//                                    "emalloc" => memory_get_usage(),
+//                                    "trueAlloc" => memory_get_usage(true),
+//                                    "percentage" => memory_get_usage(true) / 2147483648
+//                                ]
+//                            );
+                        } catch (Exception $e) {
+                            $this->errorGraylog("Couldn't handleKafkaRead", $e);
+                            usleep(200000);
+                        }
                         break;
                     case RD_KAFKA_RESP_ERR__PARTITION_EOF:
                         $this->infoGraylog('No more messages; will wait for more...', GraylogTypes::NO_DATA);
@@ -63,7 +91,7 @@ trait ConsumerFeatures {
                         $this->infoGraylog('Timed out!', GraylogTypes::WAITING);
                         break;
                     default:
-                        throw new Exception($message->errstr(), $message->err);
+                        $this->errorGraylog("Unknown consuming error", new Exception($message->errstr(), $message->err));
                         break;
                 }
             }

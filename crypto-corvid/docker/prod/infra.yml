@@ -3,11 +3,12 @@ networks:
   default:
     external:
       name: crypto-corvid_default
-
-services:
+      
+services:  
   # KAFKA  
   zookeeper:
     image: 'bitnami/zookeeper:latest'
+    user: 'root'
     ports:
       - '2181:2181'
     environment:
@@ -17,6 +18,7 @@ services:
 
   kafka:
     image: 'bitnami/kafka:latest'
+    user: 'root'
     ports:
       - '9092:9092'
       - '29092:29092'
@@ -34,6 +36,7 @@ services:
 
   lenses:
     image: lensesio/lenses
+    user: 'root'
     env_file:
       - ../../src/.env
     environment:
@@ -64,7 +67,7 @@ services:
 
   # DATABASE
   db:
-    image: "postgres:11"
+    image: "postgres:12"
     ports:
       - "5432:5432"
     env_file:
@@ -81,11 +84,14 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+    user: 'elasticsearch'
     environment:
       - http.host=0.0.0.0
       - transport.host=localhost
       - network.host=0.0.0.0
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ../persistent/graylog/elastic/data:/usr/share/elasticsearch/data
     ulimits:
       memlock:
         soft: -1
@@ -93,10 +99,11 @@ services:
 
   graylog:
     image: 'graylog/graylog:3.2.3'
+    user: 'root'
     env_file:
       - ../../src/.env
     environment:
-      GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
+      GRAYLOG_HTTP_EXTERNAL_URI: http://172.23.0.1:9000/
     volumes:
       - ../persistent/graylog/app/data/journal:/usr/share/graylog/data/journal
     depends_on:
@@ -113,11 +120,3 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
-     
-  # BLACKFIRE      
-  blackfire:
-    image: blackfire/blackfire
-    env_file:
-      - ../../src/.env
-    ports: 
-      - "8707:8707"

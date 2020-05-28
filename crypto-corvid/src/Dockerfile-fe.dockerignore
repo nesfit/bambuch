@@ -1,0 +1,8 @@
+storage/debugbar
+vendor/
+node_modules/
+tests/
+app/Console/
+!app/Console/Kernel.php
+!app/Console/Constants/
+app/Models/Kafka/

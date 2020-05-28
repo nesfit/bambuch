@@ -20,6 +20,8 @@ class CreateBitcointalkMainBoardsTable extends Migration
             $table->string(MainBoard::COL_URL, 256);
             
             $table->timestamps();
+
+            $table->index([MainBoard::COL_URL]);
         });
     }
 

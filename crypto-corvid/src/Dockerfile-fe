@@ -1,0 +1,24 @@
+FROM php:7.4.2
+
+RUN apt-get update -y && apt-get install -y openssl zip unzip git libpq-dev npm
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install pdo pdo_pgsql
+RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+
+WORKDIR /crypto-app
+COPY . /crypto-app
+
+ENV APP_ENV production
+ENV DB_HOST db
+ENV DEBUGBAR_ENABLED false
+ENV COMPOSER composer-frontend.json
+
+RUN composer global require hirak/prestissimo
+RUN composer install --no-dev
+RUN npm install --production
+
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+
+EXPOSE 8000

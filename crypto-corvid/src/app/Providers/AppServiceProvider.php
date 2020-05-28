@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Providers;
 
@@ -11,9 +12,10 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-        //
+    public function register() {
+        if ($this->app->environment('DEBUGBAR_ENABLED')) {
+            $this->app->register('\Barryvdh\Debugbar\ServiceProvider');
+        }
     }
 
     /**

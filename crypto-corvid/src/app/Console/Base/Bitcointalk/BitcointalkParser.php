@@ -23,7 +23,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $this->table = new $this->tableName();
     }
 
-    private function checkTable() {
+    protected function checkTable() {
         if (!isset($this->tableName)) {
             $this->errorGraylog("'tableName' property is not set!");
             exit(0);
@@ -41,7 +41,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->setAttribute(BitcointalkModel::COL_PARSED, false);
         $entity->save();
 
-        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
 
     protected function storeChildUrl(UrlMessage $message) {
@@ -57,7 +57,7 @@ abstract class BitcointalkParser extends CryptoParser {
         $entity->setAttribute(BitcointalkModel::COL_LAST, $message->last);
         $entity->save();
 
-        $this->infoGraylog("Url stored", GraylogTypes::STORED, $message->url);
+        $this->infoGraylog("Url stored", GraylogTypes::STORED, ["url" => $message->url]);
     }
     
     /**
@@ -73,7 +73,7 @@ abstract class BitcointalkParser extends CryptoParser {
             });
             return array_unique($allLinks);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getLinksFromPage", $e);
+            $this->errorGraylog("Goutte failed - getLinksFromPage", $e, ["url" => $url]);
             return [];
         }
     }
@@ -83,7 +83,7 @@ abstract class BitcointalkParser extends CryptoParser {
             $crawler = $this->getPageCrawler($url);
             $node = $crawler->filterXPath('//td/a[@class="navPages"][last()]/@href')->getNode(0);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getMaxPage", $e);
+            $this->errorGraylog("Goutte failed - getMaxPage", $e, ["url" => $url]);
             return null;
         }
         
@@ -102,7 +102,7 @@ abstract class BitcointalkParser extends CryptoParser {
             $crawler = $this->getPageCrawler($url);
             $node = $crawler->filterXPath('//span[@class="prevnext"][2]/a/@href')->getNode(0);
         } catch(\Exception $e) {
-            $this->errorGraylog("Goutte failed - getNextPage", $e);
+            $this->errorGraylog("Goutte failed - getNextPage", $e, ["url" => $url]);
             return null;
         }
 
@@ -117,13 +117,13 @@ abstract class BitcointalkParser extends CryptoParser {
     }
     
     protected function getNewData(string $url) {
-        $table = $this->table;
         /** @var BitcointalkModel $table */
-        $dbData = $table::getAll();
-        $all = array_map(function ($val) { return $val[BitcointalkModel::COL_URL]; }, $dbData);
+        $table = $this->table;
         $fromUrl = $this->loadDataFromUrl($url);
 
-        return array_diff($fromUrl, $all);
+        return array_filter($fromUrl, function ($url) use ($table) {
+            return !$table::exists($url);
+        });
     }
 
     abstract protected function loadDataFromUrl(string $url): array;

@@ -21,6 +21,8 @@ class CreateUserProfilesTable extends Migration
             $table->string(UserProfile::COL_URL, 256);
 
             $table->timestamps();
+
+            $table->index([UserProfile::COL_URL]);
         });
     }
 

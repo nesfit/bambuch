@@ -5,6 +5,7 @@ namespace App\Console\Commands\Bitcointalk\Producers;
 
 use App\Console\Base\Bitcointalk\KafkaConProducer;
 use App\Console\Base\Bitcointalk\UrlValidations;
+use App\Console\Base\Common\GraylogTypes;
 use App\Console\Constants\Bitcointalk\BitcointalkCommands;
 use App\Console\Constants\Bitcointalk\BitcointalkKafka;
 use App\Models\Pg\Bitcointalk\BoardPage;
@@ -59,7 +60,7 @@ class MainTopicsProducer extends KafkaConProducer {
         $allBoards = $this->getLinksFromPage($url, self::ENTITY);
         
         if(!BoardPage::setParsedByUrl($url)) {
-            $this->warningGraylog("Couldn't find url in DB", $url);
+            $this->warningGraylog("Couldn't find url in DB", ["url" => $url]);
         }
         
         return self::getMainTopics($allBoards);

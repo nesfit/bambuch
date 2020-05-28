@@ -79,12 +79,12 @@ class TopicPagesProducer extends KafkaConProducer {
                 $outUrlMessage = new UrlMessage($url, $lastUrl, true);
                 $this->kafkaProduce($outUrlMessage->encodeData());
             }
+
+            if(!MainTopic::setParsedByUrl($url)) {
+                $this->warningGraylog("Couldn't find url in DB", ["url" => $url]);
+            }
             
             return self::calculateTopicPages($mainTopicId, $fromTopicId, $toTopicId);
-        }
-
-        if(!MainTopic::setParsedByUrl($url)) {
-            $this->warningGraylog("Couldn't find url in DB", $url);
         }
 
         return [$url];
@@ -103,6 +103,6 @@ class TopicPagesProducer extends KafkaConProducer {
     }
 
     private static function calculateTopicPages(int $topicId, int $from, int $to): array {
-        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to);
+        return self::calculateEntityPages(self::ENTITY, $topicId, $from, $to, 20);
     }
 }

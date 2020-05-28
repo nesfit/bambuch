@@ -1,0 +1,27 @@
+version: "3.7"
+networks:
+  default:
+    external:
+      name: crypto-corvid_default
+
+x-scraper-base: &scraper_base
+  image: crypto_corvid_backend
+  entrypoint: ["./wait-for-it.sh", "graylog:9000", "-s", "-t", "120", "--", "php", "artisan"]
+  env_file:
+    - ../../src/.env
+  environment:
+    - DB_HOST=db
+  depends_on:
+    - kafka
+    - db
+    - graylog
+    - proxy
+
+services:
+  common_wallet_explorer:
+    << : *scraper_base
+    command: "fetch_wallet_explorer"
+
+  common_scrape_consumer:
+    << : *scraper_base
+    command: "scraped_results_consumer"
