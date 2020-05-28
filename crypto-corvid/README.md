@@ -19,6 +19,18 @@ Build backend image
 DOCKER_BUILDKIT=1 docker build . -t crypto_corvid_backend -f Dockerfile-be
 ```
 
+## Required files
+ - `.env` in the `src/` folder
+ - `license.json` in the `docker/[prod, dev]` folders (https://lenses.io/lenses-download)
+ - `proxies.json` in the `proxy/` folder with the following structure:
+ ```json
+[
+  {
+    "IPAddress": "<proxy IP address>",
+    "Port": "<proxy port>"
+  }
+]
+```
 
 ## Run the project
 ### Production
