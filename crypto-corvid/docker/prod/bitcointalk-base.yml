@@ -56,4 +56,4 @@ services:
     << : *scraper_base
     command: "bct:user_profiles_consumer 2"
     environment:
-      - SCRAPER_TIMEOUT=400
+      - SCRAPER_TIMEOUT=350
