@@ -196,3 +196,6 @@ Generate Docker Compose dep chart (all services has to be in only one yml file):
 ```bash
 docker run --rm -it --name dcv -v $(pwd):/input pmsipilot/docker-compose-viz render -o ./all.png -m image all.yml --no-volumes -f
 ```
+
+## License
+This project is licensed under the terms of the MIT license.
