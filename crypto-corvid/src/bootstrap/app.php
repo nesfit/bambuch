@@ -13,7 +13,7 @@ declare(strict_types=1);
 */
 
 ini_set('memory_limit', '2G');
-ini_set('xdebug.gc_stats_enable ', env('XDEBUG_ENABLED', 'false'));
+//ini_set('xdebug.gc_stats_enable ', env('XDEBUG_ENABLED', 'false'));
 
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
-use App\Models\Kafka\UrlMessage;
+use App\Models\Kafka\KafkaMessage;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
 use RuntimeException;
@@ -32,7 +32,7 @@ trait ProducerFeatures {
         }
     }
     
-    protected function kafkaProduce(UrlMessage $urlMessage) {
+    protected function kafkaProduce(KafkaMessage $urlMessage) {
         $this->infoGraylog("Producing", GraylogTypes::PRODUCED);
 
         $jsonMessage = $urlMessage->toJSON();

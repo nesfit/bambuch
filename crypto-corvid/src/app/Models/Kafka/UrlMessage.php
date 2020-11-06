@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Kafka;
 
-class UrlMessage {
+class UrlMessage implements KafkaMessage {
     public string $mainUrl;
     public string $url;
     public bool $last;

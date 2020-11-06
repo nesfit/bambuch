@@ -64,8 +64,7 @@ class LoadCSVData extends CryptoParser {
                 CryptoCurrency::BTC["code"],
                 $this->mapCategory($type_id)
             );
-            $tsvData = $parsedAddress->createTSVData();
-            $this->kafkaProduce($tsvData);
+            $this->kafkaProduce($parsedAddress);
         }
         fclose($handle);
     }

@@ -8,6 +8,7 @@ use App\Console\Base\KafkaClient\KafkaConsumer;
 use App\Console\Base\Common\ReturnCodes;
 use App\Console\Constants\Common\CommonCommands;
 use App\Console\Constants\Common\CommonKafka;
+use App\Models\Kafka\ParsedAddress;
 use RdKafka\Message;
 
 //docker-compose -f infra.yml -f backend.yml run --rm scraper scraped_results_consumer
@@ -53,16 +54,16 @@ class ScrapeConsumer extends KafkaConsumer {
     }
     
     protected function handleKafkaRead(Message $message) {
-        list($owner, $url, $label, $source, $address, $cryptoType, $category) = explode("\t", $message->payload); 
+        $parsedAddress = ParsedAddress::fromJSON($message->payload);
                 
         $success = $this->call('insert:db', [
-            'owner name' => $owner,
-            'url' => $url,
-            'label' => $label,
-            'source' => $source,
-            'address' => $address,
-            'crypto type' => $cryptoType,
-            'category' => $category
+            'owner name' => $parsedAddress->owner,
+            'url' => $parsedAddress->url,
+            'label' => $parsedAddress->label,
+            'source' => $parsedAddress->source,
+            'address' => $parsedAddress->address,
+            'crypto type' => $parsedAddress->type,
+            'category' => $parsedAddress->explicitCategory
         ]);
         
         switch ($success) {
