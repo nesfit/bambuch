@@ -32,12 +32,12 @@ abstract class KafkaConProducer extends BitcointalkParser {
             }
             $outUrlMessage = new UrlMessage($mainUrl, $url, $last);
             $this->storeChildUrl($outUrlMessage);
-            $this->kafkaProduce($outUrlMessage->encodeData());
+            $this->kafkaProduce($outUrlMessage);
         }            
     }
     
     protected function handleKafkaRead(Message $message): int {
-        $inUrlMessage = UrlMessage::decodeData($message->payload);
+        $inUrlMessage = UrlMessage::fromJSON($message->payload);
         $mainUrl = $inUrlMessage->url;
 
         // TODO check if the scraped url IS UNPARSED => SHOULD BE!

@@ -63,7 +63,7 @@ class MainBoardsProducer extends KafkaProducer {
         $allMainBoards = MainBoard::getAll();
         foreach ($allMainBoards as $mainBoard) {
             $urlMessage = new UrlMessage("empty", $mainBoard[BitcointalkModel::COL_URL], false);
-            $this->kafkaProduce($urlMessage->encodeData());
+            $this->kafkaProduce($urlMessage);
         }
         
         /**
@@ -88,7 +88,7 @@ class MainBoardsProducer extends KafkaProducer {
                 foreach ($mainBoards as $mainBoard) {
                     $urlMessage = new UrlMessage("empty", $mainBoard, false);
                     $this->storeMainUrl($urlMessage);
-                    $this->kafkaProduce($urlMessage->encodeData());
+                    $this->kafkaProduce($urlMessage);
                 }
             } else {
                 $this->infoGraylog("No new main boards", GraylogTypes::NO_DATA);

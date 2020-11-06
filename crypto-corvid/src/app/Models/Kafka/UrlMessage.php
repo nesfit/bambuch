@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models\Kafka;
 
-use Serializable;
-
-class UrlMessage implements Serializable {
+class UrlMessage {
     public string $mainUrl;
     public string $url;
     public bool $last;
@@ -16,7 +14,7 @@ class UrlMessage implements Serializable {
         $this->last = $last;
     }
     
-    public function serialize(): string {
+    public function toJSON(): string {
         return json_encode([
             'mainUrl' => $this->mainUrl, 
             'url' => $this->url, 
@@ -24,19 +22,17 @@ class UrlMessage implements Serializable {
         ]);
     }
     
-    public function unserialize($serialized) {
-        $json = json_decode($serialized);
+    public static function fromJSON(string $json): UrlMessage {
+        $decoded = json_decode($json);
 
-        $this->mainUrl = $json->mainUrl;
-        $this->url = $json->url;
-        $this->last = $json->last;
-    }
-    
-    public function encodeData() {
-        return serialize($this);
-    } 
-    
-    public static function decodeData($encoded): UrlMessage {
-        return unserialize($encoded);
+        $mainUrl = $decoded->mainUrl;
+        $url = $decoded->url;
+        $last = $decoded->last;
+        
+        return new UrlMessage(
+            $mainUrl,
+            $url,
+            $last
+        );
     }
 }

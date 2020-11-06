@@ -28,3 +28,13 @@ services:
     command: install
     volumes:
       - ../../src:/crypto-app
+
+  test:
+    image: crypto_corvid_backend_dev
+    env_file:
+      - ../../src/.env
+    depends_on:
+      - kafka
+    entrypoint: php artisan
+    volumes:
+      - ../../src:/crypto-app

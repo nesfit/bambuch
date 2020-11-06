@@ -6,7 +6,7 @@ namespace App\Console\Commands\Tests\KafkaContinuous;
 use App\Console\Base\KafkaClient\KafkaConsumer;
 use RdKafka\Message;
 
-// docker-compose -f infra.yml -f backend.yml run --rm scraper consumer:test
+// docker-compose -f infra.yml -f maintenance.yml run --rm test consumer:test
 
 class TestKafkaConsumer extends KafkaConsumer {
 
@@ -19,8 +19,8 @@ class TestKafkaConsumer extends KafkaConsumer {
     }
     
     public function handle() {
-        $this->inputTopic = Kafka::TEST_OUTPUT_TOPIC;
-        $this->groupID = Kafka::TEST_OUTPUT_GROUP;
+        $this->inputTopic = Kafka::TEST_INPUT_TOPIC;
+        $this->groupID = Kafka::TEST_INPUT_GROUP;
         
         parent::handle();
         
@@ -28,6 +28,12 @@ class TestKafkaConsumer extends KafkaConsumer {
     }
     
     protected function handleKafkaRead(Message $message) {
-        print "Received: " . $message->payload . "\n";
+        $json = json_decode($message->payload);
+        print "
+        Received:
+        Timestamp: {$message->timestamp}
+        Key: {$message->key}
+        Payload test: {$json->test}
+        Payload asdf: {$json->asdf} \n";
     }
 }

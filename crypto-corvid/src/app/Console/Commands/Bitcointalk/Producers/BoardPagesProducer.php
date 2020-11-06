@@ -74,7 +74,7 @@ class BoardPagesProducer extends KafkaConProducer {
                 BoardPage::unparseLast($url);
                 $lastUrl = $lastBoardPage->getAttribute(BitcointalkModel::COL_URL);
                 $outUrlMessage = new UrlMessage($url, $lastUrl, true);
-                $this->kafkaProduce($outUrlMessage->encodeData());
+                $this->kafkaProduce($outUrlMessage);
             }
             
             return self::calculateBoardPages($mainBoardId, $fromBoardId, $toBoardId);

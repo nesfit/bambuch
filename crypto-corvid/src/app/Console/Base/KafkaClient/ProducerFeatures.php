@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Base\KafkaClient;
 
 use App\Console\Base\Common\GraylogTypes;
+use App\Models\Kafka\UrlMessage;
 use RdKafka\Producer;
 use RdKafka\ProducerTopic;
 use RuntimeException;
@@ -31,15 +32,16 @@ trait ProducerFeatures {
         }
     }
     
-    protected function kafkaProduce(string $message) {
+    protected function kafkaProduce(UrlMessage $urlMessage) {
         $this->infoGraylog("Producing", GraylogTypes::PRODUCED);
 
-        $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
+        $jsonMessage = $urlMessage->toJSON();
+        $this->topic->produce(RD_KAFKA_PARTITION_UA, 0, $jsonMessage);
         $result = $this->producer->flush(10000);
 
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {
             $error = new RuntimeException('Was unable to flush, messages might be lost!');
-            $this->errorGraylog("Producer error", $error, ["failedMessage" => $message]);
+            $this->errorGraylog("Producer error", $error, ["failedMessage" => $jsonMessage]);
             throw $error;
         }
     } 

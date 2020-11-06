@@ -77,7 +77,7 @@ class TopicPagesProducer extends KafkaConProducer {
                 TopicPage::unparseLast($url);
                 $lastUrl = $lastTopicPage->getAttribute(BitcointalkModel::COL_URL);
                 $outUrlMessage = new UrlMessage($url, $lastUrl, true);
-                $this->kafkaProduce($outUrlMessage->encodeData());
+                $this->kafkaProduce($outUrlMessage);
             }
 
             if(!MainTopic::setParsedByUrl($url)) {
